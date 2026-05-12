@@ -92,7 +92,7 @@ pnpm -r test
 | [Phase 2 — Tumbuh](docs/development/dev-phase2.md) | Engagement, personalization, ops leverage |
 | [Phase 3 — Bersinar](docs/development/dev-phase3.md) | Malaysian moat + advanced features |
 | [Phase 4 — Warisan](docs/development/dev-phase4.md) | Metric-gated backlog (no pre-build) |
-| [Contributing](CONTRIBUTING.md) | Setup, branches, conventions, review flow |
+| [Contributing](docs/contributing/contributing.md) | Setup, branches, conventions, review flow |
 
 ## Engineering conventions
 
@@ -103,7 +103,7 @@ Each package has a skill file in `.claude/skills/<pkg>/SKILLS.md` codifying the 
 - [`.claude/skills/backend/SKILLS.md`](.claude/skills/backend/SKILLS.md) — Fastify REST, Zod schemas, no tRPC, no premature abstraction.
 - [`.claude/skills/error-handling/SKILLS.md`](.claude/skills/error-handling/SKILLS.md) — Unified error + logging contract. Single source in `packages/shared/src/errors/`.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the human-readable version.
+See [the contributing guide](docs/contributing/contributing.md) for the human-readable version.
 
 ## Team
 
