@@ -1,0 +1,17 @@
+{
+  "name": "@readr/backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "echo \"backend dev not configured\"",
+    "build": "echo \"backend build not configured\"",
+    "lint": "echo \"no lint\"",
+    "test": "echo \"no tests\"",
+    "typecheck": "echo \"no typecheck\""
+  },
+  "dependencies": {
+    "@readr/shared": "workspace:*"
+  }
+}

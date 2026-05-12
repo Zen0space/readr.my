@@ -1,0 +1,16 @@
+{
+  "name": "@readr/desktop",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "echo \"desktop dev not configured\"",
+    "build": "echo \"desktop build not configured\"",
+    "lint": "echo \"no lint\"",
+    "test": "echo \"no tests\"",
+    "typecheck": "echo \"no typecheck\""
+  },
+  "dependencies": {
+    "@readr/shared": "workspace:*"
+  }
+}
