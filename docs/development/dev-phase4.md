@@ -12,6 +12,7 @@ Same team. Engagement model is **opportunistic** — pick one item per quarter, 
 |---|---|
 | Backend / Infra | **Khairul** |
 | Frontend (complex) | **Khairul** |
+| Desktop / Tauri | **Khairul** |
 | Frontend (standard) | **Ajwad** |
 
 ---
@@ -112,6 +113,10 @@ Same team. Engagement model is **opportunistic** — pick one item per quarter, 
 2. Spike for 1 sprint: prototype + measure.
 3. Decision gate: kill, ship behind feature flag, or promote to P2/P3 backlog.
 4. No item gets built "because it would be cool" — every build needs a metric tied to PRD goals.
+
+## Desktop Track — Khairul
+
+Desktop parity is decided **per-item, at the start of each spike**. Default rule: if the pulled-forward feature is author-facing, mirror it on `packages/desktop`; if reader-only, the web app is enough. No upfront D4.x list — these tasks accrete as items get pulled in.
 
 ## Risks
 
