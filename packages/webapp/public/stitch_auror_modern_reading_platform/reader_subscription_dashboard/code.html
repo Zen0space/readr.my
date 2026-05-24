@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Auror - Subscription &amp; Membership</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="/stitch_auror_modern_reading_platform/assets/js/api.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fcf8ff",
+                        "primary-container": "#6063ee",
+                        "surface-dim": "#dbd8e4",
+                        "on-tertiary-container": "#fffbff",
+                        "secondary-container": "#8455ef",
+                        "tertiary": "#904900",
+                        "tertiary-fixed": "#ffdcc5",
+                        "surface-container-highest": "#e4e1ed",
+                        "inverse-surface": "#303038",
+                        "inverse-primary": "#c0c1ff",
+                        "surface-container-low": "#f5f2fe",
+                        "on-background": "#1b1b23",
+                        "tertiary-container": "#b55d00",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb783",
+                        "on-surface-variant": "#464554",
+                        "inverse-on-surface": "#f2effb",
+                        "secondary-fixed": "#e9ddff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#301400",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#fffbff",
+                        "on-tertiary-fixed-variant": "#703700",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#efecf8",
+                        "outline": "#767586",
+                        "surface": "#fcf8ff",
+                        "on-primary-fixed": "#07006c",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "error-container": "#ffdad6",
+                        "background": "#fcf8ff",
+                        "outline-variant": "#c7c4d7",
+                        "on-surface": "#1b1b23",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#e9e6f3",
+                        "primary-fixed": "#e1e0ff",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e4e1ed",
+                        "secondary": "#6b38d4",
+                        "surface-tint": "#494bd6",
+                        "on-secondary-fixed": "#23005c",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "primary": "#4648d4",
+                        "on-secondary-container": "#fffbff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "container-max": "1440px",
+                        "gutter": "24px",
+                        "sidebar-width": "280px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "headline-lg-mobile": ["Geist"],
+                        "label-md": ["Geist"],
+                        "display-lg": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "32px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid #E2E8F0;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.03);
+        }
+        .glow-bloom {
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #4648d4 0%, #8455ef 100%);
+        }
+        .text-gradient-primary {
+            background: linear-gradient(135deg, #4648d4 0%, #8455ef 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="hidden md:flex bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-xl border-r border-outline-variant/30 fixed left-0 top-0 h-screen w-[280px] shadow-[0px_10px_25px_rgba(0,0,0,0.03)] flex-col py-8 px-6 z-50">
+  <div class="mb-10">
+    <h1 class="font-display-lg text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-primary to-secondary">Auror</h1>
+    <p class="text-xs text-on-surface-variant mt-1 font-medium tracking-wide">Enter the Realm of Deep Flow</p>
+  </div>
+  
+  <div class="flex-1 space-y-2">
+    <!-- Standard Reader Links -->
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/">
+      <span class="material-symbols-outlined">explore</span>
+      <span class="font-label-md text-label-md">Explore</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/library">
+      <span class="material-symbols-outlined">auto_stories</span>
+      <span class="font-label-md text-label-md">Library</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/wallet">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      <span class="font-label-md text-label-md">Wallet</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-primary bg-primary-container/10 font-bold hover:bg-primary-container/10 transition-all duration-200" href="/subscription">
+      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+      <span class="font-label-md text-label-md">Subscription</span>
+    </a>
+
+    <!-- Author Only Links -->
+    <div data-role-required="author" class="pt-4 border-t border-outline-variant/20 space-y-2">
+      <p class="px-4 text-[10px] font-semibold text-outline uppercase tracking-wider mb-2">Author Hub</p>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/author/studio">
+        <span class="material-symbols-outlined">stylus_note</span>
+        <span class="font-label-md text-label-md">Writing Studio</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/author/analytics">
+        <span class="material-symbols-outlined">insights</span>
+        <span class="font-label-md text-label-md">Analytics</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/author/earnings">
+        <span class="material-symbols-outlined">monetization_on</span>
+        <span class="font-label-md text-label-md">Earnings & Payout</span>
+      </a>
+    </div>
+
+    <!-- Admin Only Links -->
+    <div data-role-required="admin" class="pt-4 border-t border-outline-variant/20 space-y-2">
+      <p class="px-4 text-[10px] font-semibold text-outline uppercase tracking-wider mb-2">Admin Command</p>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/admin">
+        <span class="material-symbols-outlined">admin_panel_settings</span>
+        <span class="font-label-md text-label-md">Dashboard</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/admin/moderation">
+        <span class="material-symbols-outlined">gavel</span>
+        <span class="font-label-md text-label-md">Moderation</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/admin/users">
+        <span class="material-symbols-outlined">manage_accounts</span>
+        <span class="font-label-md text-label-md">Users</span>
+      </a>
+    </div>
+  </div>
+  
+  <div class="pt-6 border-t border-outline-variant/30 space-y-2">
+    <a class="flex items-center gap-4 px-4 py-2 rounded-xl text-on-surface-variant hover:bg-primary-container/10 transition-colors" href="/author/settings">
+      <span class="material-symbols-outlined text-[20px]">settings</span>
+      <span class="font-label-md text-label-md">Settings</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-2 rounded-xl text-on-surface-variant hover:bg-primary-container/10 transition-colors cursor-pointer" id="sidebar-logout">
+      <span class="material-symbols-outlined text-[20px]">logout</span>
+      <span class="font-label-md text-label-md">Sign Out</span>
+    </a>
+  </div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-0 md:ml-[280px] flex flex-col min-h-screen relative">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full z-40 bg-surface/60 backdrop-blur-md shadow-sm flex items-center justify-between h-20 px-margin-mobile md:px-margin-desktop">
+<div class="flex items-center gap-4">
+<div class="md:hidden font-headline-lg text-headline-lg font-bold text-primary">Auror</div>
+<div class="hidden md:flex items-center bg-surface-container-low rounded-full px-4 py-2 border border-outline-variant/30 focus-within:border-primary focus-within:glow-bloom transition-all">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md font-body-md ml-2 w-64 placeholder:text-outline/70 text-on-surface" placeholder="Search library..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity cursor-pointer p-2 rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity cursor-pointer p-2 rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full">
+<div class="mb-8">
+<h1 class="font-display-lg text-display-lg text-on-background">Subscription &amp; Membership</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2">Manage your reading experience and billing details.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Status & Benefits -->
+<div class="lg:col-span-8 flex flex-col gap-gutter">
+<!-- Hero Status Card -->
+<div id="current-plan-card" class="bg-gradient-primary rounded-xl p-8 text-on-primary relative overflow-hidden shadow-xl shadow-primary/20">
+<div class="absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div>
+<div class="font-label-sm text-label-sm uppercase tracking-wider text-on-primary/80 mb-2">Current Plan</div>
+<h2 id="current-plan-name" class="font-headline-lg text-headline-lg font-bold">Free Reader</h2>
+<p id="current-plan-desc" class="font-body-md text-body-md text-on-primary/90 mt-2 max-w-md">You are on the free reader plan. Upgrade to unlock premium chapters and ad-free experience.</p>
+</div>
+<div class="text-left md:text-right">
+<div id="current-plan-price" class="font-display-lg text-display-lg">$0</div>
+<div id="current-plan-billing" class="font-label-sm text-label-sm text-on-primary/70 mt-1">Free Forever</div>
+</div>
+</div>
+</div>
+<!-- Benefits Bento -->
+<div class="glass-card rounded-xl p-6">
+<h3 class="font-title-md text-title-md text-on-surface mb-6">Your Gold Benefits</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Unlimited Library Access</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm leading-relaxed mt-1">Read any book, article, or essay in our extensive curated collection without restrictions.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">block</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Ad-Free Experience</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm leading-relaxed mt-1">Zero interruptions. Pure focus mode enabled across all your reading devices.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Early Access to Originals</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm leading-relaxed mt-1">Read Auror Original publications weeks before they hit the general library.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">devices</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Multi-Device Sync</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm leading-relaxed mt-1">Seamlessly transition from desktop to mobile to e-reader without losing your place.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Billing & Recommendations -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<!-- Billing Section -->
+<div class="glass-card rounded-xl p-6">
+<h3 class="font-title-md text-title-md text-on-surface mb-6">Billing Details</h3>
+<div id="billing-details-container" class="space-y-6">
+  <!-- Dynamic billing details will load here -->
+</div>
+</div>
+<!-- Subscription Tiers Selection -->
+<div class="space-y-4">
+  <div class="bg-surface-container-low border border-primary/20 rounded-xl p-6 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full pointer-events-none"></div>
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="font-title-md text-title-md text-on-surface font-bold">Premium Reader</h3>
+      <span class="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded-full">300 Coins</span>
+    </div>
+    <p class="text-xs text-on-surface-variant mb-4">Access premium chapters and ad-free reading flow.</p>
+    <button id="subscribe-premium-btn" class="w-full bg-primary text-on-primary py-2 px-4 rounded-lg text-sm font-semibold hover:bg-primary-container transition-all">Subscribe</button>
+  </div>
+  
+  <div class="bg-surface-container-low border border-secondary/20 rounded-xl p-6 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-bl-full pointer-events-none"></div>
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="font-title-md text-title-md text-on-surface font-bold">VIP Reader</h3>
+      <span class="bg-secondary/10 text-secondary text-xs font-bold px-2 py-1 rounded-full">600 Coins</span>
+    </div>
+    <p class="text-xs text-on-surface-variant mb-4">Ultimate access + AI Reading Assistant + Offline reading.</p>
+    <button id="subscribe-vip-btn" class="w-full bg-gradient-primary text-on-primary py-2 px-4 rounded-lg text-sm font-semibold hover:shadow-lg transition-all">Subscribe VIP</button>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const user = await api.checkSession();
+  if (!user) return;
+
+  const currentPlanCard = document.getElementById('current-plan-card');
+  const currentPlanName = document.getElementById('current-plan-name');
+  const currentPlanDesc = document.getElementById('current-plan-desc');
+  const currentPlanPrice = document.getElementById('current-plan-price');
+  const currentPlanBilling = document.getElementById('current-plan-billing');
+  const billingContainer = document.getElementById('billing-details-container');
+  
+  async function loadSubscription() {
+    try {
+      const res = await api.getSubscription();
+      if (res && res.success && res.subscription) {
+        const sub = res.subscription;
+        const endsDate = new Date(sub.ends_at).toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' });
+        
+        if (sub.tier === 'vip_reader') {
+          currentPlanName.textContent = 'VIP Reader';
+          currentPlanDesc.textContent = 'You are experiencing the ultimate VIP reader plan. Fully unlocked with AI tools and offline reading.';
+          currentPlanPrice.innerHTML = '600<span class="font-title-md text-title-md opacity-80"> Coins/mo</span>';
+          currentPlanBilling.textContent = 'Renewing monthly';
+          
+          if (currentPlanCard) {
+            currentPlanCard.className = 'bg-gradient-to-br from-secondary to-surface-tint rounded-xl p-8 text-on-primary relative overflow-hidden shadow-xl shadow-secondary/20';
+          }
+        } else {
+          currentPlanName.textContent = 'Premium Reader';
+          currentPlanDesc.textContent = 'You are experiencing our Premium reader plan. Unlimited library and ad-free experience.';
+          currentPlanPrice.innerHTML = '300<span class="font-title-md text-title-md opacity-80"> Coins/mo</span>';
+          currentPlanBilling.textContent = 'Renewing monthly';
+          
+          if (currentPlanCard) {
+            currentPlanCard.className = 'bg-gradient-primary rounded-xl p-8 text-on-primary relative overflow-hidden shadow-xl shadow-primary/20';
+          }
+        }
+        
+        if (billingContainer) {
+          billingContainer.innerHTML = `
+            <div>
+              <div class="font-label-sm text-label-sm text-on-surface-variant mb-1">Next Renewal Date</div>
+              <div class="font-label-md text-label-md text-on-surface font-bold flex items-center justify-between">
+                <span>${endsDate}</span>
+                <span>${sub.tier === 'vip_reader' ? '600' : '300'} Coins</span>
+              </div>
+            </div>
+            <hr class="border-outline-variant/30"/>
+            <div>
+              <div class="font-label-sm text-label-sm text-on-surface-variant mb-3">Subscription Status</div>
+              <div class="flex items-center gap-3 bg-surface-container-low p-3 rounded-lg border border-outline-variant/50">
+                <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                <span class="font-semibold text-sm text-green-700">Active</span>
+              </div>
+            </div>
+          `;
+        }
+      } else {
+        currentPlanName.textContent = 'Free Reader';
+        currentPlanDesc.textContent = 'You are on the free reader plan. Upgrade to unlock premium chapters and ad-free experience.';
+        currentPlanPrice.innerHTML = '$0';
+        currentPlanBilling.textContent = 'Free Forever';
+        
+        if (currentPlanCard) {
+          currentPlanCard.className = 'bg-gradient-to-br from-gray-600 to-gray-800 rounded-xl p-8 text-on-primary relative overflow-hidden shadow-xl';
+        }
+        
+        if (billingContainer) {
+          billingContainer.innerHTML = `
+            <div class="text-center py-6 text-on-surface-variant">
+              <span class="material-symbols-outlined text-4xl mb-2 opacity-50">payment_off</span>
+              <p class="text-sm">No active subscription or renewal records.</p>
+            </div>
+          `;
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  
+  await loadSubscription();
+
+  const subPremiumBtn = document.getElementById('subscribe-premium-btn');
+  const subVipBtn = document.getElementById('subscribe-vip-btn');
+
+  const handleSubscribe = async (tier) => {
+    try {
+      const price = tier === 'vip_reader' ? 600 : 300;
+      if (!confirm(`Subscribe to ${tier === 'vip_reader' ? 'VIP' : 'Premium'} tier for ${price} coins?`)) {
+        return;
+      }
+      const res = await api.subscribe(tier);
+      if (res && res.success) {
+        alert(res.message);
+        await loadSubscription();
+      } else {
+        alert(res?.error || 'Subscription failed');
+      }
+    } catch (e) {
+      alert(e.message || 'An error occurred during subscription');
+    }
+  };
+
+  if (subPremiumBtn) {
+    subPremiumBtn.addEventListener('click', () => handleSubscribe('premium_reader'));
+  }
+  if (subVipBtn) {
+    subVipBtn.addEventListener('click', () => handleSubscribe('vip_reader'));
+  }
+});
+</script>
+</main>
+</div>
+</body></html>

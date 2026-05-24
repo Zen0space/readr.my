@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Auror - Content Moderation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="/stitch_auror_modern_reading_platform/assets/js/api.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#1b1b23",
+                      "surface-container": "#efecf8",
+                      "secondary-fixed-dim": "#d0bcff",
+                      "primary-container": "#6063ee",
+                      "on-surface-variant": "#464554",
+                      "on-secondary": "#ffffff",
+                      "surface-container-high": "#e9e6f3",
+                      "on-tertiary-container": "#fffbff",
+                      "surface": "#fcf8ff",
+                      "surface-container-low": "#f5f2fe",
+                      "secondary-container": "#8455ef",
+                      "on-primary-container": "#fffbff",
+                      "inverse-on-surface": "#f2effb",
+                      "surface-variant": "#e4e1ed",
+                      "on-tertiary-fixed-variant": "#703700",
+                      "tertiary-fixed": "#ffdcc5",
+                      "surface-bright": "#fcf8ff",
+                      "outline-variant": "#c7c4d7",
+                      "surface-tint": "#494bd6",
+                      "on-primary-fixed": "#07006c",
+                      "inverse-surface": "#303038",
+                      "secondary-fixed": "#e9ddff",
+                      "tertiary-container": "#b55d00",
+                      "on-secondary-container": "#fffbff",
+                      "background": "#fcf8ff",
+                      "on-error-container": "#93000a",
+                      "secondary": "#6b38d4",
+                      "primary-fixed": "#e1e0ff",
+                      "inverse-primary": "#c0c1ff",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed-variant": "#5516be",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "on-secondary-fixed": "#23005c",
+                      "on-primary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "surface-dim": "#dbd8e4",
+                      "primary": "#4648d4",
+                      "outline": "#767586",
+                      "tertiary-fixed-dim": "#ffb783",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-highest": "#e4e1ed",
+                      "on-surface": "#1b1b23",
+                      "on-error": "#ffffff",
+                      "tertiary": "#904900",
+                      "on-tertiary-fixed": "#301400"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "40px",
+                      "gutter": "24px",
+                      "container-max": "1440px",
+                      "unit": "4px",
+                      "sidebar-width": "280px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Geist"
+                      ],
+                      "label-md": [
+                              "Geist"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Geist"
+                      ],
+                      "headline-lg-mobile": [
+                              "Geist"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "title-md": [
+                              "Geist"
+                      ],
+                      "headline-lg": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "title-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="hidden md:flex bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-xl border-r border-outline-variant/30 fixed left-0 top-0 h-screen w-[280px] shadow-[0px_10px_25px_rgba(0,0,0,0.03)] flex-col py-8 px-6 z-50">
+  <div class="mb-10">
+    <h1 class="font-display-lg text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-primary to-secondary">Auror</h1>
+    <p class="text-xs text-on-surface-variant mt-1 font-medium tracking-wide">Enter the Realm of Deep Flow</p>
+  </div>
+  
+  <div class="flex-1 space-y-2">
+    <!-- Standard Reader Links -->
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/">
+      <span class="material-symbols-outlined">explore</span>
+      <span class="font-label-md text-label-md">Explore</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/library">
+      <span class="material-symbols-outlined">auto_stories</span>
+      <span class="font-label-md text-label-md">Library</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/wallet">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      <span class="font-label-md text-label-md">Wallet</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/subscription">
+      <span class="material-symbols-outlined">workspace_premium</span>
+      <span class="font-label-md text-label-md">Subscription</span>
+    </a>
+
+    <!-- Author Only Links -->
+    <div data-role-required="author" class="pt-4 border-t border-outline-variant/20 space-y-2">
+      <p class="px-4 text-[10px] font-semibold text-outline uppercase tracking-wider mb-2">Author Hub</p>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/author/studio">
+        <span class="material-symbols-outlined">stylus_note</span>
+        <span class="font-label-md text-label-md">Writing Studio</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/author/analytics">
+        <span class="material-symbols-outlined">insights</span>
+        <span class="font-label-md text-label-md">Analytics</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/author/earnings">
+        <span class="material-symbols-outlined">monetization_on</span>
+        <span class="font-label-md text-label-md">Earnings & Payout</span>
+      </a>
+    </div>
+
+    <!-- Admin Only Links -->
+    <div data-role-required="admin" class="pt-4 border-t border-outline-variant/20 space-y-2">
+      <p class="px-4 text-[10px] font-semibold text-outline uppercase tracking-wider mb-2">Admin Command</p>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/admin" id="nav-admin-dashboard">
+        <span class="material-symbols-outlined">admin_panel_settings</span>
+        <span class="font-label-md text-label-md">Dashboard</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-primary bg-primary-container/10 font-bold hover:bg-primary-container/10 transition-all duration-200" href="/admin/moderation" id="nav-admin-moderation">
+        <span class="material-symbols-outlined">gavel</span>
+        <span class="font-label-md text-label-md">Moderation</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/admin/users" id="nav-admin-users">
+        <span class="material-symbols-outlined">manage_accounts</span>
+        <span class="font-label-md text-label-md">Users</span>
+      </a>
+    </div>
+  </div>
+  
+  <div class="pt-6 border-t border-outline-variant/30 space-y-2">
+    <a class="flex items-center gap-4 px-4 py-2 rounded-xl text-on-surface-variant hover:bg-primary-container/10 transition-colors" href="/author/settings">
+      <span class="material-symbols-outlined text-[20px]">settings</span>
+      <span class="font-label-md text-label-md">Settings</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-2 rounded-xl text-on-surface-variant hover:bg-primary-container/10 transition-colors cursor-pointer" id="sidebar-logout">
+      <span class="material-symbols-outlined text-[20px]">logout</span>
+      <span class="font-label-md text-label-md">Sign Out</span>
+    </a>
+  </div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-[280px] min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 w-full bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm flex justify-between items-center h-16 px-margin-desktop">
+<div class="flex items-center gap-4">
+<h2 class="font-title-md text-title-md text-primary dark:text-primary-fixed-dim">Content Moderation</h2>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant dark:text-outline-variant">
+<button class="hover:bg-surface-container dark:hover:bg-surface-container-highest rounded-full p-2 transition-all active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:bg-surface-container dark:hover:bg-surface-container-highest rounded-full p-2 transition-all active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</button>
+<button class="hover:bg-surface-container dark:hover:bg-surface-container-highest rounded-full p-2 transition-all active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+<div class="flex items-center gap-3 pl-2 border-l border-outline-variant/30">
+  <div class="text-right hidden sm:block">
+    <p class="text-xs font-semibold text-on-surface" data-username>Loading...</p>
+    <p class="text-[10px] text-outline font-semibold uppercase tracking-wider" data-role>Admin</p>
+  </div>
+  <div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+    <img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmVbvlApFyU9vEVpToUseX5eT1vLeEfvZlC8VKH-UfcxjKRImluPSIjlT7HSyp6wE4iFnnPCc9VFg4sJ_ejmGV5BlInCmBaLssu5ni86v74UZk0rk2M1fcV0cENHHKJ-UFsVBfmJ9KpUI224UDiNKnbURFtter_LUouQ1y0163hO_Yvly1pQF_MM3myksf3j5Le8JyIPbyIZ4K0Eu60Qnnab5SElluJnWuX_uMV6pvC-8TVS7Be0q0XjijIUvlxT7pb53bysAFuFzg"/>
+  </div>
+</div>
+</div>
+</header>
+<!-- Canvas Content -->
+<div class="p-margin-mobile md:p-margin-desktop flex-1 flex flex-col gap-gutter max-w-container-max mx-auto w-full">
+<!-- Header & Tabs -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface">Queue</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Review flagged content to maintain platform safety.</p>
+</div>
+<div class="flex p-1 bg-surface-container-low rounded-xl border border-outline-variant/30" id="moderation-tabs">
+<button class="px-6 py-2 rounded-lg bg-surface shadow-sm text-primary font-label-md text-label-md transition-all" data-tab="pending">Pending Reports</button>
+<button class="px-6 py-2 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors" data-tab="resolved">Resolved</button>
+<button class="px-6 py-2 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors" data-tab="archived">Archived</button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-gutter">
+<!-- Main Queue Column -->
+<div class="xl:col-span-2 flex flex-col gap-gutter" id="reports-list">
+<!-- Queue Card 1: High Priority -->
+<div class="bg-surface rounded-xl border border-error-container p-6 shadow-[0px_10px_25px_rgba(0,0,0,0.03)] relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-error"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-3 items-center">
+<span class="px-2.5 py-1 rounded-md bg-error-container text-on-error-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> High Priority
+                                </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Chapter 12 • "The Silent Echo"</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">2 mins ago</span>
+</div>
+<div class="mb-6">
+<h4 class="font-title-md text-title-md mb-2">Flagged for: Harassment</h4>
+<p class="font-body-md text-body-md text-on-surface-variant italic bg-surface-container-low p-4 rounded-lg border border-outline-variant/30">
+                                "...nobody cares about your generic opinions, you should just stop writing entirely."
+                            </p>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-4 mt-auto">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">person</span> Reported by: user_782 (Trust Score: 92%)
+                            </div>
+<div class="flex gap-2">
+<button class="px-4 py-2 rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors">View Full Context</button>
+<button class="px-4 py-2 rounded-lg border border-error text-error font-label-md text-label-md hover:bg-error-container transition-colors">Remove</button>
+<button class="px-4 py-2 rounded-lg bg-error text-on-error font-label-md text-label-md hover:bg-error/90 transition-colors shadow-sm shadow-error/20">Warn Author</button>
+</div>
+</div>
+</div>
+<!-- Queue Card 2: Pending -->
+<div class="bg-surface rounded-xl border border-outline-variant/30 p-6 shadow-[0px_10px_25px_rgba(0,0,0,0.03)] relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-3 items-center">
+<span class="px-2.5 py-1 rounded-md bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">flag</span> Pending
+                                </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Comment on "Neon Nights"</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">15 mins ago</span>
+</div>
+<div class="mb-6">
+<h4 class="font-title-md text-title-md mb-2">Flagged for: Spam / Promotional</h4>
+<p class="font-body-md text-body-md text-on-surface-variant italic bg-surface-container-low p-4 rounded-lg border border-outline-variant/30">
+                                "Great read! Check out my new book at bit.ly/xyz123 it's way better tbh."
+                            </p>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-4 mt-auto">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">person</span> Reported by: Auto-Mod
+                            </div>
+<div class="flex gap-2">
+<button class="px-4 py-2 rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors">Approve</button>
+<button class="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md hover:bg-outline-variant/50 transition-colors">Remove</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Panel (Analytics & Stats) -->
+<div class="flex flex-col gap-gutter">
+<!-- Performance Overview Card -->
+<div class="bg-surface rounded-xl border border-outline-variant/30 p-6 shadow-[0px_10px_25px_rgba(0,0,0,0.03)]">
+<h4 class="font-title-md text-title-md mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">trending_up</span> Content Trends
+                        </h4>
+<!-- Pseudo Chart Area -->
+<div class="h-40 flex items-end gap-2 mb-4 border-b border-outline-variant/30 pb-2">
+<div class="flex-1 bg-primary-container/20 rounded-t-md h-12 relative group"><div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">12</div></div>
+<div class="flex-1 bg-primary-container/40 rounded-t-md h-20 relative group"><div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">20</div></div>
+<div class="flex-1 bg-primary-container/60 rounded-t-md h-16 relative group"><div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">16</div></div>
+<div class="flex-1 bg-error/60 rounded-t-md h-32 relative group"><div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">32</div></div>
+<div class="flex-1 bg-primary rounded-t-md h-24 relative group"><div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">24</div></div>
+</div>
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Today</span>
+</div>
+</div>
+<!-- Quick Stats -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface rounded-xl border border-outline-variant/30 p-4 shadow-[0px_10px_25px_rgba(0,0,0,0.03)] flex flex-col justify-center items-center text-center">
+<span class="font-display-lg text-display-lg text-primary" id="stats-pending-count">--</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pending</span>
+</div>
+<div class="bg-surface rounded-xl border border-outline-variant/30 p-4 shadow-[0px_10px_25px_rgba(0,0,0,0.03)] flex flex-col justify-center items-center text-center">
+<span class="font-display-lg text-display-lg text-error" id="stats-high-priority-count">--</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">High Priority</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+// Content Moderation Page logic
+let allReports = [];
+let currentTab = 'pending';
+
+// Toast feedback helper
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `fixed bottom-5 right-5 px-6 py-3 rounded-xl shadow-lg text-white font-medium z-[100] transition-all transform translate-y-10 opacity-0 duration-300 flex items-center gap-2 ${
+    type === 'success' ? 'bg-primary' : 'bg-error'
+  }`;
+  
+  const icon = document.createElement('span');
+  icon.className = 'material-symbols-outlined';
+  icon.textContent = type === 'success' ? 'check_circle' : 'error';
+  
+  const text = document.createElement('span');
+  text.textContent = message;
+  
+  toast.appendChild(icon);
+  toast.appendChild(text);
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.classList.remove('translate-y-10', 'opacity-0');
+  }, 10);
+  
+  setTimeout(() => {
+    toast.classList.add('translate-y-10', 'opacity-0');
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+  }, 3000);
+}
+
+// Format date helper
+function timeAgo(dateString) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const seconds = Math.floor((now - date) / 1000);
+  if (isNaN(seconds)) return 'some time ago';
+  if (seconds < 60) return 'Just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes} min${minutes > 1 ? 's' : ''} ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  const days = Math.floor(hours / 24);
+  return `${days} day${days > 1 ? 's' : ''} ago`;
+}
+
+// Fetch and load reports from API
+async function loadReports() {
+  try {
+    const response = await api.getAdminReports();
+    if (response && response.success) {
+      allReports = response.reports || [];
+      updateStats();
+      renderReports(currentTab);
+    } else {
+      showToast(response.error || 'Failed to fetch reports', 'error');
+    }
+  } catch (err) {
+    showToast(err.message || 'An error occurred while loading reports', 'error');
+  }
+}
+
+// Update stats on side panel
+function updateStats() {
+  const pendingCount = allReports.filter(r => r.status === 'pending').length;
+  const highPriorityCount = allReports.filter(r => r.status === 'pending' && r.priority === 'high').length;
+  
+  document.getElementById('stats-pending-count').textContent = pendingCount;
+  document.getElementById('stats-high-priority-count').textContent = highPriorityCount;
+}
+
+// Render report cards matching priority themes
+function renderReports(tab) {
+  const listContainer = document.getElementById('reports-list');
+  if (!listContainer) return;
+  
+  listContainer.innerHTML = '';
+  
+  // Filter based on tab selection
+  const filtered = allReports.filter(r => {
+    if (tab === 'pending') return r.status === 'pending';
+    if (tab === 'resolved') return r.status === 'resolved';
+    if (tab === 'archived') return r.status === 'archived';
+    return false;
+  });
+  
+  if (filtered.length === 0) {
+    listContainer.innerHTML = `
+      <div class="bg-surface rounded-xl border border-outline-variant/30 p-12 text-center shadow-[0px_10px_25px_rgba(0,0,0,0.03)] w-full col-span-2">
+        <span class="material-symbols-outlined text-[48px] text-outline opacity-40 mb-4">check_circle</span>
+        <h4 class="font-title-md text-title-md text-on-surface mb-2">No Reports Found</h4>
+        <p class="font-body-md text-body-md text-on-surface-variant">The queue is completely clear for the ${tab} tab!</p>
+      </div>
+    `;
+    return;
+  }
+  
+  filtered.forEach(report => {
+    // Determine priority design
+    let borderClass = 'border-outline-variant/30';
+    let accentClass = 'bg-outline';
+    let badgeHtml = '';
+    
+    if (report.priority === 'high') {
+      borderClass = 'border-error-container';
+      accentClass = 'bg-error';
+      badgeHtml = `
+        <span class="px-2.5 py-1 rounded-md bg-error-container text-on-error-container font-label-sm text-label-sm flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">warning</span> High Priority
+        </span>
+      `;
+    } else if (report.priority === 'medium') {
+      borderClass = 'border-tertiary-container/30';
+      accentClass = 'bg-tertiary';
+      badgeHtml = `
+        <span class="px-2.5 py-1 rounded-md bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">flag</span> Medium Priority
+        </span>
+      `;
+    } else {
+      badgeHtml = `
+        <span class="px-2.5 py-1 rounded-md bg-surface-container-highest text-outline font-label-sm text-label-sm flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">info</span> Low Priority
+        </span>
+      `;
+    }
+    
+    // Format target name
+    const targetLabel = report.targetType.charAt(0).toUpperCase() + report.targetType.slice(1);
+    const targetIdTrunc = report.targetId ? report.targetId.slice(0, 8) : 'Unknown';
+    const targetContext = `${targetLabel} ID: ${targetIdTrunc}`;
+    
+    // Action buttons depending on tab
+    let buttonsHtml = '';
+    if (report.status === 'pending') {
+      buttonsHtml = `
+        <button class="px-4 py-2 rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors" onclick="handleAction('${report.id}', 'approve')">Approve</button>
+        <button class="px-4 py-2 rounded-lg border border-error text-error font-label-md text-label-md hover:bg-error-container transition-colors" onclick="handleAction('${report.id}', 'remove')">Remove Content</button>
+      `;
+    } else if (report.status === 'resolved') {
+      buttonsHtml = `
+        <span class="px-3 py-1.5 rounded-lg bg-primary/10 text-primary font-label-sm text-label-sm flex items-center gap-1 font-semibold">
+          <span class="material-symbols-outlined text-[16px]">check_circle</span> Resolved
+        </span>
+        <button class="px-4 py-2 rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors" onclick="handleArchive('${report.id}')">Archive</button>
+      `;
+    } else {
+      buttonsHtml = `
+        <span class="px-3 py-1.5 rounded-lg bg-surface-container-highest text-outline font-label-sm text-label-sm flex items-center gap-1 font-semibold">
+          <span class="material-symbols-outlined text-[16px]">archive</span> Archived
+        </span>
+      `;
+    }
+    
+    const card = document.createElement('div');
+    card.className = `bg-surface rounded-xl border ${borderClass} p-6 shadow-[0px_10px_25px_rgba(0,0,0,0.03)] relative overflow-hidden group`;
+    card.innerHTML = `
+      <div class="absolute top-0 left-0 w-1 h-full ${accentClass}"></div>
+      <div class="flex justify-between items-start mb-4">
+        <div class="flex gap-3 items-center">
+          ${badgeHtml}
+          <span class="font-label-sm text-label-sm text-on-surface-variant">${targetContext}</span>
+        </div>
+        <span class="font-label-sm text-label-sm text-on-surface-variant">${timeAgo(report.createdAt)}</span>
+      </div>
+      <div class="mb-6">
+        <h4 class="font-title-md text-title-md mb-2">Flagged for: ${report.reason}</h4>
+        <p class="font-body-md text-body-md text-on-surface-variant italic bg-surface-container-low p-4 rounded-lg border border-outline-variant/30">
+          "${report.contentSnippet || 'No content snippet available.'}"
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-4 mt-auto">
+        <div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+          <span class="material-symbols-outlined text-[16px]">person</span> Reported by: ${report.reporterName}
+        </div>
+        <div class="flex gap-2 items-center">
+          ${buttonsHtml}
+        </div>
+      </div>
+    `;
+    
+    listContainer.appendChild(card);
+  });
+}
+
+// Action Handlers
+async function handleAction(reportId, action) {
+  try {
+    const confirmation = confirm(`Are you sure you want to ${action === 'approve' ? 'approve' : 'remove'} this content?`);
+    if (!confirmation) return;
+    
+    const response = await api.updateAdminReport(reportId, { resolutionAction: action });
+    if (response && response.success) {
+      showToast(action === 'approve' ? 'Content approved and report resolved.' : 'Content removed and report resolved.', 'success');
+      await loadReports();
+    } else {
+      showToast(response.error || 'Failed to update report', 'error');
+    }
+  } catch (err) {
+    showToast(err.message || 'An error occurred', 'error');
+  }
+}
+
+async function handleArchive(reportId) {
+  try {
+    const response = await api.updateAdminReport(reportId, { status: 'archived' });
+    if (response && response.success) {
+      showToast('Report archived successfully.', 'success');
+      await loadReports();
+    } else {
+      showToast(response.error || 'Failed to archive report', 'error');
+    }
+  } catch (err) {
+    showToast(err.message || 'An error occurred', 'error');
+  }
+}
+
+// Tab Switching initialization
+document.addEventListener('DOMContentLoaded', () => {
+  const tabsContainer = document.getElementById('moderation-tabs');
+  if (tabsContainer) {
+    tabsContainer.querySelectorAll('[data-tab]').forEach(tabBtn => {
+      tabBtn.addEventListener('click', () => {
+        // Toggle Active classes for all tab buttons
+        tabsContainer.querySelectorAll('[data-tab]').forEach(btn => {
+          btn.className = "px-6 py-2 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors";
+        });
+        
+        tabBtn.className = "px-6 py-2 rounded-lg bg-surface shadow-sm text-primary font-label-md text-label-md transition-all";
+        
+        currentTab = tabBtn.getAttribute('data-tab');
+        renderReports(currentTab);
+      });
+    });
+  }
+  
+  // Initial load
+  loadReports();
+});
+</script>
+</body></html>

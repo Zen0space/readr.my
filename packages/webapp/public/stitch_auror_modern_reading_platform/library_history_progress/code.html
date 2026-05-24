@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Auror - My Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fcf8ff",
+                        "primary-container": "#6063ee",
+                        "surface-dim": "#dbd8e4",
+                        "on-tertiary-container": "#fffbff",
+                        "secondary-container": "#8455ef",
+                        "tertiary": "#904900",
+                        "tertiary-fixed": "#ffdcc5",
+                        "surface-container-highest": "#e4e1ed",
+                        "inverse-surface": "#303038",
+                        "inverse-primary": "#c0c1ff",
+                        "surface-container-low": "#f5f2fe",
+                        "on-background": "#1b1b23",
+                        "tertiary-container": "#b55d00",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb783",
+                        "on-surface-variant": "#464554",
+                        "inverse-on-surface": "#f2effb",
+                        "secondary-fixed": "#e9ddff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#301400",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#fffbff",
+                        "on-tertiary-fixed-variant": "#703700",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#efecf8",
+                        "outline": "#767586",
+                        "surface": "#fcf8ff",
+                        "on-primary-fixed": "#07006c",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "error-container": "#ffdad6",
+                        "background": "#fcf8ff",
+                        "outline-variant": "#c7c4d7",
+                        "on-surface": "#1b1b23",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#e9e6f3",
+                        "primary-fixed": "#e1e0ff",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e4e1ed",
+                        "secondary": "#6b38d4",
+                        "surface-tint": "#494bd6",
+                        "on-secondary-fixed": "#23005c",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "primary": "#4648d4",
+                        "on-secondary-container": "#fffbff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "container-max": "1440px",
+                        "gutter": "24px",
+                        "sidebar-width": "280px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "headline-lg-mobile": ["Geist"],
+                        "label-md": ["Geist"],
+                        "display-lg": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Geist"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+        }
+        .bloom-effect {
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+<script src="/stitch_auror_modern_reading_platform/assets/js/api.js"></script>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex selection:bg-primary/20 selection:text-primary">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-[280px] z-50 border-r border-outline-variant/20 shadow-xl shadow-primary/5 bg-surface-container/80 backdrop-blur-xl flex flex-col gap-unit py-gutter px-4 hidden md:flex">
+  <div class="mb-10 px-4 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white bloom-effect">
+      <span class="material-symbols-outlined">auto_awesome</span>
+    </div>
+    <div>
+      <h1 class="font-headline-lg text-headline-lg font-bold tracking-tight text-primary">Auror</h1>
+      <p class="font-label-sm text-label-sm text-outline">Deep Flow Reading</p>
+    </div>
+  </div>
+  
+  <div class="flex flex-col gap-2">
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/">
+      <span class="material-symbols-outlined">explore</span>
+      <span class="font-label-md text-label-md">Explore</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-primary bg-primary-container/10 font-bold hover:bg-primary-container/10 transition-all duration-200" href="/library">
+      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+      <span class="font-label-md text-label-md">Library</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/wallet">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      <span class="font-label-md text-label-md">Wallet</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/subscription">
+      <span class="material-symbols-outlined">workspace_premium</span>
+      <span class="font-label-md text-label-md">Subscription</span>
+    </a>
+
+    <!-- Author Only Links -->
+    <div data-role-required="author" class="pt-4 border-t border-outline-variant/20 space-y-2">
+      <p class="px-4 text-[10px] font-semibold text-outline uppercase tracking-wider mb-2">Author Hub</p>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/author/studio">
+        <span class="material-symbols-outlined">stylus_note</span>
+        <span class="font-label-md text-label-md">Writing Studio</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/author/analytics">
+        <span class="material-symbols-outlined">insights</span>
+        <span class="font-label-md text-label-md">Analytics</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/author/earnings">
+        <span class="material-symbols-outlined">monetization_on</span>
+        <span class="font-label-md text-label-md">Earnings & Payout</span>
+      </a>
+    </div>
+
+    <!-- Admin Only Links -->
+    <div data-role-required="admin" class="pt-4 border-t border-outline-variant/20 space-y-2">
+      <p class="px-4 text-[10px] font-semibold text-outline uppercase tracking-wider mb-2">Admin Command</p>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/admin">
+        <span class="material-symbols-outlined">admin_panel_settings</span>
+        <span class="font-label-md text-label-md">Dashboard</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/admin/moderation">
+        <span class="material-symbols-outlined">gavel</span>
+        <span class="font-label-md text-label-md">Moderation</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/admin/users">
+        <span class="material-symbols-outlined">manage_accounts</span>
+        <span class="font-label-md text-label-md">Users</span>
+      </a>
+    </div>
+  </div>
+  
+  <div class="mt-auto pt-6 border-t border-outline-variant/30 space-y-2">
+    <a class="flex items-center gap-4 px-4 py-2 rounded-xl text-on-surface-variant hover:bg-primary-container/10 transition-colors" href="/author/settings">
+      <span class="material-symbols-outlined text-[20px]">settings</span>
+      <span class="font-label-md text-label-md">Settings</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-2 rounded-xl text-on-surface-variant hover:bg-primary-container/10 transition-colors cursor-pointer" id="sidebar-logout">
+      <span class="material-symbols-outlined text-[20px]">logout</span>
+      <span class="font-label-md text-label-md">Sign Out</span>
+    </a>
+  </div>
+</nav>
+
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-0 md:ml-[280px] flex flex-col min-h-screen">
+  <!-- TopAppBar -->
+  <header class="sticky top-0 w-full z-40 bg-surface/60 backdrop-blur-md shadow-sm flex items-center justify-between h-20 px-margin-mobile md:px-margin-desktop">
+    <div class="flex items-center gap-4 w-1/3">
+      <div class="md:hidden">
+        <span class="font-headline-lg text-xl font-bold text-primary">Auror</span>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-4">
+      <div class="text-right hidden sm:block">
+        <p class="text-xs font-semibold text-on-surface" data-username>Loading...</p>
+        <p class="text-[10px] text-outline font-semibold uppercase tracking-wider" data-role>Reader</p>
+      </div>
+      <div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/30 shrink-0">
+        <img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTxC03tpGsSw-Qzyd8Y-3Glm8wImzbMndlcURg27ty9I1z-BEUeJHqBAjNevIp537zz3btAipJwdAA5-6HRrgT4rYS4KGwkzgI4Kirk_hKi1YcXXm3YZBI8m5pHz4P-hYPIgApMuheSkYFnxqSLM4Iw-xMF2U89UikROAiDL_EP25fdzl1fI8cMiWCiiK9jDJTVXGq2IsjX6YHF3F9UXA297Lfsppfcn-CUdKiI48nVcaigOZ7_SdAE6k2Q4HOAqOI5zmYotNt6oOR"/>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Canvas -->
+  <main class="flex-1 p-margin-mobile md:p-margin-desktop w-full max-w-container-max mx-auto">
+    <div class="flex flex-col lg:flex-row gap-gutter">
+      <!-- Left Column: History & Flow -->
+      <div class="flex-1 flex flex-col gap-8">
+        <!-- Header -->
+        <div>
+          <h2 class="font-headline-lg text-headline-lg font-bold text-on-surface">My Saved Library</h2>
+          <p class="font-body-md text-body-md text-on-surface-variant mt-1">Access all your active flow novels and reading lists.</p>
+        </div>
+        
+        <!-- Saved Writings Grid -->
+        <section>
+          <div id="library-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <!-- Dynamic writings cards -->
+            <div class="col-span-full py-12 text-center text-outline">
+              <span class="animate-pulse">Loading library...</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: Stats -->
+      <div class="w-full lg:w-80 flex flex-col gap-6 shrink-0">
+        <!-- Stats Card -->
+        <div class="glass-card rounded-3xl p-6 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
+          <h3 class="font-title-md text-title-md font-medium text-on-surface mb-6 relative z-10">Reading Status</h3>
+          <div class="grid grid-cols-1 gap-4 mb-6 relative z-10">
+            <div>
+              <p class="font-label-sm text-outline mb-1">Total Saved Books</p>
+              <p id="total-saved-books" class="font-headline-lg text-3xl font-bold text-primary">0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    loadLibrary();
+
+    // Logout
+    document.getElementById('sidebar-logout').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await api.logout();
+    });
+  });
+
+  async function loadLibrary() {
+    const grid = document.getElementById('library-grid');
+    try {
+      const data = await api.getLibrary();
+      if (!data || !data.success || data.library.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-outline glass-card rounded-2xl">
+            <span class="material-symbols-outlined text-4xl mb-2 text-outline-variant">bookmark</span>
+            <p>Your library is empty. Go explore and save some stories!</p>
+            <a href="/" class="text-primary hover:underline mt-4 inline-block font-semibold">Explore Stories</a>
+          </div>
+        `;
+        document.getElementById('total-saved-books').textContent = '0';
+        return;
+      }
+
+      document.getElementById('total-saved-books').textContent = data.library.length;
+
+      grid.innerHTML = data.library.map(w => {
+        const cover = w.cover_url || 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3EM-Qf4Ho1wsDUZ4xwyemU-6ZKPVrZM77Zgq5b9bFsZkr5mzbsgjyaazWm-vBBV1ZYPsMtpD78Q7eBBdZbd2Y35MHrrEvR-8a_gx5-FnAsLW3dxy6-dfKcyGHYJx11lEu4QEcbqgiS_xvGgPuYNITNMXVzc9wI83-ntplYPI1xGIHneuDTYSWWxGpPeLS3FH0RuIURgCqYifQNeYIe5_GQSg2qffsSxS2dLGkAo5oLR2ThXuj8GqQj5ohCKkIIXIWmoS9JF2qlIn8';
+        return `
+          <div class="glass-card rounded-2xl p-4 flex gap-4 hover:shadow-lg hover:border-primary/30 transition-all cursor-pointer group" onclick="window.location.href='/reading?writing_id=${w.id}'">
+            <div class="w-20 h-28 rounded-lg bg-surface-container-high overflow-hidden shrink-0 shadow-sm">
+              <img src="${cover}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${w.title}">
+            </div>
+            <div class="flex flex-col justify-between flex-1">
+              <div>
+                <h4 class="font-label-md text-label-md font-bold text-on-surface line-clamp-1 group-hover:text-primary transition-colors">${w.title}</h4>
+                <p class="text-xs text-outline mt-1">By ${w.profiles?.username || 'Author'}</p>
+                <p class="text-xs text-on-surface-variant line-clamp-2 mt-2 font-light">${w.description || 'No description provided.'}</p>
+              </div>
+              <div class="flex items-center justify-between text-xs text-outline mt-2 pt-2 border-t border-outline-variant/10">
+                <span class="text-primary font-semibold">Read story</span>
+                <button onclick="event.stopPropagation(); removeBook('${w.id}')" class="text-error hover:underline flex items-center gap-0.5">
+                  <span class="material-symbols-outlined text-[14px]">delete</span>
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+    } catch (e) {
+      console.error(e);
+      grid.innerHTML = `
+        <div class="col-span-full py-12 text-center text-error">
+          <p>Failed to load library. Please try again later.</p>
+        </div>
+      `;
+    }
+  }
+
+  async function removeBook(writingId) {
+    if (!confirm('Are you sure you want to remove this story from your library?')) return;
+    try {
+      const res = await api.removeFromLibrary(writingId);
+      if (res && res.success) {
+        loadLibrary();
+      }
+    } catch (e) {
+      alert(e.message || 'Failed to remove story');
+    }
+  }
+</script>
+</body>
+</html>

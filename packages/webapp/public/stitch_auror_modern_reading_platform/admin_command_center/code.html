@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Analytics Dashboard - Auror</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="/stitch_auror_modern_reading_platform/assets/js/api.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "primary-fixed-dim": "#c0c1ff",
+                "surface": "#fcf8ff",
+                "tertiary-fixed": "#ffdcc5",
+                "secondary-container": "#8455ef",
+                "background": "#fcf8ff",
+                "on-error": "#ffffff",
+                "surface-bright": "#fcf8ff",
+                "outline": "#767586",
+                "surface-container-lowest": "#ffffff",
+                "primary-fixed": "#e1e0ff",
+                "surface-container": "#efecf8",
+                "tertiary-container": "#b55d00",
+                "on-primary-fixed": "#07006c",
+                "surface-variant": "#e4e1ed",
+                "primary": "#4648d4",
+                "secondary": "#6b38d4",
+                "on-secondary": "#ffffff",
+                "on-secondary-fixed-variant": "#5516be",
+                "error-container": "#ffdad6",
+                "on-tertiary-container": "#fffbff",
+                "inverse-on-surface": "#f2effb",
+                "secondary-fixed": "#e9ddff",
+                "surface-dim": "#dbd8e4",
+                "outline-variant": "#c7c4d7",
+                "on-tertiary-fixed-variant": "#703700",
+                "inverse-surface": "#303038",
+                "on-primary-fixed-variant": "#2f2ebe",
+                "secondary-fixed-dim": "#d0bcff",
+                "on-secondary-fixed": "#23005c",
+                "tertiary-fixed-dim": "#ffb783",
+                "on-surface-variant": "#464554",
+                "on-background": "#1b1b23",
+                "on-secondary-container": "#fffbff",
+                "on-primary": "#ffffff",
+                "on-tertiary-fixed": "#301400",
+                "error": "#ba1a1a",
+                "on-primary-container": "#fffbff",
+                "inverse-primary": "#c0c1ff",
+                "tertiary": "#904900",
+                "on-tertiary": "#ffffff",
+                "primary-container": "#6063ee",
+                "surface-container-high": "#e9e6f3",
+                "surface-container-low": "#f5f2fe",
+                "on-error-container": "#93000a",
+                "surface-container-highest": "#e4e1ed",
+                "surface-tint": "#494bd6",
+                "on-surface": "#1b1b23"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "margin-mobile": "16px",
+                "sidebar-width": "280px",
+                "gutter": "24px",
+                "unit": "4px",
+                "container-max": "1440px",
+                "margin-desktop": "40px"
+        },
+        "fontFamily": {
+                "body-lg": [
+                        "Inter"
+                ],
+                "title-md": [
+                        "Geist"
+                ],
+                "headline-lg-mobile": [
+                        "Geist"
+                ],
+                "headline-lg": [
+                        "Geist"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "label-sm": [
+                        "Geist"
+                ],
+                "display-lg": [
+                        "Geist"
+                ],
+                "label-md": [
+                        "Geist"
+                ]
+        },
+        "fontSize": {
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "title-md": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "28px",
+                        {
+                                "lineHeight": "36px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.02em",
+                                "fontWeight": "500"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+    body {
+        background-color: #fcf8ff;
+    }
+</style>
+</head>
+<body class="bg-background text-on-background font-body-md flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-xl border-r border-outline-variant/30 fixed left-0 top-0 h-screen w-[280px] shadow-[0px_10px_25px_rgba(0,0,0,0.03)] flex-col py-8 px-6 z-50">
+  <div class="mb-10">
+    <h1 class="font-display-lg text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-primary to-secondary">Auror</h1>
+    <p class="text-xs text-on-surface-variant mt-1 font-medium tracking-wide">Enter the Realm of Deep Flow</p>
+  </div>
+  
+  <div class="flex-1 space-y-2">
+    <!-- Standard Reader Links -->
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/">
+      <span class="material-symbols-outlined">explore</span>
+      <span class="font-label-md text-label-md">Explore</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/library">
+      <span class="material-symbols-outlined">auto_stories</span>
+      <span class="font-label-md text-label-md">Library</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/wallet">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      <span class="font-label-md text-label-md">Wallet</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/subscription">
+      <span class="material-symbols-outlined">workspace_premium</span>
+      <span class="font-label-md text-label-md">Subscription</span>
+    </a>
+
+    <!-- Author Only Links -->
+    <div data-role-required="author" class="pt-4 border-t border-outline-variant/20 space-y-2">
+      <p class="px-4 text-[10px] font-semibold text-outline uppercase tracking-wider mb-2">Author Hub</p>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/author/studio">
+        <span class="material-symbols-outlined">stylus_note</span>
+        <span class="font-label-md text-label-md">Writing Studio</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/author/analytics">
+        <span class="material-symbols-outlined">insights</span>
+        <span class="font-label-md text-label-md">Analytics</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/author/earnings">
+        <span class="material-symbols-outlined">monetization_on</span>
+        <span class="font-label-md text-label-md">Earnings & Payout</span>
+      </a>
+    </div>
+
+    <!-- Admin Only Links -->
+    <div data-role-required="admin" class="pt-4 border-t border-outline-variant/20 space-y-2">
+      <p class="px-4 text-[10px] font-semibold text-outline uppercase tracking-wider mb-2">Admin Command</p>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-primary bg-primary-container/10 font-bold hover:bg-primary-container/10 transition-all duration-200" href="/admin" id="nav-admin-dashboard">
+        <span class="material-symbols-outlined">admin_panel_settings</span>
+        <span class="font-label-md text-label-md">Dashboard</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/admin/moderation" id="nav-admin-moderation">
+        <span class="material-symbols-outlined">gavel</span>
+        <span class="font-label-md text-label-md">Moderation</span>
+      </a>
+      <a class="flex items-center gap-4 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-primary-container/10 hover:text-primary transition-all duration-200" href="/admin/users" id="nav-admin-users">
+        <span class="material-symbols-outlined">manage_accounts</span>
+        <span class="font-label-md text-label-md">Users</span>
+      </a>
+    </div>
+  </div>
+  
+  <div class="pt-6 border-t border-outline-variant/30 space-y-2">
+    <a class="flex items-center gap-4 px-4 py-2 rounded-xl text-on-surface-variant hover:bg-primary-container/10 transition-colors" href="/author/settings">
+      <span class="material-symbols-outlined text-[20px]">settings</span>
+      <span class="font-label-md text-label-md">Settings</span>
+    </a>
+    <a class="flex items-center gap-4 px-4 py-2 rounded-xl text-on-surface-variant hover:bg-primary-container/10 transition-colors cursor-pointer" id="sidebar-logout">
+      <span class="material-symbols-outlined text-[20px]">logout</span>
+      <span class="font-label-md text-label-md">Sign Out</span>
+    </a>
+  </div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col md:ml-[280px] h-full overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center h-16 px-margin-desktop sticky top-0 z-40 w-full bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm">
+<div class="flex items-center">
+<h2 class="font-headline-lg text-headline-lg font-bold text-on-surface dark:text-surface-bright hidden md:block">Auror</h2>
+</div>
+<div class="flex items-center space-x-4">
+<button class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-container-highest rounded-full p-2 transition-all active:opacity-80">
+<span class="material-symbols-outlined font-label-sm text-label-sm block">notifications</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-container-highest rounded-full p-2 transition-all active:opacity-80">
+<span class="material-symbols-outlined font-label-sm text-label-sm block">account_balance_wallet</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container dark:hover:bg-surface-container-highest rounded-full p-2 transition-all active:opacity-80">
+<span class="material-symbols-outlined font-label-sm text-label-sm block">dark_mode</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary-container overflow-hidden border border-outline-variant">
+<img alt="User Profile" class="h-full w-full object-cover" data-alt="A close up portrait of a professional individual looking confident. The lighting is soft and natural, emphasizing a welcoming and modern aesthetic typical of a high-end tech platform profile image." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnt1gWvSK2hYJs1sU4RcJ-6mgu79PZMiALMcr1Jyb5T30t90gPvbqloLakNm-tXUfWeW6OGsfH3yilXZD4o2CZilRz_HhwrvP6qIhXOaCGyiRdIFmHJD36Gm6DRAdxxIRkLj52uF64Vm-5l8pTYZiiErj-H8YXzoO35kyUTohTmfxNC0MIXFn5afxCy7n1bAfJdtd0POrP0B9nuTBcAqF4DV4TC7VfvHE08rsEoBxmLEOczZqHkPlgf1GoP9ZFQI4JY9pDtFfeyOzV"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<main class="flex-1 overflow-y-auto p-margin-mobile md:p-margin-desktop">
+<div class="max-w-container-max mx-auto space-y-gutter">
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-8">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Platform Overview</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage content flow and analyze reader engagement.</p>
+</div>
+<div class="mt-4 md:mt-0 flex space-x-3">
+<button class="px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container transition-colors">Export Report</button>
+<button class="px-4 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-sm hover:shadow-md transition-all">Refresh Data</button>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-gutter">
+<!-- Stat Card 1 -->
+<div class="bg-surface border border-outline-variant/50 rounded-xl p-6 shadow-[0px_10px_25px_rgba(0,0,0,0.03)] relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-display-lg" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Total Readers</p>
+<h3 id="total-users" class="font-headline-lg text-headline-lg text-on-surface mb-2">0</h3>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[16px] mr-1">trending_up</span>
+<span class="font-label-sm text-label-sm">+12.5% vs last month</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface border border-outline-variant/50 rounded-xl p-6 shadow-[0px_10px_25px_rgba(0,0,0,0.03)] relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-primary">
+<span class="material-symbols-outlined text-display-lg" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Total Writings</p>
+<h3 id="total-writings" class="font-headline-lg text-headline-lg text-on-surface mb-2">0</h3>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[16px] mr-1">trending_up</span>
+<span class="font-label-sm text-label-sm">+4.2% vs last month</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface border border-outline-variant/50 rounded-xl p-6 shadow-[0px_10px_25px_rgba(0,0,0,0.03)] relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-secondary">
+<span class="material-symbols-outlined text-display-lg" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Monthly Revenue</p>
+<h3 id="total-revenue" class="font-headline-lg text-headline-lg text-on-surface mb-2">$0.00</h3>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[16px] mr-1">trending_up</span>
+<span class="font-label-sm text-label-sm">+18.1% vs last month</span>
+</div>
+</div>
+</div>
+<!-- Main Chart & Moderation Bento -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Chart Area -->
+<div class="lg:col-span-2 bg-surface border border-outline-variant/50 rounded-xl p-6 shadow-[0px_10px_25px_rgba(0,0,0,0.03)] flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-title-md text-on-surface">Engagement &amp; Revenue Trends</h3>
+<select class="bg-surface-container border-none text-on-surface font-label-md text-label-md rounded-md py-1 px-3 focus:ring-primary">
+<option>Last 30 Days</option>
+<option>Last Quarter</option>
+<option>Year to Date</option>
+</select>
+</div>
+<!-- Placeholder for Chart -->
+<div class="flex-1 bg-surface-container-lowest rounded-lg border border-outline-variant/30 flex items-center justify-center min-h-[300px] relative overflow-hidden">
+<!-- Abstract Chart Representation -->
+<div class="absolute inset-0 p-4 flex items-end space-x-2">
+<div class="w-1/12 bg-primary/20 rounded-t-sm h-[30%]"></div>
+<div class="w-1/12 bg-primary/30 rounded-t-sm h-[45%]"></div>
+<div class="w-1/12 bg-primary/40 rounded-t-sm h-[40%]"></div>
+<div class="w-1/12 bg-primary/50 rounded-t-sm h-[60%]"></div>
+<div class="w-1/12 bg-primary/60 rounded-t-sm h-[55%]"></div>
+<div class="w-1/12 bg-primary/70 rounded-t-sm h-[70%]"></div>
+<div class="w-1/12 bg-primary/80 rounded-t-sm h-[65%]"></div>
+<div class="w-1/12 bg-primary rounded-t-sm h-[85%]"></div>
+<div class="w-1/12 bg-secondary/80 rounded-t-sm h-[75%]"></div>
+<div class="w-1/12 bg-secondary/90 rounded-t-sm h-[90%]"></div>
+<div class="w-1/12 bg-secondary rounded-t-sm h-[95%]"></div>
+<div class="w-1/12 bg-secondary-container rounded-t-sm h-[80%]"></div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant z-10 bg-surface/80 px-3 py-1 rounded backdrop-blur-sm">Interactive Multi-Line Chart Area</span>
+</div>
+</div>
+<!-- Moderation Queue -->
+<div class="bg-surface border border-outline-variant/50 rounded-xl p-6 shadow-[0px_10px_25px_rgba(0,0,0,0.03)] flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-title-md text-on-surface">Content Moderation</h3>
+<span class="bg-error/10 text-error font-label-sm text-label-sm px-2 py-1 rounded-full">12 Pending</span>
+</div>
+<div class="space-y-4 flex-1 overflow-y-auto pr-2">
+<!-- Queue Item 1 -->
+<div class="p-4 bg-surface-container-lowest border border-outline-variant/30 rounded-lg">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-tertiary-container bg-tertiary-container/10 px-2 py-0.5 rounded">Flagged Review</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">2h ago</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-3 line-clamp-2">"The pacing in chapter 4 is completely off, it feels like the author gave up..."</p>
+<div class="flex space-x-2">
+<button class="flex-1 py-1.5 border border-outline-variant rounded text-on-surface font-label-sm text-label-sm hover:bg-surface-container">Dismiss</button>
+<button class="flex-1 py-1.5 bg-error text-on-error rounded font-label-sm text-label-sm hover:bg-error/90">Remove</button>
+</div>
+</div>
+<!-- Queue Item 2 -->
+<div class="p-4 bg-surface-container-lowest border border-outline-variant/30 rounded-lg">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-primary bg-primary/10 px-2 py-0.5 rounded">Author Request</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">5h ago</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-3 line-clamp-2">Request to change publication status for "The Silent Observer".</p>
+<div class="flex space-x-2">
+<button class="flex-1 py-1.5 border border-outline-variant rounded text-on-surface font-label-sm text-label-sm hover:bg-surface-container">Review</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Heatmap Section -->
+<div class="bg-surface border border-outline-variant/50 rounded-xl p-6 shadow-[0px_10px_25px_rgba(0,0,0,0.03)] mt-gutter">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-title-md text-on-surface">Global Reading Activity</h3>
+<div class="flex space-x-2 items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Low</span>
+<div class="w-4 h-4 rounded-sm bg-primary/20"></div>
+<div class="w-4 h-4 rounded-sm bg-primary/40"></div>
+<div class="w-4 h-4 rounded-sm bg-primary/60"></div>
+<div class="w-4 h-4 rounded-sm bg-primary"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">High</span>
+</div>
+</div>
+<div class="h-[200px] bg-surface-container-lowest border border-outline-variant/30 rounded-lg overflow-hidden relative">
+<!-- Simulated Heatmap Grid -->
+<div class="absolute inset-0 grid grid-cols-12 gap-1 p-2">
+<!-- Just filling with some abstract colored blocks for the heatmap vibe -->
+<div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/10 rounded-sm"></div><div class="bg-primary/80 rounded-sm"></div><div class="bg-primary/30 rounded-sm"></div><div class="bg-primary/50 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/10 rounded-sm"></div><div class="bg-primary/60 rounded-sm"></div><div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/90 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div>
+<div class="bg-primary/10 rounded-sm"></div><div class="bg-primary/50 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/70 rounded-sm"></div><div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/60 rounded-sm"></div><div class="bg-primary/10 rounded-sm"></div><div class="bg-primary/30 rounded-sm"></div><div class="bg-primary/80 rounded-sm"></div><div class="bg-primary/50 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/10 rounded-sm"></div>
+<div class="bg-primary/30 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/90 rounded-sm"></div><div class="bg-primary/50 rounded-sm"></div><div class="bg-primary/30 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div><div class="bg-primary/60 rounded-sm"></div><div class="bg-primary/40 rounded-sm"></div><div class="bg-primary/10 rounded-sm"></div><div class="bg-primary/30 rounded-sm"></div><div class="bg-primary/20 rounded-sm"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      const data = await api.getAnalyticsDashboard();
+      if (data && data.success && data.role === 'admin') {
+        const metrics = data.metrics;
+        document.getElementById('total-users').textContent = Number(metrics.total_users).toLocaleString();
+        document.getElementById('total-writings').textContent = Number(metrics.total_writings).toLocaleString();
+        document.getElementById('total-revenue').textContent = '$' + Number(metrics.total_revenue || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+    } catch (err) {
+      console.error('Failed to load admin analytics:', err);
+    }
+  });
+</script>
+</body></html>

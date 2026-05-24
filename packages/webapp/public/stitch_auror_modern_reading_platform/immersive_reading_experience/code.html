@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Auror - Reading Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..900&amp;family=Inter:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-primary-container": "#fffbff",
+                "surface": "#fcf8ff",
+                "surface-variant": "#e4e1ed",
+                "tertiary-fixed": "#ffdcc5",
+                "primary-container": "#6063ee",
+                "surface-container-low": "#f5f2fe",
+                "inverse-surface": "#303038",
+                "on-tertiary-container": "#fffbff",
+                "on-surface-variant": "#464554",
+                "on-surface": "#1b1b23",
+                "surface-container-high": "#e9e6f3",
+                "on-secondary-container": "#fffbff",
+                "tertiary": "#904900",
+                "surface-tint": "#494bd6",
+                "secondary-fixed-dim": "#d0bcff",
+                "on-tertiary-fixed-variant": "#703700",
+                "on-primary-fixed-variant": "#2f2ebe",
+                "surface-container-highest": "#e4e1ed",
+                "primary-fixed": "#e1e0ff",
+                "on-secondary": "#ffffff",
+                "error-container": "#ffdad6",
+                "on-secondary-fixed-variant": "#5516be",
+                "on-error": "#ffffff",
+                "tertiary-fixed-dim": "#ffb783",
+                "primary-fixed-dim": "#c0c1ff",
+                "primary": "#4648d4",
+                "surface-dim": "#dbd8e4",
+                "surface-bright": "#fcf8ff",
+                "outline": "#767586",
+                "on-background": "#1b1b23",
+                "secondary-fixed": "#e9ddff",
+                "secondary-container": "#8455ef",
+                "error": "#ba1a1a",
+                "surface-container-lowest": "#ffffff",
+                "outline-variant": "#c7c4d7",
+                "secondary": "#6b38d4",
+                "on-tertiary-fixed": "#301400",
+                "on-error-container": "#93000a",
+                "tertiary-container": "#b55d00",
+                "inverse-on-surface": "#f2effb",
+                "inverse-primary": "#c0c1ff",
+                "on-secondary-fixed": "#23005c",
+                "on-primary": "#ffffff",
+                "on-primary-fixed": "#07006c",
+                "on-tertiary": "#ffffff",
+                "surface-container": "#efecf8",
+                "background": "#fcf8ff"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "unit": "4px",
+                "margin-desktop": "40px",
+                "margin-mobile": "16px",
+                "gutter": "24px",
+                "sidebar-width": "280px",
+                "container-max": "1440px"
+        },
+        "fontFamily": {
+                "label-sm": ["Geist"],
+                "label-md": ["Geist"],
+                "title-md": ["Geist"],
+                "display-lg": ["Geist"],
+                "body-md": ["Inter"],
+                "headline-lg-mobile": ["Geist"],
+                "headline-lg": ["Geist"],
+                "body-lg": ["Inter"]
+        }
+      }
+    }
+  }
+</script>
+<script src="/stitch_auror_modern_reading_platform/assets/js/api.js"></script>
+</head>
+<body class="bg-surface text-on-surface font-body-md font-sans antialiased min-h-screen flex flex-col selection:bg-primary-container/30 selection:text-primary">
+<!-- TopAppBar -->
+<header class="bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-xl docked top-0 w-full z-40 border-b border-outline-variant dark:border-outline/20 shadow-sm sticky">
+  <div class="flex justify-between items-center px-margin-desktop h-20 w-full max-w-container-max mx-auto">
+    <!-- Left: Brand / Title -->
+    <div class="flex items-center gap-4">
+      <button onclick="window.location.href='/'" class="p-2 text-on-surface-variant hover:bg-surface-container-high/50 rounded-full transition-colors focus-within:ring-2 focus-within:ring-primary/20">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+      <div class="flex flex-col">
+        <span class="text-[10px] font-label-sm text-outline uppercase tracking-wider">Currently Reading</span>
+        <h1 id="header-writing-title" class="text-title-md font-title-md font-semibold text-primary">Loading Story...</h1>
+      </div>
+    </div>
+    <!-- Right: Actions & Focus Mode -->
+    <div class="flex items-center gap-6">
+      <!-- Coins Widget -->
+      <a href="/wallet" class="bg-primary-container/10 border border-primary-container/20 px-3 py-1 rounded-full flex items-center gap-1.5 text-primary text-xs font-semibold">
+        <span class="material-symbols-outlined text-[16px]">toll</span>
+        <span id="coins-count">--</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="flex-1 flex max-w-container-max mx-auto w-full relative">
+  <!-- Left Sidebar: Table of Contents (Sticky) -->
+  <aside class="hidden lg:block w-64 shrink-0 py-8 px-6 sticky top-20 h-[calc(100vh-80px)] overflow-y-auto border-r border-outline-variant/10">
+    <h2 class="text-xs font-bold text-outline uppercase tracking-widest mb-6">Chapters Table</h2>
+    <nav id="chapters-toc" class="flex flex-col gap-1 relative border-l border-outline-variant/30 ml-2 pl-4">
+      <span class="text-xs text-outline italic">Loading TOC...</span>
+    </nav>
+  </aside>
+
+  <!-- Main Reading Canvas -->
+  <main class="flex-1 max-w-[720px] mx-auto w-full px-margin-mobile md:px-8 py-12 lg:py-16 relative">
+    
+    <!-- Chapter Header -->
+    <header class="mb-12 text-center">
+      <span id="chapter-order-label" class="text-xs font-bold text-primary tracking-widest uppercase mb-4 block">Chapter --</span>
+      <h1 id="chapter-title" class="text-4xl font-bold text-on-surface mb-8 leading-tight">Loading Chapter...</h1>
+      
+      <!-- Author Attribution -->
+      <div class="flex items-center justify-center gap-4 bg-surface-container-low border border-outline-variant/30 rounded-full py-2 px-4 w-fit mx-auto shadow-sm">
+        <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border border-surface shrink-0">A</div>
+        <div class="flex flex-col text-left">
+          <span id="author-name" class="text-xs font-semibold text-on-surface">Author</span>
+          <span class="text-[9px] text-outline uppercase tracking-wider">Writer</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Body Text Content or Lock Screen -->
+    <article id="chapter-body-article" class="prose prose-lg max-w-none text-body-lg font-body-lg leading-relaxed text-on-surface-variant space-y-8 min-h-[300px]">
+      <p class="text-center text-outline py-12">Loading chapter content...</p>
+    </article>
+
+    <!-- Comments Section -->
+    <section class="mt-16 pt-8 border-t border-outline-variant/30">
+      <h3 class="font-title-md text-title-md font-semibold text-on-surface mb-6">Discussion & Comments</h3>
+      
+      <!-- Add Comment Form -->
+      <form id="comment-form" class="mb-8">
+        <textarea id="comment-input" rows="3" required class="w-full bg-slate-50 border border-outline-variant/40 rounded-xl p-4 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:bg-white transition-all resize-none outline-none" placeholder="Share your thoughts about this chapter..."></textarea>
+        <div class="flex justify-end mt-3">
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary text-white font-semibold text-xs shadow-md hover:bg-primary-container transition-all flex items-center gap-1.5">
+            <span>Post Comment</span>
+            <span class="material-symbols-outlined text-[16px]">send</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Comments List -->
+      <div id="comments-list" class="space-y-4">
+        <span class="text-xs text-outline italic">No comments yet. Be the first to share your thoughts!</span>
+      </div>
+    </section>
+
+    <!-- Chapter Footer Navigation -->
+    <footer class="mt-16 pt-8 border-t border-outline-variant/30 flex items-center justify-between gap-6">
+      <button id="prev-chapter-btn" class="flex items-center gap-3 text-on-surface-variant hover:text-primary transition-colors group disabled:opacity-30 disabled:pointer-events-none">
+        <span class="material-symbols-outlined p-2 rounded-full bg-surface-container-high group-hover:bg-primary/10 transition-colors">arrow_back</span>
+        <div class="flex flex-col text-left">
+          <span class="text-[10px] text-outline uppercase font-semibold">Previous</span>
+          <span class="text-xs font-bold">Chapter</span>
+        </div>
+      </button>
+      <button id="next-chapter-btn" class="flex items-center gap-3 text-on-surface-variant hover:text-primary transition-colors group text-right disabled:opacity-30 disabled:pointer-events-none">
+        <div class="flex flex-col">
+          <span class="text-[10px] text-outline uppercase font-semibold">Next</span>
+          <span class="text-xs font-bold">Chapter</span>
+        </div>
+        <span class="material-symbols-outlined p-2 rounded-full bg-surface-container-high group-hover:bg-primary/10 transition-colors">arrow_forward</span>
+      </button>
+    </footer>
+
+  </main>
+
+  <!-- Right Sidebar: Reader Actions (Sticky) -->
+  <aside class="hidden xl:flex flex-col w-20 shrink-0 py-20 px-4 sticky top-20 h-[calc(100vh-80px)] items-center gap-6">
+    <!-- Like button -->
+    <button id="like-btn" class="group flex flex-col items-center gap-1 text-on-surface-variant hover:text-error transition-colors">
+      <div id="like-icon-container" class="w-12 h-12 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center shadow-sm group-hover:bg-error-container/20 group-hover:border-error/30 transition-all">
+        <span class="material-symbols-outlined text-[24px]" id="like-icon">favorite</span>
+      </div>
+      <span id="likes-count" class="text-xs font-bold">0</span>
+    </button>
+    
+    <!-- Save/Library button -->
+    <button id="save-library-btn" class="group flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+      <div id="library-icon-container" class="w-12 h-12 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center shadow-sm group-hover:bg-primary/10 group-hover:border-primary/30 transition-all">
+        <span class="material-symbols-outlined text-[24px]" id="library-icon">bookmark</span>
+      </div>
+      <span id="library-status-label" class="text-[10px] font-semibold">Save</span>
+    </button>
+  </aside>
+</div>
+
+<script>
+  let activeWritingId = null;
+  let activeChapterId = null;
+  let allChapters = [];
+  let isBookSaved = false;
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    activeWritingId = urlParams.get('writing_id');
+    const urlChapterId = urlParams.get('chapter_id');
+
+    if (!activeWritingId) {
+      window.location.href = '/';
+      return;
+    }
+
+    // Load Wallet Balance
+    try {
+      const wBal = await api.getWalletBalance();
+      if (wBal && wBal.success) {
+        document.getElementById('coins-count').textContent = wBal.wallet.coin_balance;
+      }
+    } catch(e){}
+
+    // Load Writing Info
+    try {
+      const writing = await api.getWriting(activeWritingId);
+      if (writing && writing.success) {
+        document.getElementById('header-writing-title').textContent = writing.writing.title;
+        document.getElementById('author-name').textContent = writing.writing.profiles?.username || 'Author';
+      }
+    } catch(e) {
+      console.error(e);
+    }
+
+    // Load Save Status
+    checkLibraryStatus();
+
+    // Load Chapters List (TOC)
+    try {
+      const chaptersData = await api.getChapters(activeWritingId);
+      if (chaptersData && chaptersData.success) {
+        allChapters = chaptersData.chapters.sort((a, b) => a.chapter_order - b.chapter_order);
+        renderTOC();
+
+        // Select chapter: URL chapter_id or first chapter
+        let activeChapter = null;
+        if (urlChapterId) {
+          activeChapter = allChapters.find(c => c.id === urlChapterId);
+        }
+        if (!activeChapter && allChapters.length > 0) {
+          activeChapter = allChapters[0];
+        }
+
+        if (activeChapter) {
+          activeChapterId = activeChapter.id;
+          loadChapterContent(activeChapterId);
+        } else {
+          document.getElementById('chapter-body-article').innerHTML = `
+            <div class="text-center text-outline py-12">
+              <span class="material-symbols-outlined text-4xl mb-2 text-outline-variant">edit_document</span>
+              <p>No published chapters found for this story.</p>
+            </div>
+          `;
+        }
+      }
+    } catch(e) {
+      console.error(e);
+    }
+
+    // Connect Like Action
+    document.getElementById('like-btn').addEventListener('click', toggleLike);
+
+    // Connect Save Library Action
+    document.getElementById('save-library-btn').addEventListener('click', toggleLibrary);
+
+    // Connect Comment Form
+    document.getElementById('comment-form').addEventListener('submit', postComment);
+  });
+
+  async function checkLibraryStatus() {
+    try {
+      const lib = await api.getLibrary();
+      if (lib && lib.success) {
+        isBookSaved = lib.library.some(item => item.id === activeWritingId);
+        const icon = document.getElementById('library-icon');
+        const label = document.getElementById('library-status-label');
+        const container = document.getElementById('library-icon-container');
+        if (isBookSaved) {
+          icon.style.fontVariationSettings = "'FILL' 1";
+          icon.classList.add('text-primary');
+          label.textContent = 'Saved';
+          label.classList.add('text-primary');
+          container.classList.add('bg-primary/5', 'border-primary/30');
+        } else {
+          icon.style.fontVariationSettings = "'FILL' 0";
+          icon.classList.remove('text-primary');
+          label.textContent = 'Save';
+          label.classList.remove('text-primary');
+          container.classList.remove('bg-primary/5', 'border-primary/30');
+        }
+      }
+    } catch(e){}
+  }
+
+  async function toggleLibrary() {
+    try {
+      if (isBookSaved) {
+        await api.removeFromLibrary(activeWritingId);
+      } else {
+        await api.addToLibrary(activeWritingId);
+      }
+      checkLibraryStatus();
+    } catch(e) {
+      alert(e.message || 'Error updating library');
+    }
+  }
+
+  async function toggleLike() {
+    try {
+      const data = await api.toggleLike(activeWritingId);
+      if (data && data.success) {
+        const likeIcon = document.getElementById('like-icon');
+        const likesCount = document.getElementById('likes-count');
+        const container = document.getElementById('like-icon-container');
+        likesCount.textContent = data.likes_count;
+        if (data.liked) {
+          likeIcon.style.fontVariationSettings = "'FILL' 1";
+          likeIcon.classList.add('text-error');
+          container.classList.add('bg-error/5', 'border-error/30');
+        } else {
+          likeIcon.style.fontVariationSettings = "'FILL' 0";
+          likeIcon.classList.remove('text-error');
+          container.classList.remove('bg-error/5', 'border-error/30');
+        }
+      }
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
+  async function loadChapterContent(chapterId) {
+    const article = document.getElementById('chapter-body-article');
+    article.innerHTML = '<p class="text-center text-outline py-12">Loading chapter content...</p>';
+    
+    // Update TOC active state
+    document.querySelectorAll('[data-toc-chapter-id]').forEach(el => {
+      if (el.getAttribute('data-toc-chapter-id') === chapterId) {
+        el.className = "text-label-md font-bold py-2 text-primary bg-primary/5 -ml-4 pl-4 pr-2 rounded-r-lg relative flex items-center gap-2 group";
+        const bullet = el.querySelector('.toc-bullet');
+        if (bullet) {
+          bullet.className = "toc-bullet w-2 h-2 rounded-full bg-primary absolute -left-[4px] shadow-[0_0_8px_rgba(99,102,241,0.6)]";
+        }
+      } else {
+        el.className = "text-label-md py-2 text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2 group relative";
+        const bullet = el.querySelector('.toc-bullet');
+        if (bullet) {
+          bullet.className = "toc-bullet w-1.5 h-1.5 rounded-full bg-outline-variant group-hover:bg-primary/50 transition-colors absolute -left-[3px]";
+        }
+      }
+    });
+
+    const activeCh = allChapters.find(c => c.id === chapterId);
+    if (activeCh) {
+      document.getElementById('chapter-title').textContent = activeCh.title;
+      document.getElementById('chapter-order-label').textContent = `Chapter ${activeCh.chapter_order}`;
+    }
+
+    // Set Footer Buttons
+    const activeIndex = allChapters.findIndex(c => c.id === chapterId);
+    const prevBtn = document.getElementById('prev-chapter-btn');
+    const nextBtn = document.getElementById('next-chapter-btn');
+
+    if (activeIndex > 0) {
+      prevBtn.disabled = false;
+      prevBtn.onclick = () => selectChapter(allChapters[activeIndex - 1].id);
+    } else {
+      prevBtn.disabled = true;
+    }
+
+    if (activeIndex >= 0 && activeIndex < allChapters.length - 1) {
+      nextBtn.disabled = false;
+      nextBtn.onclick = () => selectChapter(allChapters[activeIndex + 1].id);
+    } else {
+      nextBtn.disabled = true;
+    }
+
+    // Fetch Content
+    try {
+      const data = await api.getChapter(chapterId);
+      if (data && data.success) {
+        // Format body text with paragraphs
+        const contentHtml = data.chapter.content.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
+        article.innerHTML = contentHtml;
+        loadComments(chapterId);
+      }
+    } catch(err) {
+      console.error(err);
+      // Handle Premium Locked state (HTTP 402/401)
+      if (err.message.includes('unlock') || err.message.includes('402') || err.message.includes('Payment Required') || activeCh.is_premium) {
+        const coinPrice = activeCh.coin_price || 50;
+        article.innerHTML = `
+          <div class="glass-card rounded-2xl p-8 border border-outline-variant/30 shadow-lg text-center flex flex-col items-center justify-center my-8 max-w-lg mx-auto relative overflow-hidden bg-white/70">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-secondary"></div>
+            <div class="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-6">
+              <span class="material-symbols-outlined text-[36px]">lock</span>
+            </div>
+            <h3 class="font-display text-2xl font-bold text-on-surface mb-2">Premium Chapter</h3>
+            <p class="text-sm text-outline mb-6">This chapter is premium and requires coins to unlock. Unlock now to support the author and continue your flow.</p>
+            
+            <button onclick="unlockActiveChapter('${chapterId}')" class="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2 hover:scale-[1.01] active:scale-[0.99] duration-150">
+              <span class="material-symbols-outlined text-[20px]">toll</span>
+              <span>Unlock for ${coinPrice} Coins</span>
+            </button>
+          </div>
+        `;
+      } else {
+        article.innerHTML = `
+          <div class="text-center text-error py-12">
+            <p>Failed to load chapter. Please reload or try again later.</p>
+          </div>
+        `;
+      }
+    }
+  }
+
+  function selectChapter(chapterId) {
+    activeChapterId = chapterId;
+    // Update URL history without page reload
+    const url = new URL(window.location);
+    url.searchParams.set('chapter_id', chapterId);
+    window.history.pushState({}, '', url);
+    loadChapterContent(chapterId);
+  }
+
+  async function unlockActiveChapter(chapterId) {
+    try {
+      const data = await api.unlockChapter(chapterId);
+      if (data && data.success) {
+        // Refresh coins count
+        const wBal = await api.getWalletBalance();
+        if (wBal && wBal.success) {
+          document.getElementById('coins-count').textContent = wBal.wallet.coin_balance;
+        }
+        // Reload chapter body
+        loadChapterContent(chapterId);
+      }
+    } catch(err) {
+      alert(err.message || 'Insufficient coin balance or unlock failed.');
+      window.location.href = '/wallet';
+    }
+  }
+
+  function renderTOC() {
+    const toc = document.getElementById('chapters-toc');
+    if (allChapters.length === 0) {
+      toc.innerHTML = '<span class="text-xs text-outline italic">No chapters available</span>';
+      return;
+    }
+
+    toc.innerHTML = allChapters.map(c => {
+      const isLocked = c.is_premium;
+      const icon = isLocked ? 'lock' : 'auto_stories';
+      return `
+        <a data-toc-chapter-id="${c.id}" class="text-label-md py-2 text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2 group relative cursor-pointer" onclick="selectChapter('${c.id}')">
+          <span class="toc-bullet w-1.5 h-1.5 rounded-full bg-outline-variant group-hover:bg-primary/50 transition-colors absolute -left-[3px]"></span>
+          <span class="truncate pr-4">${c.title}</span>
+          ${isLocked ? `<span class="material-symbols-outlined text-[14px] text-outline ml-auto group-hover:text-primary transition-colors">lock</span>` : ''}
+        </a>
+      `;
+    }).join('');
+  }
+
+  async function loadComments(chapterId) {
+    const list = document.getElementById('comments-list');
+    try {
+      const data = await api.getComments(activeWritingId, chapterId);
+      if (data && data.success && data.comments.length > 0) {
+        list.innerHTML = data.comments.map(c => {
+          const date = new Date(c.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+          const user = JSON.parse(localStorage.getItem('user') || '{}');
+          const isOwner = user.id === c.user_id;
+          return `
+            <div class="glass-card bg-white/40 dark:bg-slate-900/40 rounded-xl p-4 border border-outline-variant/20 shadow-sm flex gap-3 relative">
+              <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary shrink-0 overflow-hidden border border-surface">
+                ${c.profiles?.avatar_url ? `<img src="${c.profiles.avatar_url}" class="w-full h-full object-cover" />` : c.profiles?.username?.charAt(0).toUpperCase() || 'U'}
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <h5 class="text-xs font-bold text-on-surface">${c.profiles?.username || 'User'}</h5>
+                  <span class="text-[10px] text-outline">${date}</span>
+                </div>
+                <p class="text-xs text-on-surface-variant mt-1.5 font-light leading-relaxed">${c.content}</p>
+              </div>
+              ${isOwner ? `
+                <button onclick="deleteUserComment('${c.id}')" class="absolute top-2 right-2 text-outline-variant hover:text-error transition-colors p-1" title="Delete comment">
+                  <span class="material-symbols-outlined text-[16px]">delete</span>
+                </button>
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+      } else {
+        list.innerHTML = '<span class="text-xs text-outline italic">No comments yet. Be the first to share your thoughts!</span>';
+      }
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
+  async function postComment(e) {
+    e.preventDefault();
+    const commentInput = document.getElementById('comment-input');
+    const content = commentInput.value.trim();
+    if (!content) return;
+
+    try {
+      const res = await api.addComment(activeWritingId, content, activeChapterId);
+      if (res && res.success) {
+        commentInput.value = '';
+        loadComments(activeChapterId);
+      }
+    } catch(e) {
+      alert(e.message || 'Failed to add comment');
+    }
+  }
+
+  async function deleteUserComment(commentId) {
+    if (!confirm('Are you sure you want to delete this comment?')) return;
+    try {
+      const res = await api.deleteComment(commentId);
+      if (res && res.success) {
+        loadComments(activeChapterId);
+      }
+    } catch(e) {
+      alert(e.message || 'Failed to delete comment');
+    }
+  }
+</script>
+</body>
+</html>
