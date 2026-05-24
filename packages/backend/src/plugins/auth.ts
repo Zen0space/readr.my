@@ -31,10 +31,17 @@ const jwks = (() => {
 
 const verifyToken = async (token: string): Promise<JWTPayload> => {
   if (env.SUPABASE_JWT_SECRET) {
-    const { payload } = await jwtVerify(token, new TextEncoder().encode(env.SUPABASE_JWT_SECRET), {
-      algorithms: ['HS256'],
-    })
-    return payload
+    try {
+      const { payload } = await jwtVerify(
+        token,
+        new TextEncoder().encode(env.SUPABASE_JWT_SECRET),
+        { algorithms: ['HS256'] },
+      )
+      return payload
+    } catch {
+      // Fall through to JWKS — the new sb_publishable/sb_secret key system
+      // signs tokens with an asymmetric key (ES256) instead of the legacy HS256 secret.
+    }
   }
   const { payload } = await jwtVerify(token, jwks)
   return payload

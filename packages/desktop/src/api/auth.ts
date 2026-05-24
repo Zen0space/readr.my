@@ -30,6 +30,26 @@ export const signInWithPassword = async (email: string, password: string): Promi
   }
 }
 
+export const signUpWithPassword = async (email: string, password: string): Promise<SignInResult> => {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { data: { role: 'author' } },
+  })
+  if (error) throw error
+  const session = data.session
+  const user = data.user
+  if (!session || !user) {
+    throw new Error('Check your email to confirm your account before signing in.')
+  }
+  return {
+    jwt: session.access_token,
+    refreshToken: session.refresh_token,
+    userId: user.id,
+    email: user.email ?? email,
+  }
+}
+
 export const signOut = async (): Promise<void> => {
   await supabase.auth.signOut()
 }
