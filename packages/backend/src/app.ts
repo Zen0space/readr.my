@@ -21,6 +21,7 @@ import { notificationRoutes } from './modules/notifications/routes.js'
 import { reportRoutes } from './modules/reports/routes.js'
 import { payoutRoutes } from './modules/payouts/routes.js'
 import { adminRoutes } from './modules/admin/routes.js'
+import { meRoutes } from './modules/me/routes.js'
 
 export const buildApp = async (): Promise<FastifyInstance> => {
   const isDev = env.NODE_ENV === 'development'
@@ -116,6 +117,7 @@ export const buildApp = async (): Promise<FastifyInstance> => {
   await app.register(reportRoutes)
   await app.register(payoutRoutes)
   await app.register(adminRoutes)
+  await app.register(meRoutes)
 
   return app
 }
