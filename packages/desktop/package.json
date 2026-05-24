@@ -8,6 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
+    "dev:tauri": "tauri dev",
+    "build:tauri": "tauri build",
     "lint": "echo \"no lint\"",
     "test": "echo \"no tests\"",
     "typecheck": "tsc --noEmit"
