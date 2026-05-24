@@ -7,6 +7,9 @@ export type ApiClientConfig = {
   getToken: () => Promise<string | null>
   devLog?: (line: string) => void
   onUnauthorized?: () => void
+  // If provided, on a 401 the client will await this once and, on `true`, retry the request a single time.
+  // `onUnauthorized` only fires if refreshAuth is absent or resolves to `false`.
+  refreshAuth?: () => Promise<boolean>
 }
 
 export type ApiClient = {
@@ -20,7 +23,11 @@ export type ApiClient = {
 type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
 
 export const createApiClient = (cfg: ApiClientConfig): ApiClient => {
-  const request = async <T>(method: Method, path: string, body?: unknown): Promise<T> => {
+  const sendOnce = async (
+    method: Method,
+    path: string,
+    body: unknown,
+  ): Promise<{ res: Response; ms: number; text: string }> => {
     const url = cfg.baseUrl.replace(/\/+$/, '') + path
     const token = await cfg.getToken()
     const headers: Record<string, string> = { 'content-type': 'application/json' }
@@ -38,15 +45,28 @@ export const createApiClient = (cfg: ApiClientConfig): ApiClient => {
       cfg.devLog?.(formatDevLogLine({ method, path, status: 'NET', ms: null, code: 'network_unreachable' }))
       throw new NetworkError(cause)
     }
-
     const ms = Date.now() - start
+    const text = res.status === 204 ? '' : await res.text()
+    return { res, ms, text }
+  }
+
+  const request = async <T>(method: Method, path: string, body?: unknown): Promise<T> => {
+    let attempt = await sendOnce(method, path, body)
+
+    if (attempt.res.status === 401 && cfg.refreshAuth) {
+      const refreshed = await cfg.refreshAuth()
+      if (refreshed) {
+        attempt = await sendOnce(method, path, body)
+      }
+    }
+
+    const { res, ms, text } = attempt
 
     if (res.status === 204) {
       cfg.devLog?.(formatDevLogLine({ method, path, status: res.status, ms }))
       return undefined as T
     }
 
-    const text = await res.text()
     const parsed: unknown = text.length === 0 ? null : safeJson(text)
 
     if (!res.ok) {
