@@ -4,7 +4,7 @@
  */
 import crypto from 'node:crypto'
 import { env } from '../../config/env.js'
-import { AppError } from '@readr/shared/errors'
+import { AppError } from '@auror/shared/errors'
 
 export type CreateCheckoutInput = {
   purchaseId: string

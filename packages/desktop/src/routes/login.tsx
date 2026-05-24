@@ -5,7 +5,7 @@ import { fetchMe } from '../api/me'
 import { setSessionAtom } from '../atoms/session'
 import { Button } from '../components/Button'
 import { Field } from '../components/Field'
-import { getUserMessage } from '@readr/shared/errors'
+import { getUserMessage } from '@auror/shared/errors'
 
 type Mode = 'signin' | 'signup'
 
@@ -96,7 +96,7 @@ export const LoginRoute = () => {
           gap: 16,
         }}
       >
-        <h1 style={{ margin: 0, fontSize: 20, fontWeight: 600 }}>readr Author</h1>
+        <h1 style={{ margin: 0, fontSize: 20, fontWeight: 600 }}>Auror</h1>
         <p style={{ margin: 0, fontSize: 13, color: '#6b7280' }}>
           {isSignup ? 'Create an account to start writing.' : 'Sign in to continue writing.'}
         </p>
@@ -140,7 +140,7 @@ export const LoginRoute = () => {
             <span>
               I agree to the{' '}
               <a
-                href="https://readr.my/terms"
+                href="https://auror.my/terms"
                 target="_blank"
                 rel="noreferrer"
                 style={{ color: '#1f2937', textDecoration: 'underline' }}
@@ -149,7 +149,7 @@ export const LoginRoute = () => {
               </a>{' '}
               and{' '}
               <a
-                href="https://readr.my/privacy"
+                href="https://auror.my/privacy"
                 target="_blank"
                 rel="noreferrer"
                 style={{ color: '#1f2937', textDecoration: 'underline' }}

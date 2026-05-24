@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify'
 import { z } from 'zod'
-import { AppError } from '@readr/shared/errors'
+import { AppError } from '@auror/shared/errors'
 import { conflict, notFound } from '../../lib/errors.js'
 
 export const payoutRoutes: FastifyPluginAsync = async (app) => {

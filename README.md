@@ -1,10 +1,10 @@
-# readr.my
+# Auror
 
 > A self-hosted, Malaysia-first Wattpad alternative for authors and novelists.
 
 **Status:** 🚧 Early development (Phase 0 — *Mula*). Not yet usable.
 
-readr.my pairs a markdown-native, chapter-by-chapter writing experience with a transparent monetization stack (coins, subscriptions, tips) and gives operators full visibility into platform health and payouts. Everything self-hosts via Docker — no required SaaS.
+Auror pairs a markdown-native, chapter-by-chapter writing experience with a transparent monetization stack (coins, subscriptions, tips) and gives operators full visibility into platform health and payouts. Everything self-hosts via Docker — no required SaaS.
 
 ---
 
@@ -69,9 +69,9 @@ pnpm dev
 Per-package scripts:
 
 ```bash
-pnpm --filter @readr/backend dev
-pnpm --filter @readr/webapp dev
-pnpm --filter @readr/desktop tauri dev
+pnpm --filter @auror/backend dev
+pnpm --filter @auror/webapp dev
+pnpm --filter @auror/desktop tauri dev
 ```
 
 Workspace-wide:

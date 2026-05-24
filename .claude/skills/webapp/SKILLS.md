@@ -1,6 +1,6 @@
 ---
 name: webapp
-description: Conventions for the @readr/webapp package — workspace, typing, state management, and solution simplicity.
+description: Conventions for the @auror/webapp package — workspace, typing, state management, and solution simplicity.
 ---
 
 # webapp skill
@@ -10,9 +10,9 @@ Rules for working inside `packages/webapp` (and any other web frontend code in t
 ## Workspace
 
 - This is a **pnpm monorepo**. Always use `pnpm` — never `npm` or `yarn`.
-- Add deps with `pnpm add <pkg> --filter @readr/webapp`.
-- Cross-package deps use `workspace:*` (e.g. `"@readr/shared": "workspace:*"`).
-- Run scripts from repo root with `pnpm --filter @readr/webapp <script>` or `pnpm -r <script>` for all packages.
+- Add deps with `pnpm add <pkg> --filter @auror/webapp`.
+- Cross-package deps use `workspace:*` (e.g. `"@auror/shared": "workspace:*"`).
+- Run scripts from repo root with `pnpm --filter @auror/webapp <script>` or `pnpm -r <script>` for all packages.
 
 ## TypeScript
 
@@ -48,4 +48,4 @@ Rules for working inside `packages/webapp` (and any other web frontend code in t
 - [ ] State lives in Jotai atoms (or local `useState` for purely local UI state).
 - [ ] No `useEffect` for derivable state, event responses, or data fetching.
 - [ ] No new abstraction without ≥3 concrete callers.
-- [ ] `pnpm --filter @readr/webapp typecheck` passes.
+- [ ] `pnpm --filter @auror/webapp typecheck` passes.

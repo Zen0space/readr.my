@@ -1,4 +1,4 @@
-import { createApiClient, type ApiClient } from '@readr/shared/errors'
+import { createApiClient, type ApiClient } from '@auror/shared/errors'
 import { env } from '../config/env'
 
 let tokenProvider: () => string | null = () => null

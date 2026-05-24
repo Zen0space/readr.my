@@ -1,4 +1,4 @@
-# Contributing to readr.my
+# Contributing to Auror
 
 Welcome. This guide is for anyone — internal team or external contributor — making changes to this repo. It covers setup, branch model, commit + PR conventions, and the engineering rules that aren't negotiable.
 
@@ -35,9 +35,9 @@ pnpm dev
 Per-package dev:
 
 ```bash
-pnpm --filter @readr/backend dev
-pnpm --filter @readr/webapp  dev
-pnpm --filter @readr/desktop tauri dev
+pnpm --filter @auror/backend dev
+pnpm --filter @auror/webapp  dev
+pnpm --filter @auror/desktop tauri dev
 ```
 
 ## 3. Branch model

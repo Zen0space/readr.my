@@ -1,6 +1,6 @@
 ---
 name: backend
-description: Conventions for the @readr/backend package — Node.js + Fastify REST API, Supabase, Redis. No tRPC, no `as any`, simple but production-grade.
+description: Conventions for the @auror/backend package — Node.js + Fastify REST API, Supabase, Redis. No tRPC, no `as any`, simple but production-grade.
 ---
 
 # backend skill
@@ -18,13 +18,13 @@ Rules for working inside `packages/backend`. This is the Node.js API server. It 
 - **DB: Supabase Postgres.** Use the Supabase JS client server-side. For complex queries, raw SQL is fine.
 - **Cache + queues: Redis** via `ioredis` (cache, rate limits) and **BullMQ** (jobs, scheduled publish, payouts).
 - **Logging: Pino** (built into Fastify). Structured JSON only — never `console.log` in committed code.
-- **Validation: Zod**, with schemas shared via `@readr/shared` so the webapp and desktop see the same types.
+- **Validation: Zod**, with schemas shared via `@auror/shared` so the webapp and desktop see the same types.
 
 ## Workspace
 
-- pnpm monorepo. Add deps with `pnpm add <pkg> --filter @readr/backend`.
-- Shared types/DTOs live in `@readr/shared` (`workspace:*`). Never duplicate a type that crosses the wire.
-- Run with `pnpm --filter @readr/backend dev`.
+- pnpm monorepo. Add deps with `pnpm add <pkg> --filter @auror/backend`.
+- Shared types/DTOs live in `@auror/shared` (`workspace:*`). Never duplicate a type that crosses the wire.
+- Run with `pnpm --filter @auror/backend dev`.
 
 ## Project structure
 
@@ -133,7 +133,7 @@ export const storyRoutes: FastifyPluginAsyncZod = async (app) => {
 
 ```ts
 // modules/stories/service.ts
-import type { CreateStoryInput, Story } from '@readr/shared'
+import type { CreateStoryInput, Story } from '@auror/shared'
 
 export const createStory = async (
   authorId: string,
@@ -229,13 +229,13 @@ export class AppError extends Error {
 - [ ] Every route has a Zod schema for body / query / params / response.
 - [ ] Route handler is thin; business logic in `service.ts`.
 - [ ] No `console.log` — use `app.log` / Pino.
-- [ ] Cross-wire types live in `@readr/shared`, not duplicated.
+- [ ] Cross-wire types live in `@auror/shared`, not duplicated.
 - [ ] DB writes are transactional where they need to be (coin spends, payouts).
 - [ ] BullMQ jobs are idempotent.
 - [ ] OpenAPI doc renders cleanly at `/v1/docs`.
-- [ ] `pnpm --filter @readr/backend typecheck` and `test` pass.
+- [ ] `pnpm --filter @auror/backend typecheck` and `test` pass.
 
 ## Related
 
-- `[[webapp]]` — frontend consumer of this API. Shared DTOs live in `@readr/shared`.
+- `[[webapp]]` — frontend consumer of this API. Shared DTOs live in `@auror/shared`.
 - `[[desktop]]` — also consumes this API (and a few desktop-only Tauri commands).

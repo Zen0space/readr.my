@@ -1,4 +1,4 @@
-# readr.my — Product Requirements Document
+# Auror — Product Requirements Document
 
 **Status:** Draft v2 (phased)
 **Last updated:** 2026-05-12
@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-**readr.my** is a self-hosted, Malaysia-first Wattpad alternative for authors and novelists. It pairs a markdown-native, chapter-by-chapter writing experience with a transparent monetization stack (coins + subscriptions + tips) and gives admins full visibility into platform health and payouts.
+**Auror** is a self-hosted, Malaysia-first Wattpad alternative for authors and novelists. It pairs a markdown-native, chapter-by-chapter writing experience with a transparent monetization stack (coins + subscriptions + tips) and gives admins full visibility into platform health and payouts.
 
 Three user roles: **admin**, **author**, **reader**. Self-hosted via Docker (webapp, backend, Supabase, Redis, reverse proxy).
 

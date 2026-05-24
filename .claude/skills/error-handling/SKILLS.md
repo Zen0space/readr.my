@@ -1,6 +1,6 @@
 ---
 name: error-handling
-description: Unified error + logging contract — single source of truth in @readr/shared/errors. Consumers (backend, webapp, desktop) only provide thin adapters; no duplicated message tables, no duplicated clients.
+description: Unified error + logging contract — single source of truth in @auror/shared/errors. Consumers (backend, webapp, desktop) only provide thin adapters; no duplicated message tables, no duplicated clients.
 ---
 
 # error-handling skill
@@ -120,7 +120,7 @@ The factory handles, in one place: building the request, attaching the token, pa
 
 ```ts
 // webapp/src/lib/api.ts  (the ONLY api file in webapp)
-import { createApiClient } from '@readr/shared/errors'
+import { createApiClient } from '@auror/shared/errors'
 import { supabase } from './supabase'
 
 export const api = createApiClient({
@@ -137,7 +137,7 @@ export const api = createApiClient({
 
 ```ts
 // desktop/src/lib/api.ts  (the ONLY api file in desktop)
-import { createApiClient } from '@readr/shared/errors'
+import { createApiClient } from '@auror/shared/errors'
 import { invoke } from '@tauri-apps/api/core'
 import { getToken } from './auth'
 
@@ -188,7 +188,7 @@ export const createToaster = (adapter: ToastAdapter, locale: Locale = 'ms') => (
 ```ts
 // webapp/src/lib/toast.ts
 import { toast } from 'sonner'
-import { createToaster } from '@readr/shared/errors'
+import { createToaster } from '@auror/shared/errors'
 export const t = createToaster({ error: toast.error, success: toast.success })
 ```
 
@@ -197,7 +197,7 @@ export const t = createToaster({ error: toast.error, success: toast.success })
 ```ts
 // desktop/src/lib/toast.ts
 import { toast } from 'sonner'
-import { createToaster } from '@readr/shared/errors'
+import { createToaster } from '@auror/shared/errors'
 export const t = createToaster({ error: toast.error, success: toast.success })
 ```
 
@@ -213,7 +213,7 @@ Fastify's error handler is the only place that converts thrown errors into envel
 
 ```ts
 // backend/src/plugins/error-handler.ts
-import { serializeError } from '@readr/shared/errors'
+import { serializeError } from '@auror/shared/errors'
 
 app.setErrorHandler((err, req, reply) => {
   const { status, body } = serializeError(err)

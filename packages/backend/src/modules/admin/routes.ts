@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify'
 import { z } from 'zod'
-import { AppError } from '@readr/shared/errors'
+import { AppError } from '@auror/shared/errors'
 
 export const adminRoutes: FastifyPluginAsync = async (app) => {
   app.get('/v1/admin/users', {

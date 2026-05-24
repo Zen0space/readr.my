@@ -1,5 +1,5 @@
 {
-  "name": "@readr/webapp",
+  "name": "@auror/webapp",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,6 +11,6 @@
     "typecheck": "echo \"no typecheck\""
   },
   "dependencies": {
-    "@readr/shared": "workspace:*"
+    "@auror/shared": "workspace:*"
   }
 }

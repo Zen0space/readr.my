@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { Language, AgeRating, StoryStatus, ChapterGating } from '@readr/shared/domain'
+import { Language, AgeRating, StoryStatus, ChapterGating } from '@auror/shared/domain'
 
 const enumOf = <T extends Record<string, string>>(e: T) =>
   z.enum(Object.values(e) as [string, ...string[]])

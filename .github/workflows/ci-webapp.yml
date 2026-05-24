@@ -45,13 +45,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Typecheck
-        run: pnpm --filter @readr/webapp typecheck
+        run: pnpm --filter @auror/webapp typecheck
 
       - name: Lint
-        run: pnpm --filter @readr/webapp lint
+        run: pnpm --filter @auror/webapp lint
 
       - name: Test
-        run: pnpm --filter @readr/webapp test
+        run: pnpm --filter @auror/webapp test
 
       - name: Build
-        run: pnpm --filter @readr/webapp build
+        run: pnpm --filter @auror/webapp build
