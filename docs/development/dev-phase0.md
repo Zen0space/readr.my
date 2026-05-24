@@ -10,6 +10,7 @@
 |---|---|---|
 | Backend / Infra | **Khairul** | Node.js, Supabase, Redis, payments, Docker |
 | Frontend (complex) | **Khairul** | Editor, payment flows, charts, multi-device sync |
+| Desktop / Tauri | **Khairul** | Tauri v2, React, Jotai, `supabase-js` — author write/publish surface |
 | Frontend (standard) | **Ajwad** | Auth, profile pages, lists, simple forms, theming |
 
 **Rule:** if a frontend task involves a stateful editor, payment SDK, charting library, service worker, or non-trivial real-time sync — it goes to Khairul, not Ajwad.
@@ -101,6 +102,60 @@
 
 ---
 
+## Desktop Track — Khairul
+
+> **Why desktop?** PRD §9 carves out an offline-first author surface. Phase 0 ships the **online-only** foundation in `packages/desktop` (Tauri v2 + React + Jotai) so the editor and publish flow exist before the sync engine lands in Phase 3. Every author-facing web feature is mirrored on the desktop track — readers are web-only.
+
+### D0.1 — Tauri Scaffold
+- [ ] `packages/desktop` Tauri v2 + React 18 + Vite + Jotai
+- [ ] `tauri.conf.json`: single window, identifier `my.readr.author`
+- [ ] Capabilities scoped to `main` window (no blanket `**` grants)
+- [ ] Plugins: `tauri-plugin-store`, `tauri-plugin-dialog`, `tauri-plugin-shell`
+- [ ] `pnpm --filter @readr/desktop tauri dev` opens a working window against the local backend
+
+### D0.2 — Auth Flow
+- [ ] Email/password sign-in via `supabase-js` (`signInWithPassword`)
+- [ ] JWT + refresh token persisted via `@tauri-apps/plugin-store`
+- [ ] `sessionAtom` (Jotai) auto-rehydrates on launch; 401 from backend clears it
+- [ ] Logout clears persisted store and calls `supabase.auth.signOut()`
+
+### D0.3 — Story Library
+**Mirrors:** F0.A3 (metadata fields).
+- [ ] Author's stories list via `GET /v1/stories` (filtered to caller)
+- [ ] Create story form (title, blurb, genre, tags, language)
+- [ ] Empty state + create-first-story CTA
+
+### D0.4 — Chapter Editor + Autosave
+**Mirrors:** F0.K1.
+- [ ] CodeMirror 6 markdown editor in webview
+- [ ] Debounced autosave to `PATCH /v1/chapters/:id` every 10s
+- [ ] "Saved X seconds ago" indicator (Jotai atom)
+- [ ] Last-write-wins conflict policy documented in tooltip
+
+### D0.5 — Publish Flow
+- [ ] Gating picker (free / coin / sub) + price input when `coin`
+- [ ] `POST /v1/chapters/:id/publish` then `POST /v1/stories/:id/publish` (default `ongoing`)
+- [ ] Reflect `published_at` in chapter list immediately
+
+### D0.6 — Cover Upload
+**Mirrors:** F0.K6.
+- [ ] `tauri-plugin-dialog` file picker
+- [ ] Upload to Supabase Storage signed URL
+- [ ] Aspect-ratio preview in the form
+
+### D0.7 — Earnings Dashboard
+**Mirrors:** F0.K3.
+- [ ] Daily / weekly / monthly tabs
+- [ ] Chart via Recharts in the webview
+- [ ] Source split: coins vs subs
+
+### D0.8 — Wallet + Payouts
+- [ ] `GET /v1/wallet` balance display
+- [ ] `POST /v1/payouts` request form (amount, payout method id)
+- [ ] Payout history list with state badges (mirrors F0.K5 from the author's side)
+
+---
+
 ## Frontend Track — Ajwad (Standard)
 
 > **Ajwad's guardrails:** Jotai for state. No `as any`. `useEffect` is a last resort — prefer event handlers, derived state, `key` resets. Ping Khairul when blocked > 30 min.
@@ -163,6 +218,7 @@
 4. Admin suspends a flagged user; suspended user cannot publish or comment.
 5. Admin approves a payout; CSV export downloads cleanly.
 6. `docker compose up` from a fresh clone brings the stack to a working state with one `.env` file.
+7. **Desktop:** `pnpm --filter @readr/desktop tauri dev` boots; an author can log in, write, autosave, publish; the chapter appears in `GET /v1/stories/:id/chapters` with `published_at` set.
 
 ## Dependencies / Risks
 
@@ -170,3 +226,4 @@
 - **Coin↔RM rate + author cut %** blocks revenue math. Default: RM1 = 10 coins, author 70% (revisit in P1).
 - **Religious sensitivity / NSFW filter** is *not* in P0 — must communicate to early authors that moderation is manual.
 - Ajwad's onboarding: pair-program F0.A1 (auth) before solo work to set conventions.
+- **Desktop code signing keys** (macOS Developer ID, Windows EV) are out of scope for Phase 0. Phase 0 ships dev-only builds; signing lands in D1.1 alongside the auto-updater.

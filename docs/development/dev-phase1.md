@@ -10,6 +10,7 @@
 |---|---|
 | Backend / Infra | **Khairul** |
 | Frontend (complex) | **Khairul** |
+| Desktop / Tauri | **Khairul** |
 | Frontend (standard) | **Ajwad** |
 
 ---
@@ -86,7 +87,37 @@
 
 ---
 
-## Frontend Track — Ajwad (Standard)
+## Desktop Track — Khairul
+
+### D1.1 — Auto-Updater + Signing
+- [ ] Wire `tauri-plugin-updater` with signed manifest endpoint
+- [ ] macOS notarization + Windows code-signing pipeline (keys tracked outside the repo per `.claude/skills/desktop/SKILLS.md`)
+- [ ] Background check on launch; user-prompted install
+
+### D1.2 — Author Verification Badge Display
+**Mirrors:** F1.A10.
+- [ ] Render verified badge on the desktop profile header
+- [ ] Read state from `GET /v1/me` (already returns verification status)
+
+### D1.3 — Content Warnings + NSFW Editor
+**Mirrors:** F1.A3, F1.A4.
+- [ ] Multi-select `content_warnings` field in the story metadata form
+- [ ] Age-rating picker (general / 18+) with confirmation modal when 18+ selected
+
+### D1.4 — Reviews / Comments Management
+**Mirrors:** F1.A1, F1.A2.
+- [ ] List reviews on own stories with reply action
+- [ ] List per-chapter comments; collapse soft-hidden ones
+- [ ] Report-to-admin action with reason chooser
+
+### D1.5 — Notifications Panel
+- [ ] Supabase Realtime channel subscription in the webview (sender side is B0.7)
+- [ ] Persistent notification bell in header; unread count atom
+- [ ] Items: new follow, new comment on own chapter, payout state change
+
+### D1.6 — JWT At-Rest Encryption
+- [ ] Migrate session persistence from `tauri-plugin-store` → `tauri-plugin-stronghold`
+- [ ] Backwards-read existing store on first launch; rotate into stronghold; clear old file
 
 ### F1.A1 — Reviews + Star Rating UI
 - Submit / edit / delete own review

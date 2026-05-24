@@ -10,6 +10,7 @@
 |---|---|
 | Backend / Infra | **Khairul** |
 | Frontend (complex) | **Khairul** |
+| Desktop / Tauri | **Khairul** |
 | Frontend (standard) | **Ajwad** |
 
 ---
@@ -104,7 +105,40 @@
 
 ---
 
-## Frontend Track — Ajwad (Standard)
+## Desktop Track — Khairul
+
+### D2.1 — Cover Designer with Templates
+**Mirrors:** F2.K1.
+- [ ] Canvas/SVG compositing inside the webview
+- [ ] Export to PNG; upload to Supabase Storage signed URL
+- [ ] Template gallery + colour/text overrides
+
+### D2.2 — Scheduled Publishing UI
+**Mirrors:** F2.A1.
+- [ ] Datetime picker on the publish action
+- [ ] "Scheduled" badge in the chapter list with cancel/reschedule
+
+### D2.3 — Tip Jar Setup
+**Mirrors:** F2.A2.
+- [ ] Author profile toggle + custom thank-you message field
+
+### D2.4 — Inline Spell-Check
+**Mirrors:** F2.A3.
+- [ ] Native OS webview spell-check enabled on the editor surface
+- [ ] Custom dictionary in `tauri-plugin-store` for author-specific terms
+
+### D2.5 — Share-to-Social
+**Mirrors:** F2.A4.
+- [ ] `tauri-plugin-shell` opens share URLs in external browser (TikTok, IG, Threads, FB)
+- [ ] Pre-fill OG-tag URLs from backend
+
+### D2.6 — DMCA Takedown Form
+**Mirrors:** F2.A5.
+- [ ] Author-side report form → backend ticket pipeline (B1.8)
+
+### D2.7 — Native Desktop Notifications
+- [ ] `tauri-plugin-notification` for new reviews, payout state, scheduled-publish success
+- [ ] Mirrors the *subscriber side* of F2.K8 only — desktop receives, never schedules sends
 
 ### F2.A1 — Scheduled Publishing UI
 - Datetime picker on publish; "Scheduled" badge on chapter list
