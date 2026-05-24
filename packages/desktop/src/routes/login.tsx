@@ -64,7 +64,15 @@ export const LoginRoute = () => {
       await signOut()
       throw new Error('Your account is suspended.')
     }
-    await setSession(result)
+    await setSession({
+      jwt: result.jwt,
+      refreshToken: result.refreshToken,
+      userId: result.userId,
+      email: result.email,
+      role: me.role,
+      status: me.status,
+      refreshedAt: Date.now(),
+    })
   }
 
   const switchMode = (next: Mode) => {

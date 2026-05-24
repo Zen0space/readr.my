@@ -5,6 +5,9 @@ export type SessionRecord = {
   refreshToken: string
   userId: string
   email: string
+  role: 'reader' | 'author' | 'admin'
+  status: 'active' | 'suspended'
+  refreshedAt: number
 }
 
 const FILE = 'session.json'
