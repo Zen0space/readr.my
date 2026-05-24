@@ -76,7 +76,7 @@ export const buildApp = async (): Promise<FastifyInstance> => {
 
   await app.register(swagger, {
     openapi: {
-      info: { title: 'readr.my API', version: '0.0.0' },
+      info: { title: 'Auror API', version: '0.0.0' },
       servers: [{ url: `http://localhost:${env.PORT}` }],
     },
     transform: jsonSchemaTransform,

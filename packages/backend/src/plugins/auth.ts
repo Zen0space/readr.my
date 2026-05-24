@@ -1,7 +1,7 @@
 import fp from 'fastify-plugin'
 import { createRemoteJWKSet, jwtVerify, type JWTPayload } from 'jose'
-import type { UserRole } from '@readr/shared/domain'
-import { AppError } from '@readr/shared/errors'
+import type { UserRole } from '@auror/shared/domain'
+import { AppError } from '@auror/shared/errors'
 import { unauthorized } from '../lib/errors.js'
 import { env } from '../config/env.js'
 

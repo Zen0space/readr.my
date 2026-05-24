@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { conflict, forbidden, notFound } from '../../lib/errors.js'
-import { AppError } from '@readr/shared/errors'
+import { AppError } from '@auror/shared/errors'
 import type { z } from 'zod'
 import { chapterCreateBody, chapterUpdateBody } from '../stories/schema.js'
 

@@ -1,4 +1,4 @@
-# Contributing to readr.my
+# Contributing to Auror
 
 Welcome. This guide is for anyone — internal team or external contributor — making changes to this repo. It covers setup, branch model, commit + PR conventions, and the engineering rules that aren't negotiable.
 

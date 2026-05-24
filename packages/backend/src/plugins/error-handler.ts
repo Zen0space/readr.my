@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin'
 import { ZodError } from 'zod'
-import { AppError, serializeError } from '@readr/shared/errors'
+import { AppError, serializeError } from '@auror/shared/errors'
 
 export default fp(async (app) => {
   app.setErrorHandler((err, req, reply) => {

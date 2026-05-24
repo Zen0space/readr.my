@@ -1,7 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify'
 import { z } from 'zod'
 import { conflict, notFound } from '../../lib/errors.js'
-import { AppError } from '@readr/shared/errors'
+import { AppError } from '@auror/shared/errors'
 import { getAdapter } from '../payments/adapter.js'
 import { env } from '../../config/env.js'
 import crypto from 'node:crypto'

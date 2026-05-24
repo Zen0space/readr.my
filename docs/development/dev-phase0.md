@@ -108,10 +108,10 @@
 
 ### D0.1 — Tauri Scaffold
 - [ ] `packages/desktop` Tauri v2 + React 18 + Vite + Jotai
-- [ ] `tauri.conf.json`: single window, identifier `my.readr.author`
+- [ ] `tauri.conf.json`: single window, identifier `my.auror.app`
 - [ ] Capabilities scoped to `main` window (no blanket `**` grants)
 - [ ] Plugins: `tauri-plugin-store`, `tauri-plugin-dialog`, `tauri-plugin-shell`
-- [ ] `pnpm --filter @readr/desktop tauri dev` opens a working window against the local backend
+- [ ] `pnpm --filter @auror/desktop tauri dev` opens a working window against the local backend
 
 ### D0.2 — Auth Flow
 - [ ] Email/password sign-in via `supabase-js` (`signInWithPassword`)
@@ -218,7 +218,7 @@
 4. Admin suspends a flagged user; suspended user cannot publish or comment.
 5. Admin approves a payout; CSV export downloads cleanly.
 6. `docker compose up` from a fresh clone brings the stack to a working state with one `.env` file.
-7. **Desktop:** `pnpm --filter @readr/desktop tauri dev` boots; an author can log in, write, autosave, publish; the chapter appears in `GET /v1/stories/:id/chapters` with `published_at` set.
+7. **Desktop:** `pnpm --filter @auror/desktop tauri dev` boots; an author can log in, write, autosave, publish; the chapter appears in `GET /v1/stories/:id/chapters` with `published_at` set.
 
 ## Dependencies / Risks
 

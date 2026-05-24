@@ -1,13 +1,13 @@
 [package]
-name = "readr-author"
+name = "auror"
 version = "0.0.0"
-description = "readr Author desktop app"
-authors = ["readr team"]
+description = "Auror desktop app"
+authors = ["Auror team"]
 edition = "2021"
 rust-version = "1.77"
 
 [lib]
-name = "readr_author_lib"
+name = "auror_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

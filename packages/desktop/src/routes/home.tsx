@@ -25,7 +25,7 @@ export const HomeRoute = () => {
           justifyContent: 'space-between',
         }}
       >
-        <strong style={{ fontSize: 14 }}>readr Author</strong>
+        <strong style={{ fontSize: 14 }}>Auror</strong>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ fontSize: 13, color: '#6b7280' }}>{session.session.email}</span>
           <Button variant="ghost" onClick={onLogout}>
