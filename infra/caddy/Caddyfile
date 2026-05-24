@@ -1,0 +1,19 @@
+# Local-dev reverse proxy. Brings backend + webapp under a single :80.
+#
+# - /api/*    → backend  (strip /api prefix)
+# - /*        → webapp
+#
+# Production deploys via Coolify should configure their own reverse proxy and
+# TLS; this file is dev-only.
+
+:80 {
+    encode gzip
+
+    handle_path /api/* {
+        reverse_proxy backend:4000
+    }
+
+    handle {
+        reverse_proxy webapp:3000
+    }
+}

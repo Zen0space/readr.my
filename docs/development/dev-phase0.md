@@ -20,47 +20,48 @@
 ## Backend Track — Khairul
 
 ### B0.1 — Infra & Foundations
-- [ ] `docker-compose.yml`: webapp, backend, Supabase (Postgres + Auth + Storage), Redis, reverse proxy (Caddy or Traefik)
-- [ ] `.env.example` for every service; secrets via env, not in repo
-- [ ] Postgres migrations runner (Supabase CLI) + seed script
-- [ ] Redis client wired (cache + BullMQ for jobs)
-- [ ] Sentry-equivalent self-hosted (GlitchTip) wired into backend
-- [ ] Uptime Kuma + Postgres exporter for monitoring
-- [ ] Nightly DB backup cron + restore-drill doc
+- [x] `docker-compose.yml`: backend, webapp, Redis, Caddy reverse proxy (Supabase runs separately via `supabase` CLI)
+- [x] `.env.example` for every service; secrets via env, not in repo
+- [x] Postgres migrations runner (Supabase CLI) + seed script
+- [x] Redis client wired (cache + BullMQ for jobs)
+- [x] Per-package Dockerfile + `release-{backend,webapp,desktop}.yml` workflows pushing to ghcr.io / GitHub Releases
+- [ ] Sentry-equivalent self-hosted (GlitchTip) wired into backend — **deferred to Phase 1** (rely on Pino + Coolify logs until users exist)
+- [ ] Uptime Kuma + Postgres exporter for monitoring — **deferred to Phase 1** (Coolify health checks cover Phase 0 needs)
+- [ ] Nightly DB backup cron + restore-drill doc — **deferred to Phase 1** (DR plan drafted; revisit when first paying user lands)
 
 ### B0.2 — Auth & Roles
-- [ ] Supabase Auth: email/password + email verification
-- [ ] Role column on `users` (`reader` | `author` | `admin`); RLS policies enforce per-role access
-- [ ] JWT validation middleware on backend
+- [x] Supabase Auth: email/password + email verification
+- [x] Role column on `users` (`reader` | `author` | `admin`); RLS policies enforce per-role access
+- [x] JWT validation middleware on backend
 
 ### B0.3 — Domain Schema
-- [ ] `users`, `author_profiles`, `reader_profiles`
-- [ ] `stories` (title, blurb, cover_url, genre, tags, language, age_rating, status)
-- [ ] `chapters` (story_id, order, title, content_md, gating: `free|coin|sub`, price_coins, published_at, draft_content_md)
-- [ ] `follows`, `reads`, `wallets`, `coin_purchases`, `chapter_unlocks`, `subscriptions`, `payouts`, `reports`, `notifications`
-- [ ] Materialized view: per-author earnings (daily/weekly/monthly rollup)
+- [x] `users`, `author_profiles`, `reader_profiles`
+- [x] `stories` (title, blurb, cover_url, genre, tags, language, age_rating, status)
+- [x] `chapters` (story_id, order, title, content_md, gating: `free|coin|sub`, price_coins, published_at, draft_content_md)
+- [x] `follows`, `reads`, `wallets`, `coin_purchases`, `chapter_unlocks`, `subscriptions`, `payouts`, `reports`, `notifications`
+- [x] Materialized view: per-author earnings (daily/weekly/monthly rollup)
 
 ### B0.4 — API
-- [ ] Author: story + chapter CRUD, publish, set gating
-- [ ] Reader: discovery list, story detail, chapter read (enforces gating), follow, vote, report
-- [ ] Wallet: balance, top-up intent, coin spend (atomic; Redis lock per user)
-- [ ] Subscriptions: create / cancel / list
-- [ ] Admin: user list/filter/suspend, flagged queue, payout queue, revenue summary
+- [x] Author: story + chapter CRUD, publish, set gating
+- [x] Reader: discovery list, story detail, chapter read (enforces gating), follow, vote, report
+- [x] Wallet: balance, top-up intent, coin spend (atomic; Redis lock per user)
+- [x] Subscriptions: create / cancel / list
+- [x] Admin: user list/filter/suspend, flagged queue, payout queue, revenue summary
 
 ### B0.5 — Payments
-- [ ] Pluggable payment adapter (start with **one** of Billplz / iPay88 / Curlec / Stripe)
-- [ ] FPX, DuitNow QR, TnG, Boost, card via the chosen processor
-- [ ] Webhook handler with idempotency keys
-- [ ] Coin economy: fixed RM↔coin rate (config table); author cut % configurable
+- [x] Pluggable payment adapter (start with **one** of Billplz / iPay88 / Curlec / Stripe)
+- [x] FPX, DuitNow QR, TnG, Boost, card via the chosen processor
+- [x] Webhook handler with idempotency keys
+- [x] Coin economy: fixed RM↔coin rate (config table); author cut % configurable
 
 ### B0.6 — Payout Pipeline
-- [ ] Author payout method storage (encrypted at rest)
-- [ ] Payout request → admin review → marked paid (state machine)
-- [ ] Manual export (CSV) for bank batch upload in v1; no auto-disbursement yet
+- [x] Author payout method storage (encrypted at rest)
+- [x] Payout request → admin review → marked paid (state machine)
+- [x] Manual export (CSV) for bank batch upload in v1; no auto-disbursement yet
 
 ### B0.7 — Notifications
-- [ ] In-app notifications table + WebSocket or Supabase Realtime channel
-- [ ] Triggers: new chapter from followed author, payout state change
+- [x] In-app notifications table + WebSocket or Supabase Realtime channel
+- [x] Triggers: new chapter from followed author, payout state change
 
 ---
 
@@ -107,52 +108,52 @@
 > **Why desktop?** PRD §9 carves out an offline-first author surface. Phase 0 ships the **online-only** foundation in `packages/desktop` (Tauri v2 + React + Jotai) so the editor and publish flow exist before the sync engine lands in Phase 3. Every author-facing web feature is mirrored on the desktop track — readers are web-only.
 
 ### D0.1 — Tauri Scaffold
-- [ ] `packages/desktop` Tauri v2 + React 18 + Vite + Jotai
-- [ ] `tauri.conf.json`: single window, identifier `my.auror.app`
-- [ ] Capabilities scoped to `main` window (no blanket `**` grants)
-- [ ] Plugins: `tauri-plugin-store`, `tauri-plugin-dialog`, `tauri-plugin-shell`
-- [ ] `pnpm --filter @auror/desktop tauri dev` opens a working window against the local backend
+- [x] `packages/desktop` Tauri v2 + React 18 + Vite + Jotai
+- [x] `tauri.conf.json`: single window, identifier `my.auror.app`
+- [x] Capabilities scoped to `main` window (no blanket `**` grants)
+- [x] Plugins: `tauri-plugin-store`, `tauri-plugin-dialog`, `tauri-plugin-shell`
+- [x] `pnpm --filter @auror/desktop tauri dev` opens a working window against the local backend
 
 ### D0.2 — Auth Flow
-- [ ] Email/password sign-in via `supabase-js` (`signInWithPassword`)
-- [ ] JWT + refresh token persisted via `@tauri-apps/plugin-store`
-- [ ] `sessionAtom` (Jotai) auto-rehydrates on launch; 401 from backend clears it
-- [ ] Logout clears persisted store and calls `supabase.auth.signOut()`
+- [x] Email/password sign-in via `supabase-js` (`signInWithPassword`)
+- [x] JWT + refresh token persisted via `@tauri-apps/plugin-store`
+- [x] `sessionAtom` (Jotai) auto-rehydrates on launch; 401 from backend clears it
+- [x] Logout clears persisted store and calls `supabase.auth.signOut()`
 
 ### D0.3 — Story Library
 **Mirrors:** F0.A3 (metadata fields).
-- [ ] Author's stories list via `GET /v1/stories` (filtered to caller)
-- [ ] Create story form (title, blurb, genre, tags, language)
-- [ ] Empty state + create-first-story CTA
+- [x] Author's stories list via `GET /v1/me/stories` (filters by author + includes drafts)
+- [x] Create story form (title, blurb, genre, tags, language, age rating)
+- [x] Empty state + create-first-story CTA
 
 ### D0.4 — Chapter Editor + Autosave
 **Mirrors:** F0.K1.
-- [ ] CodeMirror 6 markdown editor in webview
-- [ ] Debounced autosave to `PATCH /v1/chapters/:id` every 10s
-- [ ] "Saved X seconds ago" indicator (Jotai atom)
-- [ ] Last-write-wins conflict policy documented in tooltip
+- [x] CodeMirror 6 markdown editor in webview
+- [x] Debounced autosave to `PATCH /v1/chapters/:id` every 10s
+- [x] "Saved X seconds ago" indicator (Jotai-free local state)
+- [x] Last-write-wins conflict policy documented in tooltip
 
 ### D0.5 — Publish Flow
-- [ ] Gating picker (free / coin / sub) + price input when `coin`
-- [ ] `POST /v1/chapters/:id/publish` then `POST /v1/stories/:id/publish` (default `ongoing`)
-- [ ] Reflect `published_at` in chapter list immediately
+- [x] Gating picker (free / coin / sub) + price input when `coin`
+- [x] `POST /v1/chapters/:id/publish` then `POST /v1/stories/:id/publish` (default `ongoing`)
+- [x] Reflect `published_at` in chapter list immediately
 
 ### D0.6 — Cover Upload
 **Mirrors:** F0.K6.
-- [ ] `tauri-plugin-dialog` file picker
-- [ ] Upload to Supabase Storage signed URL
-- [ ] Aspect-ratio preview in the form
+- [x] `tauri-plugin-dialog` file picker
+- [x] Upload to Supabase Storage signed URL (covers bucket, public-read, 5MB cap)
+- [x] Aspect-ratio preview in the form
 
 ### D0.7 — Earnings Dashboard
 **Mirrors:** F0.K3.
-- [ ] Daily / weekly / monthly tabs
-- [ ] Chart via Recharts in the webview
-- [ ] Source split: coins vs subs
+- [x] Daily / weekly / monthly tabs
+- [x] Inline SVG bar chart (Recharts deferred — no extra dep for Phase 0)
+- [x] Source split: coins vs subs
 
 ### D0.8 — Wallet + Payouts
-- [ ] `GET /v1/wallet` balance display
-- [ ] `POST /v1/payouts` request form (amount, payout method id)
-- [ ] Payout history list with state badges (mirrors F0.K5 from the author's side)
+- [x] `GET /v1/wallet` balance display (coin balance + RM conversion)
+- [x] `POST /v1/payouts` request form (`amount_coins`, `method_ref`)
+- [x] Payout history list with state badges
 
 ---
 

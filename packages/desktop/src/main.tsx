@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { Provider } from 'jotai'
 import { App } from './App'
 import './styles.css'
 
@@ -9,8 +8,6 @@ if (!root) throw new Error('Missing #root element')
 
 ReactDOM.createRoot(root).render(
   <React.StrictMode>
-    <Provider>
-      <App />
-    </Provider>
+    <App />
   </React.StrictMode>,
 )

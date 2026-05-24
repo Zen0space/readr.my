@@ -9,7 +9,8 @@ export type Chapter = {
   title: string
   gating: ChapterGating
   price_coins: number
-  draft_content_md: string | null
+  has_content: boolean
+  locked: boolean
   content_md: string | null
   published_at: string | null
   created_at: string
@@ -19,13 +20,14 @@ export type Chapter = {
 export type CreateChapterInput = {
   title: string
   ord: number
-  gating: ChapterGating
+  gating?: ChapterGating
   price_coins?: number
   draft_content_md?: string
 }
 
 export type UpdateChapterInput = {
   title?: string
+  ord?: number
   gating?: ChapterGating
   price_coins?: number
   draft_content_md?: string
@@ -37,11 +39,13 @@ export const listChapters = (storyId: string): Promise<{ items: Chapter[] }> =>
 export const createChapter = (storyId: string, input: CreateChapterInput): Promise<Chapter> =>
   api.post<Chapter>(`/v1/stories/${storyId}/chapters`, input)
 
-export const getChapter = (id: string): Promise<Chapter> =>
-  api.get<Chapter>(`/v1/chapters/${id}`)
+export const getChapter = (id: string): Promise<Chapter> => api.get<Chapter>(`/v1/chapters/${id}`)
 
 export const updateChapter = (id: string, input: UpdateChapterInput): Promise<Chapter> =>
   api.patch<Chapter>(`/v1/chapters/${id}`, input)
 
 export const publishChapter = (id: string): Promise<Chapter> =>
   api.post<Chapter>(`/v1/chapters/${id}/publish`)
+
+export const deleteChapter = (id: string): Promise<void> =>
+  api.del<void>(`/v1/chapters/${id}`)

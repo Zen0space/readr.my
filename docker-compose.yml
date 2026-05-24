@@ -1,7 +1,34 @@
+# Local development stack for Auror.
+#
+# What this brings up:
+#   - backend     (Fastify API, built from packages/backend)
+#   - webapp      (Next.js, built from packages/webapp — works once scaffolded)
+#   - redis       (cache, BullMQ queues)
+#   - caddy       (reverse proxy at :80 routing /api → backend, / → webapp)
+#
+# What this DOES NOT bring up:
+#   - Supabase. Run `supabase start` (Supabase CLI) in another terminal; it
+#     manages its own Docker stack on the ports defined in supabase/config.toml.
+#     The backend resolves it via http://host.docker.internal:54321 from inside
+#     the container.
+#   - GlitchTip, Uptime Kuma, postgres-exporter — deferred (see dev-phase0 B0.1).
+#
+# Coolify users: don't use this file in production. Coolify pulls the prebuilt
+# ghcr.io/<owner>/auror-backend and ghcr.io/<owner>/auror-webapp images via
+# the release workflows in .github/workflows/release-*.yml.
+#
+# Profiles:
+#   - default       brings up redis + backend
+#   - --profile webapp   adds the Next.js webapp (requires source to exist)
+#   - --profile proxy    adds the Caddy reverse proxy at :80
+
 services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
     ports:
       - "127.0.0.1:6379:6379"
     healthcheck:
@@ -14,6 +41,7 @@ services:
     build:
       context: .
       dockerfile: packages/backend/Dockerfile
+    restart: unless-stopped
     depends_on:
       redis:
         condition: service_healthy
@@ -22,20 +50,53 @@ services:
       PORT: "4000"
       HOST: "0.0.0.0"
       REDIS_URL: redis://redis:6379
-      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_URL: ${SUPABASE_URL:-http://host.docker.internal:54321}
       SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
-      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
-      SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET}
-      CORS_ORIGINS: ${CORS_ORIGINS}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+      SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:-}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:1420,tauri://localhost,http://tauri.localhost}
       PAYMENT_PROVIDER: ${PAYMENT_PROVIDER:-mock}
-      PAYMENT_WEBHOOK_BASE_URL: ${PAYMENT_WEBHOOK_BASE_URL}
+      PAYMENT_WEBHOOK_BASE_URL: ${PAYMENT_WEBHOOK_BASE_URL:-http://localhost:4000}
       BILLPLZ_API_KEY: ${BILLPLZ_API_KEY:-}
       BILLPLZ_COLLECTION_ID: ${BILLPLZ_COLLECTION_ID:-}
       BILLPLZ_XSIGN_SECRET: ${BILLPLZ_XSIGN_SECRET:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "127.0.0.1:4000:4000"
-    restart: unless-stopped
 
-# Self-hosted Supabase + GlitchTip + Uptime Kuma + Caddy reverse proxy are tracked
-# in a separate task (B0.1 docker-compose + monitoring + backups). Hosted Supabase
-# is used in dev while the full self-host stack is being built.
+  webapp:
+    build:
+      context: .
+      dockerfile: packages/webapp/Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOSTNAME: "0.0.0.0"
+      PORT: "3000"
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:4000}
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-http://localhost:54321}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+    depends_on:
+      - backend
+    ports:
+      - "127.0.0.1:3000:3000"
+    profiles: ["webapp"]
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./infra/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - backend
+    profiles: ["proxy"]
+
+volumes:
+  redis-data:
+  caddy-data:
+  caddy-config:
