@@ -1,16 +1,18 @@
 # Local development stack for Auror.
 #
-# What this brings up:
-#   - backend     (Fastify API, built from packages/backend)
-#   - webapp      (Next.js, built from packages/webapp — works once scaffolded)
-#   - redis       (cache, BullMQ queues)
-#   - caddy       (reverse proxy at :80 routing /api → backend, / → webapp)
+# Default (`docker compose up -d`) brings up ONLY redis. The backend, webapp,
+# and caddy are opt-in via profiles — run those processes on the host instead
+# (`pnpm --filter @auror/backend dev`), pointing at this redis on :6379.
+#
+# Env: there is no root .env. Each service reads its package-local .env
+# (packages/<name>/.env). For the containerized services, the few values that
+# must differ inside Docker (container networking) are overridden under
+# `environment:` — package .env files use host addresses (127.0.0.1).
 #
 # What this DOES NOT bring up:
 #   - Supabase. Run `supabase start` (Supabase CLI) in another terminal; it
 #     manages its own Docker stack on the ports defined in supabase/config.toml.
-#     The backend resolves it via http://host.docker.internal:54321 from inside
-#     the container.
+#     Containerized backend resolves it via http://host.docker.internal:54321.
 #   - GlitchTip, Uptime Kuma, postgres-exporter — deferred (see dev-phase0 B0.1).
 #
 # Coolify users: don't use this file in production. Coolify pulls the prebuilt
@@ -18,9 +20,10 @@
 # the release workflows in .github/workflows/release-*.yml.
 #
 # Profiles:
-#   - default       brings up redis + backend
-#   - --profile webapp   adds the Next.js webapp (requires source to exist)
-#   - --profile proxy    adds the Caddy reverse proxy at :80
+#   - (default)          redis only
+#   - --profile backend  adds the Fastify API (containerized)
+#   - --profile webapp   adds the Next.js webapp + backend (requires source)
+#   - --profile proxy    adds the Caddy reverse proxy at :80 + backend
 
 services:
   redis:
@@ -42,24 +45,23 @@ services:
       context: .
       dockerfile: packages/backend/Dockerfile
     restart: unless-stopped
+    profiles: ["backend", "webapp", "proxy"]
     depends_on:
       redis:
         condition: service_healthy
+    # Source of truth: packages/backend/.env (host addresses).
+    env_file:
+      - packages/backend/.env
+    # Container-only overrides: package .env points at 127.0.0.1, which inside a
+    # container means the container itself. Redirect to the compose network and
+    # the host gateway. Everything else (Supabase keys, payments, CORS) comes
+    # from the env_file above.
     environment:
       NODE_ENV: production
-      PORT: "4000"
       HOST: "0.0.0.0"
+      PORT: "4000"
       REDIS_URL: redis://redis:6379
       SUPABASE_URL: ${SUPABASE_URL:-http://host.docker.internal:54321}
-      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
-      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
-      SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:-}
-      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:1420,tauri://localhost,http://tauri.localhost}
-      PAYMENT_PROVIDER: ${PAYMENT_PROVIDER:-mock}
-      PAYMENT_WEBHOOK_BASE_URL: ${PAYMENT_WEBHOOK_BASE_URL:-http://localhost:4000}
-      BILLPLZ_API_KEY: ${BILLPLZ_API_KEY:-}
-      BILLPLZ_COLLECTION_ID: ${BILLPLZ_COLLECTION_ID:-}
-      BILLPLZ_XSIGN_SECRET: ${BILLPLZ_XSIGN_SECRET:-}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
@@ -70,13 +72,17 @@ services:
       context: .
       dockerfile: packages/webapp/Dockerfile
     restart: unless-stopped
+    # Source of truth: packages/webapp/.env (created once webapp is scaffolded).
+    # required: false so the stack still boots before that file exists.
+    env_file:
+      - path: packages/webapp/.env
+        required: false
+    # Container-only overrides: reach the backend over the compose network.
     environment:
       NODE_ENV: production
       HOSTNAME: "0.0.0.0"
       PORT: "3000"
       NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:4000}
-      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-http://localhost:54321}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
     depends_on:
       - backend
     ports:

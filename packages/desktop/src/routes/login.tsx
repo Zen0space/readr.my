@@ -5,9 +5,21 @@ import { fetchMe } from '../api/me'
 import { setSessionAtom } from '../atoms/session'
 import { Button } from '../components/Button'
 import { Field } from '../components/Field'
-import { getUserMessage } from '@auror/shared/errors'
+import { ApiError, NetworkError, getUserMessage } from '@auror/shared/errors'
 
 type Mode = 'signin' | 'signup'
+
+/**
+ * Typed API/network/Supabase errors get localized copy via getUserMessage.
+ * Our own intentional, already-human-readable Errors (author-only, suspended,
+ * "Check your email", "No session returned") are shown verbatim instead of
+ * being flattened to the generic "Something went wrong".
+ */
+const toLoginErrorMessage = (err: unknown): string => {
+  if (err instanceof ApiError || err instanceof NetworkError) return getUserMessage(err, 'en')
+  if (err instanceof Error && err.message) return err.message
+  return getUserMessage(err, 'en')
+}
 
 export const LoginRoute = () => {
   const [mode, setMode] = useState<Mode>('signin')
@@ -48,7 +60,7 @@ export const LoginRoute = () => {
         await assertAuthorAndPersist(result)
       }
     } catch (err) {
-      setError(getUserMessage(err, 'en'))
+      setError(toLoginErrorMessage(err))
     } finally {
       setSubmitting(false)
     }
