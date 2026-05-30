@@ -32,7 +32,6 @@ RUN apk add --no-cache tini \
 WORKDIR /app
 COPY --from=prod-deps --chown=app:app /repo/node_modules ./node_modules
 COPY --from=prod-deps --chown=app:app /repo/packages/backend/node_modules ./packages/backend/node_modules
-COPY --from=prod-deps --chown=app:app /repo/packages/shared/node_modules ./packages/shared/node_modules
 COPY --from=build --chown=app:app /repo/packages/backend/src ./packages/backend/src
 COPY --from=build --chown=app:app /repo/packages/backend/package.json ./packages/backend/package.json
 COPY --from=build --chown=app:app /repo/packages/backend/tsconfig.json ./packages/backend/tsconfig.json
