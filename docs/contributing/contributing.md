@@ -17,8 +17,8 @@ If you're an AI agent (Claude Code, etc.), read the skill files in `.claude/skil
 ## 2. Local setup
 
 ```bash
-git clone git@github.com:Zen0space/readr.my.git
-cd readr.my
+git clone git@github.com:rekabytes/auror.my.git
+cd auror.my
 pnpm install
 
 # Bring up Supabase + Redis + reverse proxy (config arrives in Phase 0)

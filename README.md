@@ -53,8 +53,8 @@ This is a **pnpm monorepo** with four packages:
 
 ```bash
 # Clone
-git clone git@github.com:Zen0space/readr.my.git
-cd readr.my
+git clone git@github.com:rekabytes/auror.my.git
+cd auror.my
 
 # Install all workspace deps
 pnpm install
