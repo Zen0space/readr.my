@@ -1,21 +1,15 @@
-name: Release — Webapp image
+name: Release — Admin image
 
-# NOTE: this workflow expects packages/webapp to be a Next.js app with
-# `output: "standalone"` in next.config.js. Until that source lands, the
-# Docker build step will fail. Keep the workflow disabled (or rely on the
-# `paths` filter not matching) until then — or trigger manually to test.
+# Phase A: workflow_dispatch only. Phase D.3 adds a `push` trigger gated on
+# `packages/admin/**` + `packages/shared/**` once `packages/admin` exists
+# and is live on `admin.auror.my`.
+#
+# Until that lands this workflow builds the webapp monolith under the
+# `auror-admin` image name so the Coolify entry for the admin subdomain
+# can be smoke-tested. The pipeline is a clone of `release-reader.yml`
+# (see dev-frontend-split.md §A.3.c).
 
 on:
-  push:
-    branches: [main]
-    tags: ['v*']
-    paths:
-      - 'packages/webapp/**'
-      - 'packages/shared/**'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - 'package.json'
-      - '.github/workflows/release-webapp.yml'
   workflow_dispatch:
 
 permissions:
@@ -24,7 +18,9 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/auror-webapp
+  IMAGE_NAME: ${{ github.repository_owner }}/auror-admin
+  SOURCE_CONTEXT: packages/webapp
+  DOCKERFILE: packages/webapp/Dockerfile
 
 jobs:
   build-and-push:
@@ -55,19 +51,17 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=tag
             type=sha,prefix=sha-,format=short
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=latest
 
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: packages/webapp/Dockerfile
+          file: ${{ env.DOCKERFILE }}
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=webapp
-          cache-to: type=gha,scope=webapp,mode=max
+          cache-from: type=gha,scope=admin
+          cache-to: type=gha,scope=admin,mode=max

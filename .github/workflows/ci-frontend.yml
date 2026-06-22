@@ -1,0 +1,104 @@
+name: CI — Frontend
+
+# Matrix over the per-role frontend packages. Today the only package that
+# exists is `@auror/webapp` (the pre-split monolith); Phase B–D add
+# `@auror/reader`, `@auror/author`, `@auror/admin` and the matrix legs light
+# up one-by-one as each cutover lands. The webapp leg is removed in Phase E.
+
+on:
+  push:
+    branches: [dev, main]
+    paths:
+      - 'packages/webapp/**'
+      - 'packages/reader/**'
+      - 'packages/author/**'
+      - 'packages/admin/**'
+      - 'packages/shared/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/ci-frontend.yml'
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - 'packages/webapp/**'
+      - 'packages/reader/**'
+      - 'packages/author/**'
+      - 'packages/admin/**'
+      - 'packages/shared/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/ci-frontend.yml'
+
+jobs:
+  webapp:
+    name: webapp — typecheck / lint / test / build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @auror/webapp typecheck
+      - run: pnpm --filter @auror/webapp lint
+      - run: pnpm --filter @auror/webapp test
+      - run: pnpm --filter @auror/webapp build
+
+  reader:
+    name: reader — typecheck / build (placeholder)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Phase B.3 uncomments these steps once `packages/reader` exists.
+    if: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @auror/reader typecheck
+      - run: pnpm --filter @auror/reader build
+      - run: pnpm --filter @auror/reader test:e2e
+
+  author:
+    name: author — typecheck / build (placeholder)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Phase C.3 uncomments these steps once `packages/author` exists.
+    if: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @auror/author typecheck
+      - run: pnpm --filter @auror/author build
+      - run: pnpm --filter @auror/author test:e2e
+
+  admin:
+    name: admin — typecheck / build (placeholder)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Phase D.3 uncomments these steps once `packages/admin` exists.
+    if: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @auror/admin typecheck
+      - run: pnpm --filter @auror/admin build
+      - run: pnpm --filter @auror/admin test:e2e
