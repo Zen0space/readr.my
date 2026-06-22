@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient, createAdminClient } from '../../../lib/supabase';
-import { PayoutSchema } from '../../../lib/schemas';
+import { createServerClient, createAdminClient } from '@/lib/supabase';
+import { PayoutSchema } from '@/lib/schemas';
 
 export async function POST(req: NextRequest) {
   try {

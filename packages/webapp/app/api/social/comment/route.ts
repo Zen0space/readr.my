@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient } from '../../../lib/supabase';
-import { CommentSchema } from '../../../lib/schemas';
+import { createServerClient } from '@/lib/supabase';
+import { CommentSchema } from '@/lib/schemas';
 
 export async function GET(req: NextRequest) {
   try {

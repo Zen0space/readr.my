@@ -1,0 +1,22 @@
+import { z } from 'zod';
+import { apiClient } from './client';
+import { LibraryResponseSchema, type LibraryResponse } from './types';
+
+const LibraryMutationSchema = z.object({ success: z.literal(true) });
+
+export const libraryApi = {
+  list: (): Promise<LibraryResponse> =>
+    apiClient.request('/api/library', LibraryResponseSchema),
+
+  add: (writingId: string): Promise<{ success: true }> =>
+    apiClient.request('/api/library', LibraryMutationSchema, {
+      method: 'POST',
+      body: { writing_id: writingId },
+    }),
+
+  remove: (writingId: string): Promise<{ success: true }> =>
+    apiClient.request('/api/library', LibraryMutationSchema, {
+      method: 'DELETE',
+      body: { writing_id: writingId },
+    }),
+};

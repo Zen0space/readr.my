@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient } from '../../../lib/supabase';
-import { WritingSchema } from '../../../lib/schemas';
+import { createServerClient } from '@/lib/supabase';
+import { WritingSchema } from '@/lib/schemas';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {

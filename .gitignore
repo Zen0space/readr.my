@@ -4,26 +4,45 @@ node_modules/
 .pnp.*
 jspm_packages/
 
-# ---------- Build output ----------
-dist/
-build/
-out/
-lib/
-.output/
-.vercel/
-.netlify/
-.turbo/
-.next/
-.nuxt/
-.svelte-kit/
-.astro/
-.cache/
-.parcel-cache/
-.vite/
-.rollup.cache/
-.swc/
-.tsbuildinfo
+# ---------- Build output (root + per-package) ----------
+/dist/
+/build/
+/out/
+/lib/
+/.output/
+/.vercel/
+/.netlify/
+/.turbo/
+/.next/
+/.nuxt/
+/.svelte-kit/
+/.astro/
+/.cache/
+/.parcel-cache/
+/.vite/
+/.rollup.cache/
+/.swc/
+
+# Allow tracked source under packages/*/lib/ — each monorepo package's
+# `lib/` folder is hand-written TypeScript, not a build artifact.
+/!packages/
+
+packages/*/dist/
+packages/*/build/
+packages/*/out/
+packages/*/.next/
+packages/*/.turbo/
+packages/*/.output/
+packages/*/coverage/
+packages/*/.nyc_output/
+
+# ---------- TypeScript build info ----------
 *.tsbuildinfo
+.tsbuildinfo
+*.js.map
+*.mjs.map
+*.cjs.map
+!packages/*/lib/**/*.js.map
 
 # ---------- Desktop (Electron / Tauri) ----------
 packages/desktop/src-tauri/target/

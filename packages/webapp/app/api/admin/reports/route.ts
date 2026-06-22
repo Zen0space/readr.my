@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient, createAdminClient } from '../../../lib/supabase';
+import { createServerClient, createAdminClient } from '@/lib/supabase';
 
 // Helper to seed dummy reports if the database is empty
 async function seedDummyReports(supabase: any) {

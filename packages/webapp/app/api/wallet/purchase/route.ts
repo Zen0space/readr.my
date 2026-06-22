@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient, createAdminClient } from '../../../lib/supabase';
-import { PurchaseCoinsSchema } from '../../../lib/schemas';
+import { createServerClient, createAdminClient } from '@/lib/supabase';
+import { PurchaseCoinsSchema } from '@/lib/schemas';
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,17 +15,17 @@ export async function POST(req: NextRequest) {
     const result = PurchaseCoinsSchema.safeParse(body);
     
     let coinsAmount = 0;
-    let priceUsd = 0.00;
-    let metadata: any = {};
-    
-    if (result.success) {
+    let priceUsd = 0;
+    let metadata: Record<string, string | number> = {};
+
+    if (result.success && 'coins_id' in result.data) {
       const { coins_id } = result.data;
       const { data: coinPack, error: coinError } = await supabase
         .from('coins')
         .select('*')
         .eq('id', coins_id)
         .single();
-        
+
       if (coinError || !coinPack) {
         return NextResponse.json({ error: 'Coin package not found' }, { status: 404 });
       }
