@@ -63,16 +63,6 @@ const nextConfig = {
         source: '/admin/users',
         destination: '/stitch_auror_modern_reading_platform/admin_user_management/code.html',
       },
-      // MIGRATE: see docs/development/dev-frontend-migration.md Phase B (Login)
-      {
-        source: '/login',
-        destination: '/stitch_auror_modern_reading_platform/auth/login.html',
-      },
-      // MIGRATE: see docs/development/dev-frontend-migration.md Phase B (Register)
-      {
-        source: '/register',
-        destination: '/stitch_auror_modern_reading_platform/auth/register.html',
-      },
     ];
   },
 };

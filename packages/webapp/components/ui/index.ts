@@ -13,3 +13,4 @@ export { Badge } from './Badge';
 export { Sheet, SheetTrigger, useSheet } from './Sheet';
 export { Tabs } from './Tabs';
 export { Skeleton } from './Skeleton';
+export { Icon, type IconName } from './Icon';
