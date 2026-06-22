@@ -3,31 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
   async rewrites() {
     return [
-      // MIGRATE: see docs/development/dev-frontend-migration.md Phase C (Browse)
-      {
-        source: '/',
-        destination: '/stitch_auror_modern_reading_platform/reader_browse_dashboard/code.html',
-      },
-      // MIGRATE: see docs/development/dev-frontend-migration.md Phase C (Library)
-      {
-        source: '/library',
-        destination: '/stitch_auror_modern_reading_platform/library_history_progress/code.html',
-      },
-      // MIGRATE: see docs/development/dev-frontend-migration.md Phase C (Reader)
-      {
-        source: '/reading',
-        destination: '/stitch_auror_modern_reading_platform/immersive_reading_experience/code.html',
-      },
-      // MIGRATE: see docs/development/dev-frontend-migration.md Phase C (Wallet)
-      {
-        source: '/wallet',
-        destination: '/stitch_auror_modern_reading_platform/reader_wallet_rewards/code.html',
-      },
-      // MIGRATE: see docs/development/dev-frontend-migration.md Phase C (Subscription)
-      {
-        source: '/subscription',
-        destination: '/stitch_auror_modern_reading_platform/reader_subscription_dashboard/code.html',
-      },
       // MIGRATE: see docs/development/dev-frontend-migration.md Phase D (Author analytics)
       {
         source: '/author/analytics',
