@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const fetchAuthorWritings = async (): Promise<{ writings: Writing[]; isAuthed: boolean }> => {
   if (!isSupabaseConfigured()) return { writings: [], isAuthed: false };
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { writings: [], isAuthed: false };
     const { data } = await supabase

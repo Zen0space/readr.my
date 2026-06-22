@@ -23,7 +23,7 @@ const fetchEarnings = async (): Promise<{
 }> => {
   if (!isSupabaseConfigured()) return { balance: null, earnings: null, transactions: [], isAuthed: false };
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { balance: null, earnings: null, transactions: [], isAuthed: false };
     const [{ data: wallet }, { data: tx }] = await Promise.all([

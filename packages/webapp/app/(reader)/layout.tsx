@@ -8,7 +8,7 @@ const resolveSession = async (): Promise<{ session: SessionState; coinBalance: n
     return { session: { status: 'anonymous' }, coinBalance: null };
   }
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user }, error } = await supabase.auth.getUser();
     if (error || !user) {
       return { session: { status: 'anonymous' }, coinBalance: null };

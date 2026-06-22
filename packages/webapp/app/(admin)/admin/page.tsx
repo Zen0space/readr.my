@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const fetchKpis = async (): Promise<{ metrics: { totalUsers: number; totalStories: number; totalReports: number; totalCoins: number } | null; isAdmin: boolean }> => {
   if (!isSupabaseConfigured()) return { metrics: null, isAdmin: false };
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { metrics: null, isAdmin: false };
     const { data: profile } = await supabase

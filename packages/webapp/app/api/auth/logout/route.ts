@@ -4,7 +4,7 @@ import { createServerClient } from '@/lib/supabase';
 export async function POST(req: NextRequest) {
   try {
     const response = NextResponse.next();
-    const supabase = createServerClient(response);
+    const supabase = await createServerClient(response);
     const { error } = await supabase.auth.signOut();
     
     if (error) {

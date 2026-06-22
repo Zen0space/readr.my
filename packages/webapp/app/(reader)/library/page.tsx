@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const fetchLibrary = async (): Promise<{ items: LibraryItem[]; isAuthed: boolean }> => {
   if (!isSupabaseConfigured()) return { items: [], isAuthed: false };
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { items: [], isAuthed: false };
     const { data, error } = await supabase

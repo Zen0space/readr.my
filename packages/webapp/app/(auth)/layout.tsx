@@ -3,7 +3,7 @@ import { SessionProvider, type SessionState } from '@/lib/session';
 
 const resolveSession = async (): Promise<SessionState> => {
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user }, error } = await supabase.auth.getUser();
     if (error || !user) return { status: 'anonymous' };
     const { data: profile } = await supabase

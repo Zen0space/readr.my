@@ -21,7 +21,7 @@ type Resolved = {
 const fetchReader = async (chapterId: string): Promise<Resolved | null> => {
   if (!isSupabaseConfigured()) return null;
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     const { data: chapter, error: chapterError } = await supabase
@@ -73,11 +73,12 @@ const fetchReader = async (chapterId: string): Promise<Resolved | null> => {
 };
 
 type PageProps = {
-  params: { chapterId: string };
+  params: Promise<{ chapterId: string }>;
 };
 
 export default async function ReaderPage({ params }: PageProps): Promise<React.ReactElement> {
-  const data = await fetchReader(params.chapterId);
+  const { chapterId } = await params;
+  const data = await fetchReader(chapterId);
   if (!data) {
     notFound();
   }

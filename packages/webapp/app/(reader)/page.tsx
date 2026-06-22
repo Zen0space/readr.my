@@ -13,7 +13,7 @@ const fetchInitialWritings = async (search: string): Promise<Writing[]> => {
     return [];
   }
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     let query = supabase
       .from('writings')
       .select('*, profiles(username)')
@@ -44,7 +44,7 @@ export default async function BrowsePage({ searchParams }: PageProps): Promise<R
     (async () => {
       if (!isSupabaseConfigured()) return { isAuthed: false as const };
       try {
-        const supabase = createServerClient();
+        const supabase = await createServerClient();
         const { data: { user } } = await supabase.auth.getUser();
         return { isAuthed: Boolean(user) };
       } catch {

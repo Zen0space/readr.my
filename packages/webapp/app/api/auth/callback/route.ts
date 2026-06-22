@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const response = NextResponse.redirect(`${origin}${next}`);
-    const supabase = createServerClient(response);
+    const supabase = await createServerClient(response);
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       // Fetch user profile to redirect to correct dashboard

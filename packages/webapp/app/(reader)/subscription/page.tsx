@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const fetchSubscription = async (): Promise<{ sub: Subscription; isAuthed: boolean }> => {
   if (!isSupabaseConfigured()) return { sub: null, isAuthed: false };
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { sub: null, isAuthed: false };
     const { data } = await supabase

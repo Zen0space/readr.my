@@ -4,7 +4,7 @@ import { PayoutSchema } from '@/lib/schemas';
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {

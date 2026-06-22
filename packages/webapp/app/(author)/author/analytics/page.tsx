@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const fetchMetrics = async (): Promise<{ metrics: DashboardMetrics | null; isAuthed: boolean }> => {
   if (!isSupabaseConfigured()) return { metrics: null, isAuthed: false };
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { metrics: null, isAuthed: false };
     const [{ count: totalWritings }, { count: totalFollowers }] = await Promise.all([

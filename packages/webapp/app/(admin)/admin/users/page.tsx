@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const fetchUsers = async (): Promise<{ users: AdminUser[]; isAdmin: boolean }> => {
   if (!isSupabaseConfigured()) return { users: [], isAdmin: false };
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { users: [], isAdmin: false };
     const { data: profile } = await supabase

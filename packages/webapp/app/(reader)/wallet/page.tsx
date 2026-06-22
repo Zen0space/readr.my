@@ -14,7 +14,7 @@ const fetchWallet = async (): Promise<{
 }> => {
   if (!isSupabaseConfigured()) return { balance: null, earnings: null, isAuthed: false };
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { balance: null, earnings: null, isAuthed: false };
     const { data } = await supabase

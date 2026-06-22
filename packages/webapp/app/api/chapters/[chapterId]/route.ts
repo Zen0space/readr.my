@@ -2,16 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase';
 import { ChapterSchema } from '@/lib/schemas';
 
-export async function GET(req: NextRequest, { params }: { params: { chapterId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ chapterId: string }> }) {
   try {
-    const supabase = createServerClient();
+    const { chapterId } = await params;
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     // Fetch chapter and the author's id
     const { data: chapter, error } = await supabase
       .from('chapters')
       .select('*, writings(author_id, status)')
-      .eq('id', params.chapterId)
+      .eq('id', chapterId)
       .single();
       
     if (error || !chapter) {
@@ -71,8 +72,8 @@ export async function GET(req: NextRequest, { params }: { params: { chapterId: s
         .from('transactions')
         .select('id')
         .eq('wallet_id', wallet.id)
-        .eq('type', 'chapter_unlock')
-        .eq('metadata->>chapter_id', params.chapterId)
+          .eq('type', 'chapter_unlock')
+          .eq('metadata->>chapter_id', chapterId)
         .maybeSingle();
         
       if (!transaction) {
@@ -115,19 +116,20 @@ export async function GET(req: NextRequest, { params }: { params: { chapterId: s
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { chapterId: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ chapterId: string }> }) {
   try {
-    const supabase = createServerClient();
+    const { chapterId } = await params;
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+
     const { data: chapter, error: fetchError } = await supabase
       .from('chapters')
       .select('*, writings(author_id)')
-      .eq('id', params.chapterId)
+      .eq('id', chapterId)
       .single();
       
     if (fetchError || !chapter) {
@@ -170,10 +172,10 @@ export async function PUT(req: NextRequest, { params }: { params: { chapterId: s
         status,
         updated_at: new Date().toISOString()
       })
-      .eq('id', params.chapterId)
+      .eq('id', chapterId)
       .select()
       .single();
-      
+
     if (updateError) {
       return NextResponse.json({ error: updateError.message }, { status: 400 });
     }
@@ -184,19 +186,20 @@ export async function PUT(req: NextRequest, { params }: { params: { chapterId: s
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { chapterId: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ chapterId: string }> }) {
   try {
-    const supabase = createServerClient();
+    const { chapterId } = await params;
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+
     const { data: chapter, error: fetchError } = await supabase
       .from('chapters')
       .select('*, writings(author_id)')
-      .eq('id', params.chapterId)
+      .eq('id', chapterId)
       .single();
       
     if (fetchError || !chapter) {
@@ -219,7 +222,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { chapterId
     const { error: deleteError } = await supabase
       .from('chapters')
       .delete()
-      .eq('id', params.chapterId);
+      .eq('id', chapterId);
       
     if (deleteError) {
       return NextResponse.json({ error: deleteError.message }, { status: 400 });

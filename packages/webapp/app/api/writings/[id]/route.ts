@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase';
 import { WritingSchema } from '@/lib/schemas';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = createServerClient();
+    const { id } = await params;
+    const supabase = await createServerClient();
     const { data: writing, error } = await supabase
       .from('writings')
       .select('*, profiles(username)')
-      .eq('id', params.id)
+      .eq('id', id)
       .single();
       
     if (error || !writing) {
@@ -37,20 +38,21 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = createServerClient();
+    const { id } = await params;
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+
     // Fetch the writing to verify owner
     const { data: writing, error: fetchError } = await supabase
       .from('writings')
       .select('author_id')
-      .eq('id', params.id)
+      .eq('id', id)
       .single();
       
     if (fetchError || !writing) {
@@ -92,10 +94,10 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         status,
         updated_at: new Date().toISOString()
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single();
-      
+
     if (updateError) {
       return NextResponse.json({ error: updateError.message }, { status: 400 });
     }
@@ -106,19 +108,20 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const supabase = createServerClient();
+    const { id } = await params;
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    
+
     const { data: writing, error: fetchError } = await supabase
       .from('writings')
       .select('author_id')
-      .eq('id', params.id)
+      .eq('id', id)
       .single();
       
     if (fetchError || !writing) {
@@ -141,7 +144,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     const { error: deleteError } = await supabase
       .from('writings')
       .delete()
-      .eq('id', params.id);
+      .eq('id', id);
       
     if (deleteError) {
       return NextResponse.json({ error: deleteError.message }, { status: 400 });

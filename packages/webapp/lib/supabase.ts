@@ -19,14 +19,14 @@ class SupabaseNotConfiguredError extends Error {
   }
 }
 
-const buildServerClient = (writer: CookieWriter): SupabaseClient => {
+const buildServerClient = async (writer: CookieWriter): Promise<SupabaseClient> => {
   if (!isConfigured()) {
     throw new SupabaseNotConfiguredError();
   }
   return createSsrServerClient(url(), anonKey(), {
     cookies: {
-      getAll: () => {
-        const store = cookies();
+      getAll: async () => {
+        const store = await cookies();
         return store.getAll().map(({ name, value }) => ({ name, value }));
       },
       setAll: (toSet: { name: string; value: string; options?: CookieOptions }[]) => {
@@ -38,11 +38,11 @@ const buildServerClient = (writer: CookieWriter): SupabaseClient => {
   });
 };
 
-export const createServerClient = (...args: [] | [NextResponse]): SupabaseClient => {
+export const createServerClient = async (...args: [] | [NextResponse]): Promise<SupabaseClient> => {
   if (args.length === 0) {
     return buildServerClient({
-      set: (name, value, options) => {
-        const store = cookies();
+      set: async (name, value, options) => {
+        const store = await cookies();
         store.set({ name, value, ...options });
       },
     });

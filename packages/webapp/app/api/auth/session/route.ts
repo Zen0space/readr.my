@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
     const allCookies = req.cookies.getAll();
     console.log('GET /api/auth/session - Received cookies:', allCookies.map(c => c.name));
     
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user }, error } = await supabase.auth.getUser();
     
     if (error || !user) {

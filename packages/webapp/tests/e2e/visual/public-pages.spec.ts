@@ -15,7 +15,7 @@ for (const route of routes) {
     test(`matches snapshot on desktop`, async ({ page }) => {
       await page.goto(route.path);
       await page.waitForLoadState("networkidle");
-      await expect(page).toHaveScreenshot(`${route.name}-desktop.png", {
+      await expect(page).toHaveScreenshot(`${route.name}-desktop.png`, {
         fullPage: true,
         maxDiffPixelRatio: 0.02,
       });

@@ -15,7 +15,7 @@ const fetchProfile = async (): Promise<{
 }> => {
   if (!isSupabaseConfigured()) return { username: '', email: '', avatar: null, isAuthed: false };
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { username: '', email: '', avatar: null, isAuthed: false };
     const { data: profile } = await supabase
