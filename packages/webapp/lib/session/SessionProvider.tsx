@@ -12,7 +12,7 @@ import {
   sessionAtom,
   type SessionState,
 } from './atoms';
-import { SessionExpiredError } from '@/lib/api/errors';
+import { SessionExpiredError } from '@auror/shared/api-client';
 
 type Props = {
   initialSession: SessionState;

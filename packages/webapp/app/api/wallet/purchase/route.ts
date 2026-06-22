@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient, createAdminClient } from '@/lib/supabase';
-import { PurchaseCoinsSchema } from '@/lib/schemas';
+import { PurchaseCoinsSchema } from '@auror/shared/domain';
 
 export async function POST(req: NextRequest) {
   try {

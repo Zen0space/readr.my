@@ -1,15 +1,17 @@
-import { z } from 'zod';
-import { apiClient } from './client';
+import { z } from 'zod'
+import { createApiClient } from '../api-client'
 import {
   SubscriptionResponseSchema,
   type SubscriptionResponse,
   type SubscriptionTier,
-} from './types';
+} from '../api-client'
+
+const apiClient = createApiClient()
 
 const SubscribeResponseSchema = z.object({
   success: z.literal(true),
   subscription_id: z.string().optional(),
-});
+})
 
 export const subscriptionApi = {
   current: (): Promise<SubscriptionResponse> =>
@@ -20,4 +22,4 @@ export const subscriptionApi = {
       method: 'POST',
       body: { tier },
     }),
-};
+}

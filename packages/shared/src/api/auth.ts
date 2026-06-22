@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { apiClient } from './client';
+import { z } from 'zod'
+import { createApiClient } from '../api-client'
 import {
   LoginResponseSchema,
   RegisterResponseSchema,
@@ -7,7 +7,9 @@ import {
   type LoginResponse,
   type RegisterResponse,
   type SessionResponse,
-} from './types';
+} from '../api-client'
+
+const apiClient = createApiClient()
 
 export const authApi = {
   checkSession: (): Promise<SessionResponse> =>
@@ -20,11 +22,11 @@ export const authApi = {
     }),
 
   register: (input: {
-    email: string;
-    password: string;
-    username: string;
-    role: 'reader' | 'author';
-    avatarUrl?: string;
+    email: string
+    password: string
+    username: string
+    role: 'reader' | 'author'
+    avatarUrl?: string
   }): Promise<RegisterResponse> =>
     apiClient.request('/api/auth/register', RegisterResponseSchema, {
       method: 'POST',
@@ -37,4 +39,4 @@ export const authApi = {
       z.object({ success: z.literal(true) }),
       { method: 'POST' },
     ),
-};
+}

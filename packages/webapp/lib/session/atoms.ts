@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import type { User } from '@/lib/api/types';
+import type { User } from '@auror/shared/api-client';
 
 export type SessionState =
   | { status: 'loading' }

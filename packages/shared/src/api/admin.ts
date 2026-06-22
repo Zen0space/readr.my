@@ -1,6 +1,8 @@
-import { z } from 'zod';
-import { apiClient } from './client';
-import { RoleSchema } from './types';
+import { z } from 'zod'
+import { createApiClient } from '../api-client'
+import { RoleSchema } from '../api-client'
+
+const apiClient = createApiClient()
 
 const AdminUserSchema = z.object({
   id: z.string(),
@@ -10,13 +12,13 @@ const AdminUserSchema = z.object({
   avatar_url: z.string().url().nullable().optional(),
   status: z.enum(['active', 'suspended']),
   created_at: z.string(),
-});
-export type AdminUser = z.infer<typeof AdminUserSchema>;
+})
+export type AdminUser = z.infer<typeof AdminUserSchema>
 
 const AdminUsersResponseSchema = z.object({
   success: z.literal(true),
   users: z.array(AdminUserSchema),
-});
+})
 
 const AdminReportSchema = z.object({
   id: z.string(),
@@ -25,13 +27,13 @@ const AdminReportSchema = z.object({
   reason: z.string(),
   status: z.enum(['open', 'in_review', 'resolved', 'dismissed']),
   created_at: z.string(),
-});
-export type AdminReport = z.infer<typeof AdminReportSchema>;
+})
+export type AdminReport = z.infer<typeof AdminReportSchema>
 
 const AdminReportsResponseSchema = z.object({
   success: z.literal(true),
   reports: z.array(AdminReportSchema),
-});
+})
 
 export const adminApi = {
   users: {
@@ -69,4 +71,4 @@ export const adminApi = {
         },
       ),
   },
-};
+}

@@ -1,8 +1,10 @@
-import { z } from 'zod';
-import { apiClient } from './client';
-import { LibraryResponseSchema, type LibraryResponse } from './types';
+import { z } from 'zod'
+import { createApiClient } from '../api-client'
+import { LibraryResponseSchema, type LibraryResponse } from '../api-client'
 
-const LibraryMutationSchema = z.object({ success: z.literal(true) });
+const apiClient = createApiClient()
+
+const LibraryMutationSchema = z.object({ success: z.literal(true) })
 
 export const libraryApi = {
   list: (): Promise<LibraryResponse> =>
@@ -19,4 +21,4 @@ export const libraryApi = {
       method: 'DELETE',
       body: { writing_id: writingId },
     }),
-};
+}

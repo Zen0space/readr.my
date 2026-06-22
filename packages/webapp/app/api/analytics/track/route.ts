@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase';
-import { TrackEventSchema } from '@/lib/schemas';
+import { TrackEventSchema } from '@auror/shared/domain';
 
 export async function POST(req: NextRequest) {
   try {
