@@ -5,16 +5,17 @@ import {
   type WalletResponse,
 } from './types';
 
+const TransactionSchema = z.object({
+  id: z.string(),
+  amount: z.number(),
+  kind: z.string(),
+  created_at: z.string(),
+});
+export type Transaction = z.infer<typeof TransactionSchema>;
+
 const TransactionsResponseSchema = z.object({
   success: z.literal(true),
-  transactions: z.array(
-    z.object({
-      id: z.string(),
-      amount: z.number(),
-      kind: z.string(),
-      created_at: z.string(),
-    }),
-  ),
+  transactions: z.array(TransactionSchema),
 });
 const PurchaseResponseSchema = z.object({
   success: z.literal(true),
