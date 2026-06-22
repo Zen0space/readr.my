@@ -23,6 +23,13 @@ const LikeResponseSchema = z.object({
   like_count: z.number(),
 })
 
+/**
+ * Comment + like endpoints are NOT in the Fastify backend yet (see Phase A.2
+ * scope decisions in docs/development/dev-frontend-split.md). Until they
+ * land there, these wrappers still hit the legacy BFF paths so the existing
+ * webapp keeps working — but Phase C/D will route them to /api/v1/social/...
+ * once backend modules are added.
+ */
 export const socialApi = {
   toggleLike: (writingId: string): Promise<z.infer<typeof LikeResponseSchema>> =>
     apiClient.request('/api/social/like', LikeResponseSchema, {
@@ -36,9 +43,7 @@ export const socialApi = {
       chapterId?: string,
     ): Promise<z.infer<typeof CommentsResponseSchema>> => {
       const search = new URLSearchParams({ writing_id: writingId })
-      if (chapterId) {
-        search.append('chapter_id', chapterId)
-      }
+      if (chapterId) search.append('chapter_id', chapterId)
       return apiClient.request(
         `/api/social/comment?${search.toString()}`,
         CommentsResponseSchema,

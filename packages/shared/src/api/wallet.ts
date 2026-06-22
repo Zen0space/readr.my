@@ -4,45 +4,64 @@ import { WalletResponseSchema, type WalletResponse } from '../api-client'
 
 const apiClient = createApiClient()
 
+const WalletBalanceSchema = z.object({
+  coin_balance: z.number(),
+  coins_per_rm: z.number(),
+  updated_at: z.string(),
+})
+
 const TransactionSchema = z.object({
-  id: z.string(),
-  amount: z.number(),
-  kind: z.string(),
-  created_at: z.string(),
+  id: z.string().uuid(),
+  pack_rm_cents: z.number().optional(),
+  coins: z.number().optional(),
+  coins_paid: z.number().optional(),
+  chapter_id: z.string().uuid().optional(),
+  status: z.string().optional(),
+  created_at: z.string().optional(),
+  unlocked_at: z.string().optional(),
 })
 export type Transaction = z.infer<typeof TransactionSchema>
 
 const TransactionsResponseSchema = z.object({
-  success: z.literal(true),
-  transactions: z.array(TransactionSchema),
+  purchases: z.array(TransactionSchema),
+  unlocks: z.array(TransactionSchema),
 })
-const PurchaseResponseSchema = z.object({
-  success: z.literal(true),
-  new_balance: z.number().optional(),
-})
-const PayoutResponseSchema = z.object({
-  success: z.literal(true),
-  payout_id: z.string().optional(),
+
+const TopupResponseSchema = z.object({
+  purchase_id: z.string().uuid(),
+  checkout_url: z.string().url(),
+  coins: z.number(),
 })
 
 export const walletApi = {
   balance: (): Promise<WalletResponse> =>
-    apiClient.request('/api/wallet/balance', WalletResponseSchema),
+    apiClient.request('/api/v1/wallet', WalletBalanceSchema),
 
-  transactions: (): Promise<z.infer<typeof TransactionsResponseSchema>> =>
-    apiClient.request('/api/wallet/transactions', TransactionsResponseSchema),
+  transactions: (limit = 50): Promise<z.infer<typeof TransactionsResponseSchema>> =>
+    apiClient.request(
+      `/api/v1/wallet/transactions?limit=${limit}`,
+      TransactionsResponseSchema,
+    ),
 
-  purchase: (
-    input: { coins_id: string } | { coins: number; price: number },
-  ): Promise<z.infer<typeof PurchaseResponseSchema>> =>
-    apiClient.request('/api/wallet/purchase', PurchaseResponseSchema, {
+  topup: (
+    packRm: 5 | 10 | 20 | 50,
+  ): Promise<z.infer<typeof TopupResponseSchema>> =>
+    apiClient.request('/api/v1/wallet/topup', TopupResponseSchema, {
       method: 'POST',
-      body: input,
+      body: { pack_rm: packRm },
     }),
 
-  requestPayout: (amount: number): Promise<z.infer<typeof PayoutResponseSchema>> =>
-    apiClient.request('/api/wallet/payout', PayoutResponseSchema, {
-      method: 'POST',
-      body: { amount },
-    }),
+  requestPayout: (amountCoins: number, methodRef: string): Promise<{ id: string }> =>
+    apiClient.request(
+      '/api/v1/payouts',
+      z.object({ id: z.string().uuid() }),
+      {
+        method: 'POST',
+        body: { amount_coins: amountCoins, method_ref: methodRef },
+      },
+    ),
 }
+
+// Backwards-compat — webapp's legacy wallet shape
+export { WalletResponseSchema as legacyWalletResponseSchema }
+export type { WalletResponse }

@@ -31,53 +31,64 @@ export const RegisterResponseSchema = z.object({
 })
 export type RegisterResponse = z.infer<typeof RegisterResponseSchema>
 
-export const WritingStatusSchema = z.enum(['draft', 'published'])
-export type WritingStatus = z.infer<typeof WritingStatusSchema>
-
+/**
+ * Story / Writing — matches the backend's `storyResponse` envelope from
+ * packages/backend/src/modules/stories/schema.ts (which is the source of
+ * truth, mirroring the public.stories table).
+ */
 export const WritingSchema = z.object({
-  id: z.string(),
+  id: z.string().uuid(),
+  author_id: z.string().uuid(),
   title: z.string(),
-  description: z.string().nullable().optional(),
-  cover_url: z.string().url().nullable().optional(),
-  status: WritingStatusSchema,
-  author_id: z.string(),
+  blurb: z.string().nullable(),
+  genre: z.string(),
+  tags: z.array(z.string()),
+  language: z.string(),
+  age_rating: z.string(),
+  status: z.enum(['draft', 'ongoing', 'completed']),
+  cover_url: z.string().nullable(),
+  published_at: z.string().nullable(),
   created_at: z.string(),
-  updated_at: z.string().optional(),
-  profiles: z
-    .object({ username: z.string() })
-    .nullable()
-    .optional(),
+  updated_at: z.string(),
 })
 export type Writing = z.infer<typeof WritingSchema>
 
 export const WritingsListResponseSchema = z.object({
-  success: z.literal(true),
-  writings: z.array(WritingSchema),
+  items: z.array(WritingSchema),
+  next_cursor: z.string().nullable(),
 })
 export type WritingsListResponse = z.infer<typeof WritingsListResponseSchema>
 
+/** Chapter — matches backend's `chapterResponse`. */
 export const ChapterSchema = z.object({
-  id: z.string(),
-  writing_id: z.string(),
+  id: z.string().uuid(),
+  story_id: z.string().uuid(),
+  ord: z.number(),
   title: z.string(),
-  content: z.string().nullable().optional(),
-  chapter_order: z.number(),
-  is_premium: z.boolean(),
-  coin_price: z.number(),
-  status: WritingStatusSchema,
-  published_at: z.string().nullable().optional(),
+  gating: z.enum(['free', 'coin', 'sub']),
+  price_coins: z.number(),
+  has_content: z.boolean(),
+  locked: z.boolean(),
+  content_md: z.string().nullable(),
+  published_at: z.string().nullable(),
+  created_at: z.string(),
+  updated_at: z.string(),
 })
 export type Chapter = z.infer<typeof ChapterSchema>
 
+/**
+ * Wallet — for the reader surface this is the coin balance only. Earnings
+ * (author) is exposed via `/v1/me/earnings` instead.
+ */
 export const WalletSchema = z.object({
   coin_balance: z.number(),
-  earnings_balance: z.number(),
 })
 export type Wallet = z.infer<typeof WalletSchema>
 
 export const WalletResponseSchema = z.object({
-  success: z.literal(true),
-  wallet: WalletSchema,
+  coin_balance: z.number(),
+  coins_per_rm: z.number(),
+  updated_at: z.string(),
 })
 export type WalletResponse = z.infer<typeof WalletResponseSchema>
 
@@ -102,14 +113,20 @@ export const SubscriptionResponseSchema = z.object({
 })
 export type SubscriptionResponse = z.infer<typeof SubscriptionResponseSchema>
 
-export const LibraryItemSchema = WritingSchema.extend({
+export const LibraryItemSchema = z.object({
+  story_id: z.string().uuid(),
   added_at: z.string(),
+  title: z.string(),
+  blurb: z.string().nullable(),
+  cover_url: z.string().nullable(),
+  status: z.enum(['draft', 'ongoing', 'completed']),
+  author_id: z.string().uuid(),
+  author_pen_name: z.string().nullable(),
 })
 export type LibraryItem = z.infer<typeof LibraryItemSchema>
 
 export const LibraryResponseSchema = z.object({
-  success: z.literal(true),
-  library: z.array(LibraryItemSchema),
+  items: z.array(LibraryItemSchema),
 })
 export type LibraryResponse = z.infer<typeof LibraryResponseSchema>
 

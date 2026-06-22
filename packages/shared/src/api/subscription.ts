@@ -13,6 +13,11 @@ const SubscribeResponseSchema = z.object({
   subscription_id: z.string().optional(),
 })
 
+/**
+ * Reader-tier subscription (premium_reader / vip_reader). NOT in the Fastify
+ * backend yet — backend's `/v1/subscriptions` is the author-follow kind.
+ * Wrapper keeps the legacy BFF path until a reader-tier endpoint lands.
+ */
 export const subscriptionApi = {
   current: (): Promise<SubscriptionResponse> =>
     apiClient.request('/api/subscription', SubscriptionResponseSchema),

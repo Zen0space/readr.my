@@ -3,54 +3,59 @@ import { createApiClient } from '../api-client'
 import {
   ChapterSchema,
   WritingSchema,
-  WritingsListResponseSchema,
   type Chapter,
   type Writing,
-  type WritingStatus,
-  type WritingsListResponse,
 } from '../api-client'
 
 const apiClient = createApiClient()
 
-const WritingResponseSchema = z.object({
-  success: z.literal(true),
-  writing: WritingSchema,
+const StoryListResponseSchema = z.object({
+  items: z.array(WritingSchema),
+  next_cursor: z.string().nullable(),
 })
-const ChaptersResponseSchema = z.object({
-  success: z.literal(true),
-  chapters: z.array(ChapterSchema),
+
+const StoryResponseSchema = WritingSchema
+
+const ChapterListResponseSchema = z.object({
+  items: z.array(ChapterSchema),
 })
-const ChapterResponseSchema = z.object({
-  success: z.literal(true),
-  chapter: ChapterSchema,
-})
+
 const DeleteResponseSchema = z.object({
-  success: z.literal(true),
+  ok: z.literal(true),
 })
+
 const UnlockResponseSchema = z.object({
-  success: z.literal(true),
+  chapter_id: z.string().uuid(),
+  coins_paid: z.number(),
+  new_balance: z.number(),
 })
 
 export type CreateWritingInput = {
   title: string
-  description?: string
+  blurb?: string
+  genre: string
+  tags?: string[]
+  language: 'ms' | 'en'
+  age_rating?: 'general' | 'teen' | 'mature'
   coverUrl?: string
-  status?: WritingStatus
 }
 
-export type UpdateWritingInput = Partial<CreateWritingInput>
+export type UpdateWritingInput = Partial<CreateWritingInput> & {
+  status?: 'draft' | 'ongoing' | 'completed'
+}
 
 export type CreateChapterInput = {
   title: string
-  content?: string
-  chapterOrder: number
-  isPremium?: boolean
-  coinPrice?: number
-  status?: WritingStatus
+  ord: number
+  gating?: 'free' | 'coin' | 'sub'
+  priceCoins?: number
+  draftContentMd?: string
 }
 
 export const writingsApi = {
-  list: (params: Record<string, string | number | undefined> = {}): Promise<WritingsListResponse> => {
+  list: (
+    params: Record<string, string | number | undefined> = {},
+  ): Promise<{ items: Writing[]; next_cursor: string | null }> => {
     const search = new URLSearchParams()
     for (const [key, value] of Object.entries(params)) {
       if (value !== undefined && value !== null) {
@@ -58,87 +63,87 @@ export const writingsApi = {
       }
     }
     const query = search.toString()
-    return apiClient.request(`/api/writings${query ? `?${query}` : ''}`, WritingsListResponseSchema)
+    return apiClient.request(`/api/v1/stories${query ? `?${query}` : ''}`, StoryListResponseSchema)
   },
 
-  get: (id: string): Promise<{ success: true; writing: Writing }> =>
-    apiClient.request(`/api/writings/${id}`, WritingResponseSchema),
+  get: (id: string): Promise<Writing> =>
+    apiClient.request(`/api/v1/stories/${id}`, StoryResponseSchema),
 
-  create: (input: CreateWritingInput): Promise<{ success: true; writing: Writing }> =>
-    apiClient.request('/api/writings', WritingResponseSchema, {
+  create: (input: CreateWritingInput): Promise<Writing> =>
+    apiClient.request('/api/v1/stories', StoryResponseSchema, {
       method: 'POST',
       body: {
         title: input.title,
-        description: input.description ?? '',
+        blurb: input.blurb ?? '',
+        genre: input.genre,
+        tags: input.tags ?? [],
+        language: input.language,
+        age_rating: input.age_rating ?? 'general',
         cover_url: input.coverUrl,
-        status: input.status ?? 'draft',
       },
     }),
 
-  update: (id: string, input: UpdateWritingInput): Promise<{ success: true; writing: Writing }> =>
-    apiClient.request(`/api/writings/${id}`, WritingResponseSchema, {
-      method: 'PUT',
-      body: {
-        title: input.title,
-        description: input.description,
-        cover_url: input.coverUrl,
-        status: input.status,
-      },
+  update: (id: string, input: UpdateWritingInput): Promise<Writing> =>
+    apiClient.request(`/api/v1/stories/${id}`, StoryResponseSchema, {
+      method: 'PATCH',
+      body: input,
     }),
 
-  remove: (id: string): Promise<{ success: true }> =>
-    apiClient.request(`/api/writings/${id}`, DeleteResponseSchema, {
+  remove: (id: string): Promise<{ ok: true }> =>
+    apiClient.request(`/api/v1/stories/${id}`, DeleteResponseSchema, {
       method: 'DELETE',
     }),
 
-  chapters: {
-    list: (writingId: string): Promise<{ success: true; chapters: Chapter[] }> =>
-      apiClient.request(`/api/writings/${writingId}/chapters`, ChaptersResponseSchema),
+  publish: (id: string, status: 'ongoing' | 'completed' = 'ongoing'): Promise<Writing> =>
+    apiClient.request(`/api/v1/stories/${id}/publish`, StoryResponseSchema, {
+      method: 'POST',
+      body: { status },
+    }),
 
-    create: (
-      writingId: string,
-      input: CreateChapterInput,
-    ): Promise<{ success: true; chapter: Chapter }> =>
-      apiClient.request(`/api/writings/${writingId}/chapters`, ChapterResponseSchema, {
+  chapters: {
+    list: (writingId: string): Promise<{ items: Chapter[] }> =>
+      apiClient.request(`/api/v1/stories/${writingId}/chapters`, ChapterListResponseSchema),
+
+    create: (writingId: string, input: CreateChapterInput): Promise<Chapter> =>
+      apiClient.request(`/api/v1/stories/${writingId}/chapters`, ChapterSchema, {
         method: 'POST',
         body: {
           title: input.title,
-          content: input.content ?? '',
-          chapter_order: input.chapterOrder,
-          is_premium: input.isPremium ?? false,
-          coin_price: input.coinPrice ?? 0,
-          status: input.status ?? 'draft',
+          ord: input.ord,
+          gating: input.gating ?? 'free',
+          price_coins: input.priceCoins ?? 0,
+          draft_content_md: input.draftContentMd,
         },
       }),
 
-    get: (chapterId: string): Promise<{ success: true; chapter: Chapter }> =>
-      apiClient.request(`/api/chapters/${chapterId}`, ChapterResponseSchema),
+    get: (chapterId: string): Promise<Chapter> =>
+      apiClient.request(`/api/v1/chapters/${chapterId}`, ChapterSchema),
 
-    update: (
-      chapterId: string,
-      input: CreateChapterInput,
-    ): Promise<{ success: true; chapter: Chapter }> =>
-      apiClient.request(`/api/chapters/${chapterId}`, ChapterResponseSchema, {
-        method: 'PUT',
+    update: (chapterId: string, input: Partial<CreateChapterInput>): Promise<Chapter> =>
+      apiClient.request(`/api/v1/chapters/${chapterId}`, ChapterSchema, {
+        method: 'PATCH',
         body: {
           title: input.title,
-          content: input.content ?? '',
-          chapter_order: input.chapterOrder,
-          is_premium: input.isPremium ?? false,
-          coin_price: input.coinPrice ?? 0,
-          status: input.status ?? 'draft',
+          ord: input.ord,
+          gating: input.gating,
+          price_coins: input.priceCoins,
+          draft_content_md: input.draftContentMd,
         },
       }),
 
-    remove: (chapterId: string): Promise<{ success: true }> =>
-      apiClient.request(`/api/chapters/${chapterId}`, DeleteResponseSchema, {
+    remove: (chapterId: string): Promise<{ ok: true }> =>
+      apiClient.request(`/api/v1/chapters/${chapterId}`, DeleteResponseSchema, {
         method: 'DELETE',
       }),
 
-    unlock: (chapterId: string): Promise<{ success: true }> =>
-      apiClient.request(`/api/chapters/${chapterId}/unlock`, UnlockResponseSchema, {
+    publish: (chapterId: string): Promise<Chapter> =>
+      apiClient.request(`/api/v1/chapters/${chapterId}/publish`, ChapterSchema, {
         method: 'POST',
-        body: {},
+      }),
+
+    unlock: (chapterId: string): Promise<z.infer<typeof UnlockResponseSchema>> =>
+      apiClient.request(`/api/v1/chapters/${chapterId}/unlock`, UnlockResponseSchema, {
+        method: 'POST',
       }),
   },
 }

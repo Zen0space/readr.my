@@ -14,9 +14,6 @@ export type { Comment } from './social'
 export type { AdminUser, AdminReport } from './admin'
 export type { DashboardMetrics } from './analytics'
 
-// Re-export the api-client's domain types + zod schemas so a package can
-// `import { Writing, Chapter, LibraryItem, Subscription, SubscriptionTier, Role, User }
-// from '@auror/shared/api'` without reaching into the api-client subpath.
 export type {
   Chapter,
   Json,
@@ -33,7 +30,6 @@ export type {
   Wallet,
   WalletResponse,
   Writing,
-  WritingStatus,
   WritingsListResponse,
   ApiErrorBody,
 } from '../api-client'
@@ -53,7 +49,6 @@ export {
   WalletResponseSchema,
   WalletSchema,
   WritingSchema,
-  WritingStatusSchema,
   WritingsListResponseSchema,
   ApiErrorBodySchema,
 } from '../api-client'
