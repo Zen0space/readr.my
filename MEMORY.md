@@ -1,4 +1,4 @@
-# readr.my (Auror Reading Platform) Memory
+# auror.my (Auror Reading Platform) Memory
 
 ## Project Overview
 Next.js 14 App Router backend with Supabase integration, serving the existing static HTML frontend out of `public/stitch_auror_modern_reading_platform` via configuration rewrites.
