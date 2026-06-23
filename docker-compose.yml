@@ -95,6 +95,28 @@ services:
     expose:
       - "3000"
 
+  admin:
+    build:
+      context: .
+      dockerfile: packages/admin/Dockerfile
+    restart: unless-stopped
+    profiles: ["admin", "proxy"]
+    env_file:
+      - path: packages/admin/.env
+        required: false
+    environment:
+      NODE_ENV: production
+      HOSTNAME: "0.0.0.0"
+      PORT: "3000"
+      BACKEND_URL: http://backend:4000
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:3000}
+      NEXT_PUBLIC_COOKIE_DOMAIN: ${NEXT_PUBLIC_COOKIE_DOMAIN:-}
+    depends_on:
+      - backend
+    # No host port — Caddy fans admin.auror.my traffic to the container.
+    expose:
+      - "3000"
+
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
