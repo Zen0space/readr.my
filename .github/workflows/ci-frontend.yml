@@ -50,11 +50,9 @@ jobs:
       - run: pnpm --filter @auror/webapp build
 
   reader:
-    name: reader — typecheck / build (placeholder)
+    name: reader — typecheck / build / e2e
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # Phase B.3 uncomments these steps once `packages/reader` exists.
-    if: "false"
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

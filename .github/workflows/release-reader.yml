@@ -1,14 +1,21 @@
 name: Release — Reader image
 
-# Phase A: workflow_dispatch only. Phase B.3 adds a `push` trigger gated on
-# `packages/reader/**` + `packages/shared/**` once `packages/reader` exists
-# and is live on `auror.my`.
-#
-# Build context is `packages/reader` once that package is scaffolded; for now
-# it builds `packages/webapp` (the legacy monolith) so the pipeline can be
-# smoke-tested before Phase B cuts over. See dev-frontend-split.md.
+# Phase B.3: push trigger is live, gated on the reader package + shared. The
+# legacy webapp workflow stays in place during the cutover (release-webapp was
+# renamed to this file in A.3; it dual-publishes under auror-reader + the
+# legacy auror-webapp name until Phase E removes the webapp package).
 
 on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths:
+      - 'packages/reader/**'
+      - 'packages/shared/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/release-reader.yml'
   workflow_dispatch:
 
 permissions:
@@ -18,11 +25,9 @@ permissions:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository_owner }}/auror-reader
-  # Phase B.3: switch SOURCE_CONTEXT to packages/reader.
-  SOURCE_CONTEXT: packages/webapp
-  DOCKERFILE: packages/webapp/Dockerfile
-  # Phase B.3: switch IMAGE_NAME to auror-reader and drop the legacy suffix.
   IMAGE_NAME_LEGACY: ${{ github.repository_owner }}/auror-webapp
+  SOURCE_CONTEXT: packages/reader
+  DOCKERFILE: packages/reader/Dockerfile
 
 jobs:
   build-and-push:
@@ -51,15 +56,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          # Publish under both the legacy and new image names until Phase E
-          # removes the webapp package. The legacy name keeps the existing
-          # Coolify deploy working during the cutover.
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LEGACY }}
           tags: |
+            type=ref,event=branch
+            type=ref,event=tag
             type=sha,prefix=sha-,format=short
-            type=raw,value=latest
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
       - name: Build and push
         uses: docker/build-push-action@v6
