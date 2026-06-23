@@ -82,11 +82,9 @@ jobs:
       - run: pnpm --filter @auror/author test:e2e
 
   admin:
-    name: admin — typecheck / build (placeholder)
+    name: admin — typecheck / build / e2e
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # Phase D.3 uncomments these steps once `packages/admin` exists.
-    if: "false"
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
