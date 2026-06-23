@@ -1,19 +1,43 @@
-# Local-dev reverse proxy. Brings backend + webapp under a single :80.
+# Local-dev reverse proxy for the multi-subdomain split (dev-frontend-split.md §B.2).
 #
-# - /api/*    → backend  (strip /api prefix)
-# - /*        → webapp
+# Production deploys via Coolify configure their own TLS termination + wildcard
+# cert; this file is dev-only. Each package binds a different host header so
+# the proxy can fan traffic to the right container without any port juggling.
 #
-# Production deploys via Coolify should configure their own reverse proxy and
-# TLS; this file is dev-only.
+# Routing:
+#   auror.my          → reader (apex)
+#   author.auror.my   → author
+#   admin.auror.my    → admin
+#   *.auror.my        → fallback to reader (so the cert covers the apex even
+#                       before the per-subdomain services are live)
+#
+# /api/* is the same-origin proxy to the Fastify backend in every case —
+# Caddy strips the /api prefix before forwarding. /api/v1/:path* on any
+# subdomain hits the same backend (per-package NEXT_PUBLIC_API_BASE_URL
+# pins the path prefix the package uses).
 
 :80 {
     encode gzip
 
+    @reader host auror.my
+    @author host author.auror.my
+    @admin  host admin.auror.my
+
+    # /api/* → backend (prefix stripped) on every host.
     handle_path /api/* {
         reverse_proxy backend:4000
     }
 
+    # Per-subdomain frontends (author + admin come online in Phase C/D).
+    handle @author {
+        reverse_proxy author:3000
+    }
+    handle @admin {
+        reverse_proxy admin:3000
+    }
+
+    # Default: reader.
     handle {
-        reverse_proxy webapp:3000
+        reverse_proxy reader:3000
     }
 }
