@@ -57,7 +57,7 @@ services:
       context: .
       dockerfile: packages/reader/Dockerfile
     restart: unless-stopped
-    profiles: ["reader", "proxy"]
+    profiles: ["reader", "author", "admin", "proxy"]
     env_file:
       - path: packages/reader/.env
         required: false
@@ -72,6 +72,28 @@ services:
       - backend
     ports:
       - "127.0.0.1:3000:3000"
+
+  author:
+    build:
+      context: .
+      dockerfile: packages/author/Dockerfile
+    restart: unless-stopped
+    profiles: ["author", "proxy"]
+    env_file:
+      - path: packages/author/.env
+        required: false
+    environment:
+      NODE_ENV: production
+      HOSTNAME: "0.0.0.0"
+      PORT: "3000"
+      BACKEND_URL: http://backend:4000
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:3000}
+      NEXT_PUBLIC_COOKIE_DOMAIN: ${NEXT_PUBLIC_COOKIE_DOMAIN:-}
+    depends_on:
+      - backend
+    # No host port — Caddy fans author.auror.my traffic to the container.
+    expose:
+      - "3000"
 
   caddy:
     image: caddy:2-alpine
