@@ -66,11 +66,9 @@ jobs:
       - run: pnpm --filter @auror/reader test:e2e
 
   author:
-    name: author — typecheck / build (placeholder)
+    name: author — typecheck / build / e2e
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # Phase C.3 uncomments these steps once `packages/author` exists.
-    if: "false"
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

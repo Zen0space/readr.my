@@ -1,15 +1,20 @@
 name: Release — Author image
 
-# Phase A: workflow_dispatch only. Phase C.3 adds a `push` trigger gated on
-# `packages/author/**` + `packages/shared/**` once `packages/author` exists
-# and is live on `author.auror.my`.
-#
-# Until that lands this workflow builds the webapp monolith under the
-# `auror-author` image name so the Coolify entry for the author subdomain
-# can be smoke-tested. The pipeline is a clone of `release-reader.yml`
-# (see dev-frontend-split.md §A.3.c).
+# Phase C.3: push trigger is live, gated on the author package + shared. The
+# legacy-auror-webapp dual-publish from A.3 is dropped here — author ships to
+# author.auror.my only.
 
 on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths:
+      - 'packages/author/**'
+      - 'packages/shared/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/release-author.yml'
   workflow_dispatch:
 
 permissions:
@@ -19,8 +24,8 @@ permissions:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository_owner }}/auror-author
-  SOURCE_CONTEXT: packages/webapp
-  DOCKERFILE: packages/webapp/Dockerfile
+  SOURCE_CONTEXT: packages/author
+  DOCKERFILE: packages/author/Dockerfile
 
 jobs:
   build-and-push:
@@ -51,8 +56,10 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
+            type=ref,event=branch
+            type=ref,event=tag
             type=sha,prefix=sha-,format=short
-            type=raw,value=latest
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
       - name: Build and push
         uses: docker/build-push-action@v6
