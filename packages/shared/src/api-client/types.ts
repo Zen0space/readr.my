@@ -135,6 +135,32 @@ export const LibraryResponseSchema = z.object({
 })
 export type LibraryResponse = z.infer<typeof LibraryResponseSchema>
 
+/**
+ * Watchlist — a "follow this story" list. Distinct from `LibraryItem`:
+ * the reader is signaling ongoing interest (e.g. wants new-chapter
+ * notifications) but hasn't necessarily saved the story to their
+ * private shelf yet. The `notify_on_chapter` flag drives whether
+ * the backend mints a `chapter_published` notification when a new
+ * chapter drops.
+ */
+export const WatchlistItemSchema = z.object({
+  story_id: z.string().uuid(),
+  added_at: z.string(),
+  notify_on_chapter: z.boolean(),
+  title: z.string(),
+  blurb: z.string().nullable(),
+  cover_url: z.string().nullable(),
+  status: z.enum(['draft', 'ongoing', 'completed']),
+  author_id: z.string().uuid(),
+  author_pen_name: z.string().nullable(),
+})
+export type WatchlistItem = z.infer<typeof WatchlistItemSchema>
+
+export const WatchlistResponseSchema = z.object({
+  items: z.array(WatchlistItemSchema),
+})
+export type WatchlistResponse = z.infer<typeof WatchlistResponseSchema>
+
 export const ApiErrorBodySchema = z.object({
   error: z.union([z.string(), z.object({ message: z.string() })]),
   details: z.unknown().optional(),

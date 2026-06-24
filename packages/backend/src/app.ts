@@ -25,6 +25,7 @@ import { meRoutes } from './modules/me/routes.js'
 import { libraryRoutes } from './modules/library/routes.js'
 import { dashboardRoutes } from './modules/dashboard/routes.js'
 import { uploadRoutes } from './modules/uploads/routes.js'
+import { watchlistRoutes } from './modules/watchlist/routes.js'
 
 export const buildApp = async (): Promise<FastifyInstance> => {
   const isDev = env.NODE_ENV === 'development'
@@ -124,6 +125,7 @@ export const buildApp = async (): Promise<FastifyInstance> => {
   await app.register(libraryRoutes)
   await app.register(dashboardRoutes)
   await app.register(uploadRoutes)
+  await app.register(watchlistRoutes)
 
   return app
 }

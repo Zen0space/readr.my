@@ -30,6 +30,8 @@ export type {
   SubscriptionResponse,
   LibraryItem,
   LibraryResponse,
+  WatchlistItem,
+  WatchlistResponse,
   ApiErrorBody,
   Json,
 } from './types'
@@ -49,5 +51,7 @@ export {
   SubscriptionResponseSchema,
   LibraryItemSchema,
   LibraryResponseSchema,
+  WatchlistItemSchema,
+  WatchlistResponseSchema,
   ApiErrorBodySchema,
 } from './types'
