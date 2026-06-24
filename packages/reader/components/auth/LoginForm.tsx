@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useId, useState, type FormEvent } from 'react';
+import { ZodError } from 'zod';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { Button, Icon, Input, Label } from '@/components/ui';
 import { useApiCall, useSetSession } from '@/lib/session';
@@ -11,19 +12,21 @@ import { authApi } from '@/lib/api';
 const SAFE_REDIRECT = /^\/[a-zA-Z0-9_\-/]*$/;
 
 const resolveRedirect = (raw: string | null): string => {
-  if (!raw) return '/';
+  if (!raw) return '/library';
   const decoded = decodeURIComponent(raw);
   if (SAFE_REDIRECT.test(decoded)) return decoded;
-  return '/';
+  return '/library';
 };
 
 type LoginFormProps = {
   initialError?: string;
+  initialNotice?: string;
   redirectTo?: string;
 };
 
 export const LoginForm = ({
   initialError,
+  initialNotice,
   redirectTo,
 }: LoginFormProps): React.ReactElement => {
   const router = useRouter();
@@ -35,6 +38,7 @@ export const LoginForm = ({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(true);
+  const [notice, setNotice] = useState<string | null>(initialNotice ?? null);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(initialError ?? null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,6 +48,7 @@ export const LoginForm = ({
   const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setError(null);
+    setNotice(null);
     setIsSubmitting(true);
     try {
       const result = await callLogin({ email, password });
@@ -54,9 +59,18 @@ export const LoginForm = ({
       router.push(target);
       router.refresh();
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Invalid credentials. Please try again.';
-      setError(message);
+      // ZodErrors mean the response shape didn't match the schema
+      // (i.e. the server is broken, not the user's credentials).
+      // Never show that raw JSON to the user.
+      if (err instanceof ZodError) {
+        setError("Something went wrong on our end. Please try again.");
+        // eslint-disable-next-line no-console
+        console.error('Login response failed schema validation:', err.issues);
+      } else {
+        const message =
+          err instanceof Error ? err.message : 'Invalid credentials. Please try again.';
+        setError(message);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -78,6 +92,20 @@ export const LoginForm = ({
                 Welcome back
               </span>
             </header>
+
+            {notice ? (
+              <div
+                role="status"
+                className="mb-6 flex items-start gap-3 rounded-xl border border-emerald-300/50 bg-emerald-50 p-4 text-sm text-emerald-700"
+              >
+                <Icon
+                  name="check-circle"
+                  size={18}
+                  className="mt-0.5 shrink-0"
+                />
+                <span className="leading-relaxed">{notice}</span>
+              </div>
+            ) : null}
 
             {error ? (
               <div
