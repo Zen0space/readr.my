@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { LegalPage } from '@/components/legal/LegalPage';
-import { CookiePreferencesModal } from '@/components/cookies/CookiePreferencesModal';
-import { Button, Icon } from '@/components/ui';
+import { CookiePreferencesButton } from '@/components/cookies/CookiePreferencesButton';
 
 export const metadata: Metadata = {
   title: 'Cookie Policy · Auror',
@@ -115,19 +114,7 @@ export default function CookiesPage(): React.ReactElement {
                 preferences panel will not affect your reading session.
               </p>
               <div className="mt-5">
-                <CookiePreferencesModal>
-                  {({ open }) => (
-                    <Button
-                      type="button"
-                      onClick={open}
-                      variant="default"
-                      className="gap-2 shadow-primary-glow"
-                    >
-                      <Icon name="settings" size={16} />
-                      Manage cookie preferences
-                    </Button>
-                  )}
-                </CookiePreferencesModal>
+                <CookiePreferencesButton />
               </div>
             </>
           ),

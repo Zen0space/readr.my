@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Icon, type IconName } from '@/components/ui';
 import { cn } from '@/lib/cn';
 
@@ -58,28 +58,29 @@ const DEFAULTS: Preferences = {
 };
 
 type Props = {
-  /**
-   * Render-prop trigger. The parent supplies the visible button (or
-   * any clickable element) and the modal injects the click handler
-   * via the `open` callback. This keeps the trigger out of the
-   * modal's DOM, so we never end up with nested `<button>` elements.
-   */
-  children: (api: { open: () => void }) => ReactNode;
+  /** Whether the modal is open. Controlled by the parent. */
+  open: boolean;
+  /** Called with the next open state when the user dismisses. */
+  onOpenChange: (open: boolean) => void;
 };
 
 /**
  * Cookie consent modal.
  *
+ * Controlled component — the parent owns `open` state and supplies
+ * the trigger element separately. This keeps the modal server-safe
+ * (no function-as-children crossing the server/client boundary) and
+ * lets the parent decide how the trigger is rendered.
+ *
  * - Four categories: Essential (always on), Preferences, Analytics, Marketing.
  * - State is persisted to `localStorage` under `auror.cookie-preferences`.
  * - Closes on backdrop click, Escape key, or any of the action buttons.
- * - Renders nothing on the server — the modal is mounted only after
- *   the user clicks the trigger.
+ * - Renders nothing on the server — the modal is mounted only when `open`.
  */
 export const CookiePreferencesModal = ({
-  children,
-}: Props): React.ReactElement => {
-  const [open, setOpen] = useState(false);
+  open,
+  onOpenChange,
+}: Props): React.ReactElement | null => {
   const [preferences, setPreferences] = useState<Preferences>(DEFAULTS);
 
   // Load any previously saved preferences on mount.
@@ -100,18 +101,18 @@ export const CookiePreferencesModal = ({
   useEffect(() => {
     if (!open) return;
     const onKey = (event: KeyboardEvent): void => {
-      if (event.key === 'Escape') setOpen(false);
+      if (event.key === 'Escape') onOpenChange(false);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [open]);
+  }, [open, onOpenChange]);
 
   const persist = (next: Preferences): void => {
     setPreferences(next);
     if (typeof window !== 'undefined') {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     }
-    setOpen(false);
+    onOpenChange(false);
   };
 
   const acceptAll = (): void =>
@@ -130,22 +131,20 @@ export const CookiePreferencesModal = ({
       marketing: false,
     });
 
-  return (
-    <>
-      {children({ open: () => setOpen(true) })}
+  if (!open) return null;
 
-      {open ? (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-on-surface/40 p-4 backdrop-blur-sm"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="cookie-preferences-title"
-          onClick={() => setOpen(false)}
-        >
-          <div
-            className="relative flex w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-surface shadow-card-elevated"
-            onClick={(event) => event.stopPropagation()}
-          >
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-on-surface/40 p-4 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cookie-preferences-title"
+      onClick={() => onOpenChange(false)}
+    >
+      <div
+        className="relative flex w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-surface shadow-card-elevated"
+        onClick={(event) => event.stopPropagation()}
+      >
             {/* Header */}
             <div className="flex items-start justify-between gap-4 border-b border-outline-variant/30 p-6">
               <div>
@@ -165,7 +164,7 @@ export const CookiePreferencesModal = ({
               </div>
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={() => onOpenChange(false)}
                 aria-label="Close"
                 className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface"
               >
@@ -241,8 +240,6 @@ export const CookiePreferencesModal = ({
             </div>
           </div>
         </div>
-      ) : null}
-    </>
   );
 };
 
