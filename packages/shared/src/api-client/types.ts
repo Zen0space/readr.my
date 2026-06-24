@@ -8,7 +8,12 @@ export const UserSchema = z.object({
   email: z.string().email(),
   username: z.string(),
   role: RoleSchema,
-  avatar_url: z.string().url().nullable().optional(),
+  // Avatar URLs are validated per-use-case at the consumer (the
+  // <Avatar> component already tolerates missing/empty values).
+  // We don't gate the entire response on a strict URL parse here,
+  // because a single bad row in `profiles.avatar_url` would
+  // otherwise 500 every login / session check.
+  avatar_url: z.string().nullable().optional(),
 })
 export type User = z.infer<typeof UserSchema>
 
