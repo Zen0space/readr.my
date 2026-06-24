@@ -22,10 +22,33 @@ export type ApiClientConfig = {
 }
 
 /**
+ * Module-level bearer token provider. The shared `apiClient` instances
+ * (created at module-load time by `createApiClient()`) don't have a
+ * `getToken` baked in, so each frontend package that needs to talk to
+ * the Fastify backend calls `setAccessTokenProvider(fn)` once at boot
+ * to wire up the reader's BFF `/api/auth/token` round-trip.
+ *
+ * This is `null` until something registers a provider — the client
+ * then falls through to the cookie-only path and the backend will
+ * just 401 until a token is available.
+ */
+let accessTokenProvider: (() => Promise<string | null>) | null = null
+
+export const setAccessTokenProvider = (
+  fn: (() => Promise<string | null>) | null,
+): void => {
+  accessTokenProvider = fn
+}
+
+export const getAccessTokenProvider = (): (() => Promise<string | null>) | null =>
+  accessTokenProvider
+
+/**
  * Typed HTTP client. Sends cookies by default (`credentials: 'include'`) so
  * same-origin BFF routes that read the Supabase SSR cookie just work. When a
- * `getToken` is supplied, the token is attached as `Authorization: Bearer …`,
- * which is what the Fastify backend expects.
+ * `getToken` is supplied (or a module-level provider is registered), the
+ * token is attached as `Authorization: Bearer …`, which is what the Fastify
+ * backend expects.
  *
  * Responses are validated with a Zod schema — caller receives a parsed value
  * or a typed error (network, session expired, validation, generic).
@@ -61,6 +84,11 @@ export class ApiClient {
 
     if (this.config.getToken) {
       const token = await this.config.getToken()
+      if (token) {
+        ;(init.headers as Record<string, string>).Authorization = `Bearer ${token}`
+      }
+    } else if (accessTokenProvider) {
+      const token = await accessTokenProvider()
       if (token) {
         ;(init.headers as Record<string, string>).Authorization = `Bearer ${token}`
       }

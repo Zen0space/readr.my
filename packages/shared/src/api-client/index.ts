@@ -1,4 +1,11 @@
-export { ApiClient, createApiClient, codeFromStatus, swrFetcher } from './client'
+export {
+  ApiClient,
+  createApiClient,
+  codeFromStatus,
+  swrFetcher,
+  setAccessTokenProvider,
+  getAccessTokenProvider,
+} from './client'
 export type { ApiClientConfig, RequestOptions } from './client'
 export {
   ApiClientError,

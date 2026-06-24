@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useHydrateAtoms } from 'jotai/utils';
 import {
@@ -13,6 +13,7 @@ import {
   type SessionState,
 } from './atoms';
 import { SessionExpiredError } from '@auror/shared/api-client';
+import { registerAccessTokenProvider } from '@/lib/api/accessToken';
 
 type Props = {
   initialSession: SessionState;
@@ -21,6 +22,13 @@ type Props = {
 
 export const SessionProvider = ({ initialSession, children }: Props): React.ReactElement => {
   useHydrateAtoms([[sessionAtom, initialSession]], { dangerouslyForceHydrate: true });
+
+  // Wire the shared `apiClient`'s bearer-token provider once at boot so
+  // every authed call to the Fastify backend carries the right token.
+  useEffect(() => {
+    registerAccessTokenProvider()
+  }, [])
+
   return <>{children}</>;
 };
 
