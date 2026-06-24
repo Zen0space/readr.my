@@ -37,7 +37,7 @@ Three user roles: **admin**, **author**, **reader**. Self-hosted via Docker (web
 
 - **Backend** (`packages/backend`): Node.js + REST API + Redis (cache, queues, rate limits).
 - **Auth + DB**: Supabase (self-hosted) — Postgres, Auth, Storage.
-- **Webapp** (`packages/webapp`): Next.js App Router, Supabase Auth, Jotai state (no `as any`, `useEffect` last resort).
+- **Webapp** (split into `packages/reader`, `packages/author`, `packages/admin` per [`dev-frontend-split.md`](../development/dev-frontend-split.md) — one Next.js App Router codebase per role, Supabase Auth, Jotai state, no `as any`, `useEffect` last resort).
 - **Desktop** (`packages/desktop`): Electron or Tauri (decision pending) — author-focused wrapper.
 - **Shared** (`packages/shared`): DTOs and domain types consumed by all clients.
 - **Deploy**: Docker Compose for everything. No external SaaS required.

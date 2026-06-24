@@ -26,7 +26,9 @@ docker compose up -d
 
 # Copy env templates
 cp packages/backend/.env.example packages/backend/.env
-cp packages/webapp/.env.example  packages/webapp/.env
+cp packages/reader/.env.example  packages/reader/.env
+cp packages/author/.env.example  packages/author/.env
+cp packages/admin/.env.example   packages/admin/.env
 
 # Run everything in dev mode
 pnpm dev
@@ -36,9 +38,16 @@ Per-package dev:
 
 ```bash
 pnpm --filter @auror/backend dev
-pnpm --filter @auror/webapp  dev
+pnpm --filter @auror/reader  dev     # auror.my
+pnpm --filter @auror/author  dev     # author.auror.my
+pnpm --filter @auror/admin   dev     # admin.auror.my
 pnpm --filter @auror/desktop tauri dev
 ```
+
+The three frontends are independently deployable Next.js apps that share
+one Supabase project and one Fastify backend; see
+[`docs/development/dev-frontend-split.md`](../development/dev-frontend-split.md)
+for the full topology.
 
 ## 3. Branch model
 
@@ -118,7 +127,7 @@ These apply to every PR. They are enforced in skill files at `.claude/skills/<pk
 
 - **State: Jotai** for shared state. Atoms colocated with the feature, not in a global dump.
 - **`useEffect` is a last resort.** Most of the time it's the wrong tool. Before using it, check: can this be derived during render? Handled in an event? Reset via `key`? Synced with `useSyncExternalStore` or a Jotai atom? Only reach for `useEffect` for true synchronization with non-React systems.
-- See `.claude/skills/webapp/SKILLS.md` and `.claude/skills/desktop/SKILLS.md`.
+- See `.claude/skills/webapp/SKILLS.md` (generic Next.js + Jotai rules shared by reader/author/admin), `.claude/skills/desktop/SKILLS.md`.
 
 ### Desktop (Tauri v2)
 
@@ -172,7 +181,7 @@ If you're unsure whether a frontend task is "complex" — ask Khairul before sta
 ## 10. Security & secrets
 
 - **Never commit `.env`, credentials, signing keys, or private files.** `.gitignore` covers the common ones; if you add a new secret-bearing file, add it to `.gitignore` in the same PR.
-- Secrets only via env vars, parsed through Zod in `config/env.ts` (backend) or `env.ts` (webapp/desktop).
+- Secrets only via env vars, parsed through Zod in `config/env.ts` (backend) or `.env.example` (frontends).
 - If you suspect a secret was committed, **don't just delete and re-commit** — tell the team so we can rotate the key and rewrite history.
 
 ## 11. Reporting bugs / proposing features

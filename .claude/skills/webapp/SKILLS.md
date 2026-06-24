@@ -1,18 +1,31 @@
 ---
-name: webapp
-description: Conventions for the @auror/webapp package — workspace, typing, state management, and solution simplicity.
+name: frontend
+description: Conventions shared by the @auror/reader, @auror/author, and @auror/admin Next.js packages — workspace, typing, state management, and solution simplicity.
 ---
 
-# webapp skill
+# frontend skill
 
-Rules for working inside `packages/webapp` (and any other web frontend code in this monorepo).
+Rules for working inside any of the per-role frontend packages:
+- `packages/reader` (apex, `auror.my`)
+- `packages/author` (`author.auror.my`)
+- `packages/admin` (`admin.auror.my`)
+
+These packages are siblings under the per-role split (Phase B–D of
+`docs/development/dev-frontend-split.md`). The pre-split monolith was
+deleted in Phase E. Each frontend package:
+
+- Ships its own `app/(role)/` pages + `app/(auth)/{login,register}` + `app/api/auth/*`
+- Carries the same apex-cookie config (`Domain=.auror.my` via `NEXT_PUBLIC_COOKIE_DOMAIN`)
+- Mirrors the `/api/v1/:path*` → `http://backend:4000/v1/:path*` rewrite in `next.config.mjs`
+- Gates its own role via `middleware.ts` (reader: any authed; author: `author|admin`; admin: `admin` only)
 
 ## Workspace
 
 - This is a **pnpm monorepo**. Always use `pnpm` — never `npm` or `yarn`.
-- Add deps with `pnpm add <pkg> --filter @auror/webapp`.
+- Add deps with `pnpm add <pkg> --filter @auror/<role>` (where `<role>` is `reader|author|admin`).
 - Cross-package deps use `workspace:*` (e.g. `"@auror/shared": "workspace:*"`).
-- Run scripts from repo root with `pnpm --filter @auror/webapp <script>` or `pnpm -r <script>` for all packages.
+- Run scripts from repo root with `pnpm --filter @auror/<role> <script>` or `pnpm -r <script>` for all packages.
+- **Cross-package imports are forbidden.** A frontend package can only import from `@auror/shared`. Never `import ... from '@auror/reader'` in `@auror/author`, and so on. If two packages need the same component, lift it into `@auror/shared` first.
 
 ## TypeScript
 
@@ -25,13 +38,13 @@ Rules for working inside `packages/webapp` (and any other web frontend code in t
 
 ## State management
 
-- **Use Jotai** for shared/component state. Atoms live in a `state/` or `atoms/` folder colocated with the feature.
+- **Use Jotai** for shared/component state. Atoms live in `lib/session/atoms.ts` (already shared across all three packages).
 - **`useEffect` is a last resort.** Most of the time it's the wrong tool. Before reaching for it, check:
   - Deriving state from props/state? → compute during render.
   - Reacting to a user event? → put the logic in the event handler.
   - Resetting state when a prop changes? → use a `key`.
   - Syncing with an external store? → `useSyncExternalStore` or a Jotai atom.
-  - Fetching data? → use a data-fetching lib (TanStack Query, etc.), not raw `useEffect`.
+  - Fetching data? → use the shared `@auror/shared/api` wrappers + `useApiCall`, not raw `useEffect`.
   - Only reach for `useEffect` for true synchronization with non-React systems (DOM APIs, subscriptions, timers). Document why in a one-line comment.
 
 ## Solution shape
@@ -48,4 +61,6 @@ Rules for working inside `packages/webapp` (and any other web frontend code in t
 - [ ] State lives in Jotai atoms (or local `useState` for purely local UI state).
 - [ ] No `useEffect` for derivable state, event responses, or data fetching.
 - [ ] No new abstraction without ≥3 concrete callers.
-- [ ] `pnpm --filter @auror/webapp typecheck` passes.
+- [ ] No cross-package imports (`rg "from '@auror/(reader|author|admin)"` returns zero matches in your changed files).
+- [ ] `pnpm --filter @auror/<role> typecheck` passes.
+- [ ] `pnpm --filter @auror/<role> build` passes.

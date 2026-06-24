@@ -27,7 +27,7 @@ If you ever find yourself wanting an Electron API, find the Tauri equivalent fir
 
 ```
 packages/desktop/
-├── src/                    # React + Jotai frontend (reuses webapp components where practical)
+├── src/                    # React + Jotai frontend (reuses shared reader/author/admin UI via @auror/shared)
 │   ├── atoms/              # Jotai atoms live close to features
 │   ├── ipc/                # Typed wrappers around `invoke`
 │   └── App.tsx
@@ -132,7 +132,7 @@ The desktop app is the offline-writing surface (PRD §9, P3). The model:
 - **Simplest solution that meets industry standards.** Same rule as webapp.
 - Don't build a plugin system, theming engine, or mod loader because "the desktop app might want one." It won't. Not in this product.
 - Three similar Rust commands beats a generic command-dispatcher abstraction.
-- Reuse webapp components via `@auror/shared` or by importing from `@auror/webapp`. Don't fork UI.
+- Reuse components from `@auror/shared` (the api-client, api wrappers, and domain types are already there). Cross-package imports from `@auror/reader|author|admin` are not supported — if you need a UI primitive, lift it into `@auror/shared` first. Don't fork UI.
 
 ## Build & release
 

@@ -1,5 +1,8 @@
 # Frontend Migration — Stitch → Next.js App Router
 
+> **Superseded by [`dev-frontend-split.md`](./dev-frontend-split.md) (Cabang).**
+> The Stitch → App Router migration it describes shipped in Phase F (Sapu) of the old dev pipeline. The subsequent Phase G cutover split the unified `packages/webapp` package into three per-role packages (`packages/reader`, `packages/author`, `packages/admin`) plus a Fastify `packages/backend`. That plan lives in the linked doc; this file is kept as a historical reference for the page-by-page DoD ledger.
+>
 > **Codename:** Alih ("transfer / move")
 > **Scope:** Convert the 16 static Stitch designs in `packages/webapp/public/stitch_auror_modern_reading_platform/` into real Next.js App Router pages (TypeScript, no CDN Tailwind, real data via the existing `/api/*` route handlers).
 > **Rule:** *nothing* replaces a rewrite in `next.config.mjs` until the real page is live, typechecked, and visually matches the Stitch screen on a 1280×800 desktop and a 390×844 mobile viewport.

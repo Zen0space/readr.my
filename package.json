@@ -8,7 +8,11 @@
     "dev": "pnpm -r --parallel dev",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r typecheck",
+    "infra:up": "supabase start && docker compose up -d redis",
+    "infra:down": "docker compose down && supabase stop",
+    "infra:status": "supabase status && docker compose ps",
+    "infra:restart": "pnpm infra:down && pnpm infra:up"
   },
   "engines": {
     "node": ">=20",

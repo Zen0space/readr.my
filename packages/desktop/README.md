@@ -1,6 +1,6 @@
 # @auror/desktop
 
-Tauri v2 desktop app for **authors** — write, autosave, publish, track earnings. Talks to the existing `packages/backend` HTTP API (`/v1/...`) over `fetch`. No frontend for readers; that lives in `packages/webapp` (separate track).
+Tauri v2 desktop app for **authors** — write, autosave, publish, track earnings. Talks to the existing `packages/backend` HTTP API (`/v1/...`) over `fetch`. No frontend for readers; that lives in `packages/reader` (apex `auror.my`) alongside the per-role sibling packages (`packages/author` and `packages/admin`).
 
 ## Prerequisites
 

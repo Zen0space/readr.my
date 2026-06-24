@@ -10,24 +10,32 @@ Auror pairs a markdown-native, chapter-by-chapter writing experience with a tran
 
 ## What's inside
 
-This is a **pnpm monorepo** with four packages:
+This is a **pnpm monorepo** with six packages:
 
-| Package | Purpose |
-|---|---|
-| [`packages/backend`](packages/backend) | Node.js + Fastify REST API. Talks to Supabase + Redis. |
-| [`packages/webapp`](packages/webapp) | Next.js (App Router) + Jotai. Reader + author + admin web UI. |
-| [`packages/desktop`](packages/desktop) | Tauri v2 desktop wrapper. Offline-first authoring. |
-| [`packages/shared`](packages/shared) | Shared types, DTOs, Zod schemas, error contract. |
+| Package | Purpose | Hostname |
+|---|---|---|
+| [`packages/backend`](packages/backend) | Node.js + Fastify REST API. Talks to Supabase + Redis. | — |
+| [`packages/reader`](packages/reader) | Next.js (App Router). Reader-facing browse/library/read/wallet/subscription UI. | `auror.my` (apex) |
+| [`packages/author`](packages/author) | Next.js (App Router). Author-facing studio/analytics/earnings/settings UI. | `author.auror.my` |
+| [`packages/admin`](packages/admin) | Next.js (App Router). Admin command-center + moderation + user management. Strict CSP + locked-down `next/image`. | `admin.auror.my` |
+| [`packages/desktop`](packages/desktop) | Tauri v2 desktop wrapper. Offline-first authoring. | — |
+| [`packages/shared`](packages/shared) | Shared types, DTOs, Zod schemas, error contract, API client. | — |
+
+Each frontend package owns the same auth BFF (`/api/auth/*`) and the
+same apex-cookie config (`Domain=.auror.my`); one Supabase login
+authenticates the user across all three subdomains. See
+[`docs/development/dev-frontend-split.md`](docs/development/dev-frontend-split.md)
+for the full split plan.
 
 ## Tech stack at a glance
 
 - **Backend:** Node.js (LTS), Fastify, Pino, BullMQ, ioredis.
 - **DB + Auth:** Supabase (self-hosted Postgres + Auth + Storage).
 - **Cache + queues:** Redis.
-- **Webapp:** Next.js App Router, Supabase Auth, Jotai state, Zod validation.
+- **Frontends:** Next.js App Router, Supabase Auth, Jotai state, Zod validation.
 - **Desktop:** Tauri v2 (Rust + webview). No Electron.
 - **API style:** REST under `/v1/...` with OpenAPI docs. **Not tRPC, not GraphQL.**
-- **Deploy:** `docker compose up` — webapp, backend, Supabase, Redis, reverse proxy.
+- **Deploy:** `docker compose up` — backend, reader, author, admin, Redis, Caddy reverse proxy.
 
 ## Repo layout
 
@@ -35,9 +43,11 @@ This is a **pnpm monorepo** with four packages:
 .
 ├── packages/
 │   ├── backend/         # Fastify REST API
-│   ├── webapp/          # Next.js webapp
+│   ├── reader/          # Next.js — auror.my
+│   ├── author/          # Next.js — author.auror.my
+│   ├── admin/           # Next.js — admin.auror.my (strict CSP)
 │   ├── desktop/         # Tauri desktop app
-│   └── shared/          # Cross-package types, error contract
+│   └── shared/          # Cross-package types, error contract, API client
 ├── docs/
 │   ├── prd/             # Product Requirements Document (phased, 0–1 scored)
 │   └── development/     # Per-phase dev plans (Mula → Warisan)
@@ -59,18 +69,30 @@ cd auror.my
 # Install all workspace deps
 pnpm install
 
-# Bring up infra (Supabase, Redis, etc.) — coming in Phase 0
-docker compose up -d
+# Bring up infra (Supabase + Redis)
+# — these are two separate stacks managed by different tools
+#   (`supabase` CLI for Supabase, `docker compose` for Redis),
+#   so we wrap them in one command:
+make up          # or: pnpm infra:up
 
 # Run everything in dev
 pnpm dev
+```
+
+To tear the infra back down (preserves data volumes):
+
+```bash
+make down        # or: pnpm infra:down
+make status      # or: pnpm infra:status
 ```
 
 Per-package scripts:
 
 ```bash
 pnpm --filter @auror/backend dev
-pnpm --filter @auror/webapp dev
+pnpm --filter @auror/reader dev
+pnpm --filter @auror/author dev
+pnpm --filter @auror/admin dev
 pnpm --filter @auror/desktop tauri dev
 ```
 
@@ -92,13 +114,14 @@ pnpm -r test
 | [Phase 2 — Tumbuh](docs/development/dev-phase2.md) | Engagement, personalization, ops leverage |
 | [Phase 3 — Bersinar](docs/development/dev-phase3.md) | Malaysian moat + advanced features |
 | [Phase 4 — Warisan](docs/development/dev-phase4.md) | Metric-gated backlog (no pre-build) |
+| [Frontend split — Cabang](docs/development/dev-frontend-split.md) | Reader/author/admin subdomain split plan + phase ledger |
 | [Contributing](docs/contributing/contributing.md) | Setup, branches, conventions, review flow |
 
 ## Engineering conventions
 
 Each package has a skill file in `.claude/skills/<pkg>/SKILLS.md` codifying the rules a Claude Code agent (and human contributors) follow:
 
-- [`.claude/skills/webapp/SKILLS.md`](.claude/skills/webapp/SKILLS.md) — Jotai state, no `as any`, `useEffect` last resort.
+- [`.claude/skills/webapp/SKILLS.md`](.claude/skills/webapp/SKILLS.md) — Generic Next.js + Jotai rules (shared by reader/author/admin).
 - [`.claude/skills/desktop/SKILLS.md`](.claude/skills/desktop/SKILLS.md) — Tauri v2, typed IPC, capability-scoped permissions.
 - [`.claude/skills/backend/SKILLS.md`](.claude/skills/backend/SKILLS.md) — Fastify REST, Zod schemas, no tRPC, no premature abstraction.
 - [`.claude/skills/error-handling/SKILLS.md`](.claude/skills/error-handling/SKILLS.md) — Unified error + logging contract. Single source in `packages/shared/src/errors/`.
