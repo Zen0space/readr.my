@@ -1,57 +1,60 @@
-import { type ButtonHTMLAttributes, forwardRef } from 'react';
-import { cn } from '@/lib/cn';
+import * as React from 'react';
+import { Slot } from '@radix-ui/react-slot';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
-type Size = 'sm' | 'md' | 'lg';
+/**
+ * shadcn/ui Button — pre-Tailwind-v4 source, project is on Tailwind v3.
+ * Variants and sizes via `class-variance-authority`. `asChild` swaps
+ * the rendered element via Radix Slot for composition with Link etc.
+ */
+const buttonVariants = cva(
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  {
+    variants: {
+      variant: {
+        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        destructive:
+          'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        outline:
+          'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+        secondary:
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        link: 'text-primary underline-offset-4 hover:underline',
+      },
+      size: {
+        default: 'h-10 px-4 py-2',
+        sm: 'h-9 rounded-md px-3',
+        lg: 'h-11 rounded-md px-8',
+        icon: 'h-10 w-10',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  },
+);
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: Variant;
-  size?: Size;
-  isLoading?: boolean;
-  fullWidth?: boolean;
-};
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+}
 
-const variantClass: Record<Variant, string> = {
-  primary:
-    'bg-gradient-to-r from-primary to-secondary text-on-primary shadow-primary-glow hover:shadow-[0_12px_32px_-8px_rgba(70,72,212,0.55)] active:scale-[0.99]',
-  secondary:
-    'bg-primary-container/15 text-primary border border-primary/20 hover:bg-primary-container/25',
-  ghost:
-    'bg-transparent text-on-surface hover:bg-primary/5 border border-transparent',
-  danger:
-    'bg-error text-on-error hover:opacity-90 active:scale-[0.99]',
-};
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button';
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
+Button.displayName = 'Button';
 
-const sizeClass: Record<Size, string> = {
-  sm: 'h-8 px-3 text-sm rounded-lg',
-  md: 'h-10 px-4 text-sm rounded-xl',
-  lg: 'h-12 px-6 text-base rounded-2xl',
-};
-
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant = 'primary', size = 'md', isLoading, fullWidth, children, disabled, type = 'button', ...rest },
-  ref,
-) {
-  return (
-    <button
-      ref={ref}
-      type={type}
-      disabled={disabled || isLoading}
-      className={cn(
-        'inline-flex items-center justify-center gap-2 font-display font-semibold tracking-wide transition-all duration-200',
-        'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-        'disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100',
-        variantClass[variant],
-        sizeClass[size],
-        fullWidth && 'w-full',
-        className,
-      )}
-      {...rest}
-    >
-      {isLoading ? (
-        <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-      ) : null}
-      {children}
-    </button>
-  );
-});
+export { Button, buttonVariants };
