@@ -66,7 +66,7 @@ export const WalletView = ({
   if (!isAuthed) {
     return (
       <Card className="mx-auto max-w-md p-8 text-center">
-        <Icon name="account-balance-wallet" size={32} />
+        <Icon name="credit-card" size={32} />
         <h2 className="mt-4 font-display text-xl font-bold">Sign in to manage your wallet</h2>
         <Link
           href="/login?redirect=/wallet"

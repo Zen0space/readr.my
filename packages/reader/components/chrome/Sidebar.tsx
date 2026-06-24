@@ -31,22 +31,22 @@ type NavItem = {
 };
 
 const READER_ITEMS: NavItem[] = [
-  { href: '/', label: 'Explore', icon: 'explore', match: (p) => p === '/' },
-  { href: '/library', label: 'Library', icon: 'auto-stories' },
-  { href: '/wallet', label: 'Wallet', icon: 'account-balance-wallet' },
-  { href: '/subscription', label: 'Subscription', icon: 'workspace-premium' },
+  { href: '/', label: 'Explore', icon: 'compass', match: (p) => p === '/' },
+  { href: '/library', label: 'Library', icon: 'book-open' },
+  { href: '/wallet', label: 'Wallet', icon: 'credit-card' },
+  { href: '/subscription', label: 'Subscription', icon: 'award' },
 ];
 
 const AUTHOR_ITEMS: NavItem[] = [
-  { href: '/author/studio', label: 'Writing Studio', icon: 'stylus-note' },
-  { href: '/author/analytics', label: 'Analytics', icon: 'insights' },
-  { href: '/author/earnings', label: 'Earnings & Payout', icon: 'monetization-on' },
+  { href: '/author/studio', label: 'Writing Studio', icon: 'edit' },
+  { href: '/author/analytics', label: 'Analytics', icon: 'bar-chart' },
+  { href: '/author/earnings', label: 'Earnings & Payout', icon: 'dollar-sign' },
 ];
 
 const ADMIN_ITEMS: NavItem[] = [
-  { href: '/admin', label: 'Dashboard', icon: 'admin-panel-settings' },
-  { href: '/admin/moderation', label: 'Moderation', icon: 'gavel' },
-  { href: '/admin/users', label: 'Users', icon: 'manage-accounts' },
+  { href: '/admin', label: 'Dashboard', icon: 'shield' },
+  { href: '/admin/moderation', label: 'Moderation', icon: 'briefcase' },
+  { href: '/admin/users', label: 'Users', icon: 'users' },
 ];
 
 const renderItems = (
@@ -143,13 +143,13 @@ export const Sidebar = ({ role, username, avatarUrl, coinBalance }: SidebarProps
         </Link>
         <Button
           variant="ghost"
-          size="md"
+          size="default"
           onClick={() => {
             void logout();
           }}
           className="!h-auto w-full !justify-start gap-4 !rounded-xl !px-4 !py-2 !text-sm !font-normal !text-on-surface-variant hover:!bg-primary-container/10"
         >
-          <Icon name="logout" size={20} />
+          <Icon name="log-out" size={20} />
           <span>Sign Out</span>
         </Button>
         <div className="flex items-center gap-3 px-4 pt-3">
@@ -174,7 +174,7 @@ export const Sidebar = ({ role, username, avatarUrl, coinBalance }: SidebarProps
               href="/wallet"
               className="flex items-center gap-1 rounded-full border border-primary-container/20 bg-primary-container/10 px-2.5 py-1 text-xs font-semibold text-primary"
             >
-              <Icon name="toll" size={14} />
+              <Icon name="circle" size={14} />
               {coinBalance}
             </Link>
           ) : null}

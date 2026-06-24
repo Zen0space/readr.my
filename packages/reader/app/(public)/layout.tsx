@@ -1,7 +1,11 @@
-import { createServerClient } from '@/lib/supabase';
+import { createServerClient, isSupabaseConfigured } from '@/lib/supabase';
 import { SessionProvider, type SessionState } from '@/lib/session';
+import { PublicChrome } from './_chrome';
 
 const resolveSession = async (): Promise<SessionState> => {
+  if (!isSupabaseConfigured()) {
+    return { status: 'anonymous' };
+  }
   try {
     const supabase = await createServerClient();
     const { data: { user }, error } = await supabase.auth.getUser();
@@ -26,7 +30,15 @@ const resolveSession = async (): Promise<SessionState> => {
   }
 };
 
-export default async function AuthLayout({
+/**
+ * Server layout for every public route (marketing, legal, auth pages).
+ *
+ * Resolves the session once and mounts `SessionProvider` so client
+ * components below — `ReaderNav`, in particular — see real auth state.
+ * Chrome selection (centered card vs `ReaderNav`) happens in
+ * `_chrome.tsx`, a small client child that reads `usePathname()`.
+ */
+export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -34,13 +46,7 @@ export default async function AuthLayout({
   const session = await resolveSession();
   return (
     <SessionProvider initialSession={session}>
-      <div className="relative flex min-h-screen items-center justify-center p-4">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(70,72,212,0.10),transparent_45%),radial-gradient(circle_at_80%_70%,rgba(107,56,212,0.10),transparent_45%)]"
-        />
-        <div className="relative z-10 w-full max-w-md">{children}</div>
-      </div>
+      <PublicChrome>{children}</PublicChrome>
     </SessionProvider>
   );
 }

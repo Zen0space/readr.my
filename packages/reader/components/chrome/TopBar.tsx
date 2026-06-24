@@ -102,7 +102,7 @@ export const TopBar = ({ username, role, coinBalance }: TopBarProps): React.Reac
           href="/wallet"
           className="flex items-center gap-2 rounded-full border border-primary-container/20 bg-primary-container/10 px-3.5 py-1.5 text-sm font-semibold text-primary transition-all hover:bg-primary-container/20"
         >
-          <Icon name="toll" size={18} />
+          <Icon name="circle" size={18} />
           <span>{coinBalance ?? '—'}</span>
           <span className="text-xs font-normal opacity-80">Coins</span>
         </Link>
@@ -123,7 +123,7 @@ export const TopBar = ({ username, role, coinBalance }: TopBarProps): React.Reac
             aria-label="Sign out"
             className="!h-9 !rounded-full !px-3"
           >
-            <Icon name="logout" size={16} />
+            <Icon name="log-out" size={16} />
           </Button>
         </div>
       </div>

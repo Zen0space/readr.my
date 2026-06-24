@@ -76,7 +76,7 @@ export const SubscriptionView = ({ initialSubscription, isAuthed }: Props): Reac
   if (!isAuthed) {
     return (
       <Card className="mx-auto max-w-md p-8 text-center">
-        <Icon name="workspace-premium" size={32} />
+        <Icon name="award" size={32} />
         <h2 className="mt-4 font-display text-xl font-bold">Sign in to manage your subscription</h2>
         <Link
           href="/login?redirect=/subscription"

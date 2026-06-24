@@ -86,7 +86,7 @@ export const ReaderView = ({
               onClick={() => void onUnlock()}
               className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-primary-glow transition-colors hover:bg-primary-container"
             >
-              <Icon name="toll" size={18} />
+              <Icon name="circle" size={18} />
               Unlock for {chapter.price_coins} coins
               {coinBalance !== null ? ` (you have ${coinBalance})` : ''}
             </button>

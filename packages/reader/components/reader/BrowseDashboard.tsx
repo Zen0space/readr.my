@@ -48,7 +48,7 @@ const StoryCard = ({ writing, isAuthed, onAdd, onRemove, inLibrary, busy }: {
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary-container/30 to-secondary-container/30">
-              <Icon name="menu-book" size={48} />
+              <Icon name="book" size={48} />
             </div>
           )}
           <div className="absolute right-3 top-3">
@@ -64,7 +64,7 @@ const StoryCard = ({ writing, isAuthed, onAdd, onRemove, inLibrary, busy }: {
       </Link>
       <div className="mt-5 flex items-center justify-between border-t border-outline-variant/20 pt-3">
         <span className="flex items-center gap-1 text-xs font-medium text-on-surface-variant">
-          <Icon name="person" size={14} />
+          <Icon name="user" size={14} />
           {formatAuthor(writing)}
         </span>
         {isAuthed ? (
@@ -80,7 +80,7 @@ const StoryCard = ({ writing, isAuthed, onAdd, onRemove, inLibrary, busy }: {
                 : 'text-on-surface-variant hover:bg-surface-container hover:text-primary',
             )}
           >
-            <Icon name={inLibrary ? 'bookmark-filled' : 'bookmark-add'} size={16} />
+            <Icon name="bookmark" size={16} />
           </button>
         ) : (
           <span className="text-[10px] font-semibold uppercase tracking-wider text-outline">
@@ -100,7 +100,7 @@ const HeroFeature = ({ writing }: { writing: Writing | null }): React.ReactEleme
         className="flex h-[320px] items-center justify-center rounded-3xl border border-outline-variant/30 bg-surface-container shadow-card md:h-[400px]"
       >
         <div className="text-center text-on-surface-variant">
-          <Icon name="menu-book" size={48} />
+          <Icon name="book" size={48} />
           <p className="mt-2 text-sm">No published stories yet — be the first to publish.</p>
         </div>
       </section>
@@ -132,7 +132,7 @@ const HeroFeature = ({ writing }: { writing: Writing | null }): React.ReactEleme
           href={`/read/${writing.id}`}
           className="inline-flex w-fit items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-primary-glow transition-colors hover:bg-primary-container"
         >
-          <Icon name="menu-book" size={20} />
+          <Icon name="book" size={20} />
           Start Reading
         </Link>
       </div>
@@ -250,7 +250,7 @@ export const BrowseDashboard = ({ initialWritings, initialSearch, isAuthed }: Pr
           </div>
         ) : writings.length === 0 ? (
           <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-lowest py-16 text-center">
-            <Icon name="menu-book" size={40} />
+            <Icon name="book" size={40} />
             <p className="mt-3 text-on-surface-variant">
               No stories found matching your criteria.
             </p>

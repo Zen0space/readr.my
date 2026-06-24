@@ -27,7 +27,7 @@ const StoryRow = ({ item, onRemove, busy }: {
         <img src={item.cover_url} alt={item.title} className="h-full w-full object-cover" />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-primary-container/30">
-          <Icon name="menu-book" size={20} />
+          <Icon name="book" size={20} />
         </div>
       )}
     </div>
@@ -86,7 +86,7 @@ export const LibraryView = ({ initialLibrary, isAuthed }: Props): React.ReactEle
   if (!isAuthed) {
     return (
       <Card className="mx-auto max-w-md p-8 text-center">
-        <Icon name="auto-stories" size={32} />
+        <Icon name="book-open" size={32} />
         <h2 className="mt-4 font-display text-xl font-bold">Sign in to see your library</h2>
         <Link
           href="/login?redirect=/library"
