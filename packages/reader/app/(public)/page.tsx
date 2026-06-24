@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 };
 
 /**
- * Fetch the browse feed from the backend. The URL goes through Next.js's
- * /api/v1 → backend rewrite so the request looks same-origin to the browser
- * and Caddy doesn't have to proxy.
+ * Fetch the browse feed from the backend directly. `NEXT_PUBLIC_API_BASE_URL`
+ * points at the Fastify backend (port 4000), so server components and the
+ * browser hit it directly. CORS is configured on the backend.
  */
 const fetchStories = async (
   baseUrl: string,
@@ -19,7 +19,7 @@ const fetchStories = async (
 ): Promise<Writing[]> => {
   try {
     const qs = search ? `?q=${encodeURIComponent(search)}` : ''
-    const res = await fetch(`${baseUrl}/api/v1/stories${qs}`, {
+    const res = await fetch(`${baseUrl}/v1/stories${qs}`, {
       cache: 'no-store',
     })
     if (!res.ok) return []

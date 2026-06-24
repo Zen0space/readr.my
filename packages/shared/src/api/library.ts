@@ -26,16 +26,16 @@ const MutationResponseSchema = z.object({
 
 export const libraryApi = {
   list: (): Promise<z.infer<typeof ListResponseSchema>> =>
-    apiClient.request('/api/v1/me/library', ListResponseSchema),
+    apiClient.request('/v1/me/library', ListResponseSchema),
 
   add: (storyId: string): Promise<z.infer<typeof MutationResponseSchema>> =>
-    apiClient.request('/api/v1/me/library', MutationResponseSchema, {
+    apiClient.request('/v1/me/library', MutationResponseSchema, {
       method: 'POST',
       body: { story_id: storyId },
     }),
 
   remove: (storyId: string): Promise<null> =>
-    apiClient.request(`/api/v1/me/library/${storyId}`, z.null(), {
+    apiClient.request(`/v1/me/library/${storyId}`, z.null(), {
       method: 'DELETE',
     }),
 }

@@ -11,18 +11,45 @@ export const meRoutes: FastifyPluginAsync = async (app) => {
         200: z.object({
           id: z.string(),
           email: z.string().nullable(),
+          username: z.string().nullable(),
+          display_name: z.string().nullable(),
+          avatar_url: z.string().nullable(),
           role: z.enum(['reader', 'author', 'admin']),
           status: z.enum(['active', 'suspended']),
+          created_at: z.string().nullable(),
         }),
       },
     },
     handler: async (req) => {
       const u = req.user!
+      // Pull profile fields (display_name, created_at) from the `users`
+      // table — Supabase's auth schema doesn't expose them on the JWT,
+      // but the public `users` row does. We act as the authenticated user
+      // via their JWT so RLS applies normally; the
+      // `users_select_authenticated` policy permits `select to authenticated`.
+      //
+      // `avatar_url` is intentionally NOT selected here: it lives in the
+      // `avatars` storage bucket (see migration 0010) and isn't a column on
+      // `public.users`. A future migration can add the column and a
+      // trigger to keep it in sync with the storage object.
+      const db = app.supabaseForUser(req.headers.authorization!.slice(7))
+      const { data: profile, error } = await db
+        .from('users')
+        .select('display_name, created_at')
+        .eq('id', u.id)
+        .maybeSingle()
+      if (error) throw error
+      const row = profile as { display_name?: string | null; created_at?: string } | null
+      const emailLocal = u.email?.split('@')[0] ?? null
       return {
         id: u.id,
         email: u.email ?? null,
+        username: row?.display_name ?? emailLocal,
+        display_name: row?.display_name ?? null,
+        avatar_url: null,
         role: u.role,
         status: u.status,
+        created_at: row?.created_at ?? null,
       }
     },
   })

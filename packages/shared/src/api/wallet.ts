@@ -35,25 +35,25 @@ const TopupResponseSchema = z.object({
 
 export const walletApi = {
   balance: (): Promise<WalletResponse> =>
-    apiClient.request('/api/v1/wallet', WalletBalanceSchema),
+    apiClient.request('/v1/wallet', WalletBalanceSchema),
 
   transactions: (limit = 50): Promise<z.infer<typeof TransactionsResponseSchema>> =>
     apiClient.request(
-      `/api/v1/wallet/transactions?limit=${limit}`,
+      `/v1/wallet/transactions?limit=${limit}`,
       TransactionsResponseSchema,
     ),
 
   topup: (
     packRm: 5 | 10 | 20 | 50,
   ): Promise<z.infer<typeof TopupResponseSchema>> =>
-    apiClient.request('/api/v1/wallet/topup', TopupResponseSchema, {
+    apiClient.request('/v1/wallet/topup', TopupResponseSchema, {
       method: 'POST',
       body: { pack_rm: packRm },
     }),
 
   requestPayout: (amountCoins: number, methodRef: string): Promise<{ id: string }> =>
     apiClient.request(
-      '/api/v1/payouts',
+      '/v1/payouts',
       z.object({ id: z.string().uuid() }),
       {
         method: 'POST',

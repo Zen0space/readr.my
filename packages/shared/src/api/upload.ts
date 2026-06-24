@@ -16,7 +16,7 @@ export const uploadApi = {
    * then writes the `public_url` into the user's profile.
    */
   avatarUploadUrl: (ext: 'jpg' | 'jpeg' | 'png' | 'webp'): Promise<z.infer<typeof UploadResponseSchema>> =>
-    apiClient.request('/api/v1/me/avatar-upload-url', UploadResponseSchema, {
+    apiClient.request('/v1/me/avatar-upload-url', UploadResponseSchema, {
       method: 'POST',
       body: { ext },
     }),
@@ -29,7 +29,7 @@ export const uploadApi = {
     storyId: string,
     ext: 'jpg' | 'jpeg' | 'png' | 'webp',
   ): Promise<z.infer<typeof UploadResponseSchema>> =>
-    apiClient.request('/api/v1/me/cover-upload-url', UploadResponseSchema, {
+    apiClient.request('/v1/me/cover-upload-url', UploadResponseSchema, {
       method: 'POST',
       body: { story_id: storyId, ext },
     }),

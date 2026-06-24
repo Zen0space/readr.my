@@ -63,14 +63,14 @@ export const writingsApi = {
       }
     }
     const query = search.toString()
-    return apiClient.request(`/api/v1/stories${query ? `?${query}` : ''}`, StoryListResponseSchema)
+    return apiClient.request(`/v1/stories${query ? `?${query}` : ''}`, StoryListResponseSchema)
   },
 
   get: (id: string): Promise<Writing> =>
-    apiClient.request(`/api/v1/stories/${id}`, StoryResponseSchema),
+    apiClient.request(`/v1/stories/${id}`, StoryResponseSchema),
 
   create: (input: CreateWritingInput): Promise<Writing> =>
-    apiClient.request('/api/v1/stories', StoryResponseSchema, {
+    apiClient.request('/v1/stories', StoryResponseSchema, {
       method: 'POST',
       body: {
         title: input.title,
@@ -84,28 +84,28 @@ export const writingsApi = {
     }),
 
   update: (id: string, input: UpdateWritingInput): Promise<Writing> =>
-    apiClient.request(`/api/v1/stories/${id}`, StoryResponseSchema, {
+    apiClient.request(`/v1/stories/${id}`, StoryResponseSchema, {
       method: 'PATCH',
       body: input,
     }),
 
   remove: (id: string): Promise<{ ok: true }> =>
-    apiClient.request(`/api/v1/stories/${id}`, DeleteResponseSchema, {
+    apiClient.request(`/v1/stories/${id}`, DeleteResponseSchema, {
       method: 'DELETE',
     }),
 
   publish: (id: string, status: 'ongoing' | 'completed' = 'ongoing'): Promise<Writing> =>
-    apiClient.request(`/api/v1/stories/${id}/publish`, StoryResponseSchema, {
+    apiClient.request(`/v1/stories/${id}/publish`, StoryResponseSchema, {
       method: 'POST',
       body: { status },
     }),
 
   chapters: {
     list: (writingId: string): Promise<{ items: Chapter[] }> =>
-      apiClient.request(`/api/v1/stories/${writingId}/chapters`, ChapterListResponseSchema),
+      apiClient.request(`/v1/stories/${writingId}/chapters`, ChapterListResponseSchema),
 
     create: (writingId: string, input: CreateChapterInput): Promise<Chapter> =>
-      apiClient.request(`/api/v1/stories/${writingId}/chapters`, ChapterSchema, {
+      apiClient.request(`/v1/stories/${writingId}/chapters`, ChapterSchema, {
         method: 'POST',
         body: {
           title: input.title,
@@ -117,10 +117,10 @@ export const writingsApi = {
       }),
 
     get: (chapterId: string): Promise<Chapter> =>
-      apiClient.request(`/api/v1/chapters/${chapterId}`, ChapterSchema),
+      apiClient.request(`/v1/chapters/${chapterId}`, ChapterSchema),
 
     update: (chapterId: string, input: Partial<CreateChapterInput>): Promise<Chapter> =>
-      apiClient.request(`/api/v1/chapters/${chapterId}`, ChapterSchema, {
+      apiClient.request(`/v1/chapters/${chapterId}`, ChapterSchema, {
         method: 'PATCH',
         body: {
           title: input.title,
@@ -132,17 +132,17 @@ export const writingsApi = {
       }),
 
     remove: (chapterId: string): Promise<{ ok: true }> =>
-      apiClient.request(`/api/v1/chapters/${chapterId}`, DeleteResponseSchema, {
+      apiClient.request(`/v1/chapters/${chapterId}`, DeleteResponseSchema, {
         method: 'DELETE',
       }),
 
     publish: (chapterId: string): Promise<Chapter> =>
-      apiClient.request(`/api/v1/chapters/${chapterId}/publish`, ChapterSchema, {
+      apiClient.request(`/v1/chapters/${chapterId}/publish`, ChapterSchema, {
         method: 'POST',
       }),
 
     unlock: (chapterId: string): Promise<z.infer<typeof UnlockResponseSchema>> =>
-      apiClient.request(`/api/v1/chapters/${chapterId}/unlock`, UnlockResponseSchema, {
+      apiClient.request(`/v1/chapters/${chapterId}/unlock`, UnlockResponseSchema, {
         method: 'POST',
       }),
   },

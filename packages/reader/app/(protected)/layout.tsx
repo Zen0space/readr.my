@@ -3,63 +3,109 @@ import { redirect } from 'next/navigation';
 import { createServerComponentClient, isSupabaseConfigured } from '@/lib/supabase';
 import { SessionProvider, type SessionState } from '@/lib/session';
 import { Sidebar } from '@/components/chrome/Sidebar';
-import { TopBar } from '@/components/chrome/TopBar';
+import { ErrorToast } from '@/components/ui';
 
-const resolveSession = async (): Promise<{ session: SessionState; coinBalance: number | null }> => {
-  if (!isSupabaseConfigured()) {
-    return { session: { status: 'anonymous' }, coinBalance: null };
-  }
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? ''
+
+/**
+ * Resolve the access_token from the Supabase session cookie.
+ *
+ * The Supabase SSR cookie value is a JSON-stringified object:
+ *   { access_token, refresh_token, expires_at, expires_in, token_type, user }
+ * We only need `access_token` to forward to the backend as Bearer auth.
+ */
+const resolveAccessToken = async (): Promise<string | null> => {
+  if (!isSupabaseConfigured()) return null
   try {
-    const supabase = await createServerComponentClient();
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error || !user) {
-      return { session: { status: 'anonymous' }, coinBalance: null };
-    }
-    const { data: profile } = await supabase
-      .from('users')
-      .select('role, display_name, avatar_url')
-      .eq('id', user.id)
-      .single();
-
-    const session: SessionState = {
-      status: 'authenticated',
-      user: {
-        id: user.id,
-        email: user.email ?? '',
-        username: profile?.display_name ?? user.email?.split('@')[0] ?? '',
-        role: ((profile?.role as 'reader' | 'author' | 'admin' | undefined) ?? 'reader'),
-        avatar_url: profile?.avatar_url ?? null,
-      },
-    };
-
-    let coinBalance: number | null = null;
-    try {
-      const { data: wallet } = await supabase
-        .from('wallets')
-        .select('coin_balance')
-        .eq('user_id', user.id)
-        .maybeSingle();
-      coinBalance = wallet?.coin_balance ?? 0;
-    } catch {
-      coinBalance = null;
-    }
-
-    return { session, coinBalance };
+    const supabase = await createServerComponentClient()
+    const { data: { session } } = await supabase.auth.getSession()
+    return session?.access_token ?? null
   } catch {
-    return { session: { status: 'anonymous' }, coinBalance: null };
+    return null
   }
-};
+}
+
+type MeResponse = {
+  id: string
+  email: string | null
+  display_name: string | null
+  avatar_url: string | null
+  role: 'reader' | 'author' | 'admin'
+}
+
+const resolveSession = async (): Promise<{
+  session: SessionState
+  coinBalance: number | null
+}> => {
+  if (!isSupabaseConfigured()) {
+    return { session: { status: 'anonymous' }, coinBalance: null }
+  }
+
+  // Supabase is used here ONLY to validate the auth session and extract
+  // the access_token. No DB queries (`supabase.from(...)`) anywhere —
+  // every profile / wallet / library / stories fetch goes directly to
+  // the Fastify backend using the Bearer token.
+  const accessToken = await resolveAccessToken()
+  if (!accessToken) {
+    return { session: { status: 'anonymous' }, coinBalance: null }
+  }
+
+  // Fetch the user's profile row from the backend.
+  let me: MeResponse | null = null
+  try {
+    const meRes = await fetch(`${BACKEND_URL}/v1/me`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      cache: 'no-store',
+    })
+    if (meRes.ok) {
+      me = (await meRes.json()) as MeResponse
+    }
+  } catch {
+    me = null
+  }
+  if (!me) {
+    return { session: { status: 'anonymous' }, coinBalance: null }
+  }
+
+  const session: SessionState = {
+    status: 'authenticated',
+    user: {
+      id: me.id,
+      email: me.email ?? '',
+      username: me.display_name ?? (me.email?.split('@')[0] ?? ''),
+      role: me.role,
+      avatar_url: me.avatar_url ?? null,
+    },
+  }
+
+  // Fetch the wallet balance from the backend. Failure here is non-fatal
+  // — the sidebar just shows "—" until the user navigates to /wallet.
+  let coinBalance: number | null = null
+  try {
+    const walletRes = await fetch(`${BACKEND_URL}/v1/wallet`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      cache: 'no-store',
+    })
+    if (walletRes.ok) {
+      const wallet = (await walletRes.json()) as { coin_balance?: number }
+      coinBalance = wallet.coin_balance ?? 0
+    }
+  } catch {
+    coinBalance = null
+  }
+
+  return { session, coinBalance }
+}
 
 /**
  * Layout for every route that requires a reader account.
  *
- * Auth gate: the layout calls `supabase.auth.getUser()` on the server.
- * If no user is present it calls `redirect('/login?redirect=<currentPath>')`
- * so the user lands on the page they wanted after signing in. The redirect
- * query param is honored by the login page.
- *
- * After the gate, this layout renders the full in-app chrome (left
- * Sidebar + TopBar with avatar / coins / sign-out).
+ * Auth gate: the layout validates the Supabase session cookie (login
+ * + signup themselves are handled by the BFF `/api/auth/*` routes),
+ * then resolves the user's profile and wallet balance from the Fastify
+ * backend using a Bearer token. If the session is anonymous, redirect
+ * to `/login?redirect=<currentPath>` so the user lands back where they
+ * tried to go after signing in.
  *
  * Public marketing/legal/auth routes live under `(public)` instead.
  */
@@ -71,8 +117,6 @@ export default async function ProtectedLayout({
   const { session, coinBalance } = await resolveSession();
 
   if (session.status !== 'authenticated') {
-    // Preserve the user's intended destination so they bounce back after
-    // signing in. `x-pathname` is set by `proxy.ts` for every request.
     const headerStore = await headers();
     const pathname = headerStore.get('x-pathname') ?? '';
     const search = headerStore.get('x-search') ?? '';
@@ -95,10 +139,10 @@ export default async function ProtectedLayout({
           coinBalance={coinBalance}
         />
         <div className="flex min-h-screen w-full flex-1 flex-col md:ml-[280px]">
-          <TopBar username={username} role={role} coinBalance={coinBalance} />
           <main className="flex-1 px-4 pb-24 pt-8 md:px-10 md:pt-10">{children}</main>
         </div>
       </div>
+      <ErrorToast />
     </SessionProvider>
   );
 }

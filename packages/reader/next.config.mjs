@@ -1,6 +1,3 @@
-const BACKEND_URL =
-  process.env.BACKEND_URL ?? 'http://localhost:4000'
-
 // The monorepo lives two levels up from this config (packages/reader/ →
 // auror.my/). Turbopack auto-detects the project root by walking up
 // looking for a lockfile, but on this machine there is a stub
@@ -13,23 +10,19 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TURBOPACK_ROOT = path.resolve(__dirname, '../..');
 
-/** @type {import('next').NextConfig} */
+/**
+ * The reader talks to the Fastify backend DIRECTLY (`NEXT_PUBLIC_API_BASE_URL`
+ * points at the backend), so no rewrite proxy is configured here. The
+ * backend already allows the reader's origin via CORS_ORIGINS.
+ *
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
   reactStrictMode: true,
   turbopack: {
     root: TURBOPACK_ROOT,
   },
   outputFileTracingRoot: TURBOPACK_ROOT,
-  async rewrites() {
-    return [
-      // Same-origin proxy to the Fastify backend.
-      // Browser sees https://auror.my/api/v1/stories → backend receives /v1/stories.
-      {
-        source: '/api/v1/:path*',
-        destination: `${BACKEND_URL}/v1/:path*`,
-      },
-    ]
-  },
 }
 
 export default nextConfig

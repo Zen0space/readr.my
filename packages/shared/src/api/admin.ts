@@ -44,23 +44,23 @@ export const adminApi = {
       }
       const query = search.toString()
       return apiClient.request(
-        `/api/v1/admin/users${query ? `?${query}` : ''}`,
+        `/v1/admin/users${query ? `?${query}` : ''}`,
         AdminUsersResponseSchema,
       )
     },
 
     suspend: (userId: string): Promise<null> =>
-      apiClient.request(`/api/v1/admin/users/${userId}/suspend`, z.null(), {
+      apiClient.request(`/v1/admin/users/${userId}/suspend`, z.null(), {
         method: 'POST',
       }),
 
     reinstate: (userId: string): Promise<null> =>
-      apiClient.request(`/api/v1/admin/users/${userId}/reinstate`, z.null(), {
+      apiClient.request(`/v1/admin/users/${userId}/reinstate`, z.null(), {
         method: 'POST',
       }),
 
     setRole: (userId: string, role: 'reader' | 'author' | 'admin'): Promise<null> =>
-      apiClient.request(`/api/v1/admin/users/${userId}/role`, z.null(), {
+      apiClient.request(`/v1/admin/users/${userId}/role`, z.null(), {
         method: 'POST',
         body: { role },
       }),
@@ -69,17 +69,17 @@ export const adminApi = {
   reports: {
     list: (status: 'open' | 'dismissed' | 'actioned' = 'open'): Promise<z.infer<typeof AdminReportsResponseSchema>> =>
       apiClient.request(
-        `/api/v1/admin/reports?status=${status}`,
+        `/v1/admin/reports?status=${status}`,
         AdminReportsResponseSchema,
       ),
 
     dismiss: (reportId: string): Promise<null> =>
-      apiClient.request(`/api/v1/admin/reports/${reportId}/dismiss`, z.null(), {
+      apiClient.request(`/v1/admin/reports/${reportId}/dismiss`, z.null(), {
         method: 'POST',
       }),
 
     action: (reportId: string): Promise<null> =>
-      apiClient.request(`/api/v1/admin/reports/${reportId}/action`, z.null(), {
+      apiClient.request(`/v1/admin/reports/${reportId}/action`, z.null(), {
         method: 'POST',
       }),
   },
@@ -96,7 +96,7 @@ export const adminApi = {
     if (params.to) search.append('to', params.to)
     const query = search.toString()
     return apiClient.request(
-      `/api/v1/admin/revenue${query ? `?${query}` : ''}`,
+      `/v1/admin/revenue${query ? `?${query}` : ''}`,
       z.object({
         gross_rm: z.string(),
         author_share_rm: z.string(),

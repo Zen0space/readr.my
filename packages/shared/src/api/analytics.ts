@@ -34,5 +34,5 @@ export type DashboardMetrics = z.infer<typeof DashboardResponseSchema>['metrics'
 
 export const analyticsApi = {
   dashboard: (): Promise<z.infer<typeof DashboardResponseSchema>> =>
-    apiClient.request('/api/v1/me/dashboard', DashboardResponseSchema),
+    apiClient.request('/v1/me/dashboard', DashboardResponseSchema),
 }
