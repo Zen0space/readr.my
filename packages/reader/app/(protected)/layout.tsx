@@ -1,6 +1,6 @@
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { createServerClient, isSupabaseConfigured } from '@/lib/supabase';
+import { createServerComponentClient, isSupabaseConfigured } from '@/lib/supabase';
 import { SessionProvider, type SessionState } from '@/lib/session';
 import { Sidebar } from '@/components/chrome/Sidebar';
 import { TopBar } from '@/components/chrome/TopBar';
@@ -10,7 +10,7 @@ const resolveSession = async (): Promise<{ session: SessionState; coinBalance: n
     return { session: { status: 'anonymous' }, coinBalance: null };
   }
   try {
-    const supabase = await createServerClient();
+    const supabase = await createServerComponentClient();
     const { data: { user }, error } = await supabase.auth.getUser();
     if (error || !user) {
       return { session: { status: 'anonymous' }, coinBalance: null };

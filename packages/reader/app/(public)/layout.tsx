@@ -1,4 +1,4 @@
-import { createServerClient, isSupabaseConfigured } from '@/lib/supabase';
+import { createServerComponentClient, isSupabaseConfigured } from '@/lib/supabase';
 import { SessionProvider, type SessionState } from '@/lib/session';
 import { PublicChrome } from './_chrome';
 
@@ -7,7 +7,7 @@ const resolveSession = async (): Promise<SessionState> => {
     return { status: 'anonymous' };
   }
   try {
-    const supabase = await createServerClient();
+    const supabase = await createServerComponentClient();
     const { data: { user }, error } = await supabase.auth.getUser();
     if (error || !user) return { status: 'anonymous' };
     const { data: profile } = await supabase

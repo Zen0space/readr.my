@@ -5,6 +5,13 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
 const SUPABASE_CONFIGURED = SUPABASE_URL.length > 0 && SUPABASE_ANON_KEY.length > 0;
 
+const COOKIE_OPTIONS = {
+  path: '/',
+  sameSite: 'lax' as const,
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+};
+
 /**
  * Reader-only proxy (formerly `middleware` — renamed in Next.js 16).
  *
@@ -23,10 +30,13 @@ export async function proxy(request: NextRequest) {
   requestHeaders.set('x-pathname', request.nextUrl.pathname);
   requestHeaders.set('x-search', request.nextUrl.search);
 
+  // Build the response up front and hand it to the Supabase client so
+  // the refreshed session cookies land on it. We rebuild it once more
+  // after `set` fires so the response carries the request-header mutations
+  // we made above (Next.js requires the response to be built with the
+  // mutated headers so downstream handlers see them).
   let response = NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
+    request: { headers: requestHeaders },
   });
 
   if (!SUPABASE_CONFIGURED) {
@@ -35,28 +45,21 @@ export async function proxy(request: NextRequest) {
 
   const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     cookies: {
-      getAll() {
-        return request.cookies.getAll();
-      },
-      setAll(cookiesToSet: any[]) {
-        cookiesToSet.forEach(({ name, value, options }) =>
-          request.cookies.set(name, value),
-        );
+      get: (name: string) => request.cookies.get(name)?.value,
+      set: (name: string, value: string) => {
+        // Rebuild `response` from scratch each time `set` fires so the
+        // new cookies are attached to the final NextResponse we return.
         response = NextResponse.next({
-          request: {
-            headers: requestHeaders,
-          },
+          request: { headers: requestHeaders },
         });
-        cookiesToSet.forEach(({ name, value, options }) =>
-          response.cookies.set(name, value, {
-            ...options,
-            secure: process.env.NODE_ENV === 'production',
-          }),
-        );
+        response.cookies.set({ name, value, ...COOKIE_OPTIONS });
       },
-    },
-    cookieOptions: {
-      secure: process.env.NODE_ENV === 'production',
+      remove: (name: string) => {
+        response = NextResponse.next({
+          request: { headers: requestHeaders },
+        });
+        response.cookies.set({ name, value: '', ...COOKIE_OPTIONS, maxAge: 0 });
+      },
     },
   });
 

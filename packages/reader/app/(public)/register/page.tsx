@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { createServerClient, isSupabaseConfigured } from '@/lib/supabase';
+import { createServerComponentClient, isSupabaseConfigured } from '@/lib/supabase';
 import { RegisterForm } from '@/components/auth/RegisterForm';
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export default async function RegisterPage({ searchParams }: PageProps): Promise
   const params = await searchParams;
   if (isSupabaseConfigured()) {
     try {
-      const supabase = await createServerClient();
+      const supabase = await createServerComponentClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         redirect('/');

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { createServerClient, isSupabaseConfigured } from '@/lib/supabase';
+import { createServerComponentClient, isSupabaseConfigured } from '@/lib/supabase';
 import { LoginForm } from '@/components/auth/LoginForm';
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export default async function LoginPage({ searchParams }: PageProps): Promise<Re
   const params = await searchParams;
   if (isSupabaseConfigured()) {
     try {
-      const supabase = await createServerClient();
+      const supabase = await createServerComponentClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         redirect(params.redirect ?? '/');
@@ -26,11 +26,16 @@ export default async function LoginPage({ searchParams }: PageProps): Promise<Re
     }
   }
 
-  const banner = params.registered
+  const notice = params.registered
     ? `Account created for ${params.registered}. Please sign in.`
-    : params.error
-      ? params.error
-      : undefined;
+    : undefined;
+  const error = params.error;
 
-  return <LoginForm initialError={banner} redirectTo={params.redirect} />;
+  return (
+    <LoginForm
+      initialError={error}
+      initialNotice={notice}
+      redirectTo={params.redirect}
+    />
+  );
 }
