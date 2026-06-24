@@ -110,3 +110,8 @@ $RECYCLE.BIN/
 .tmp/
 tmp/
 temp/
+
+# ---------- AI agent skills (local-only) ----------
+# Local copies of agent skills for tooling like Claude / OpenCode.
+# Keep them on disk for the assistant but never commit them.
+.agents/
