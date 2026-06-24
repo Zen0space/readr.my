@@ -12,13 +12,6 @@ on:
       - '.github/workflows/ci-desktop.yml'
   pull_request:
     branches: [dev]
-    paths:
-      - 'packages/desktop/**'
-      - 'packages/shared/**'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - 'package.json'
-      - '.github/workflows/ci-desktop.yml'
 
 jobs:
   desktop:

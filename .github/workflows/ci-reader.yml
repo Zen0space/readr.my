@@ -17,17 +17,10 @@ on:
       - '.github/workflows/ci-reader.yml'
   pull_request:
     branches: [dev]
-    paths:
-      - 'packages/reader/**'
-      - 'packages/shared/**'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - 'package.json'
-      - '.github/workflows/ci-reader.yml'
 
 jobs:
   reader:
-    name: Typecheck / Build / E2E
+    name: Typecheck / Build
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
