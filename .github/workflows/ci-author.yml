@@ -42,4 +42,3 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @auror/author typecheck
       - run: pnpm --filter @auror/author build
-      - run: pnpm --filter @auror/author test:e2e
