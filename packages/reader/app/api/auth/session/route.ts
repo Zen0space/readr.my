@@ -44,7 +44,8 @@ export async function GET(req: NextRequest) {
     const finalResponse = NextResponse.json(body);
     copyCookies(cookieResponse, finalResponse);
     return finalResponse;
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message || 'Internal Server Error' }, { status: 500 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Internal Server Error'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
