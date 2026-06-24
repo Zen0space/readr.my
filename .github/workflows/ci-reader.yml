@@ -1,0 +1,45 @@
+name: CI — Reader
+
+# Per-package CI for the reader frontend (reader.auror.my). Mirrors the
+# path-filter style of release-reader.yml: runs when the reader package,
+# the shared types package it depends on, the lockfile/workspace, or this
+# workflow file changes. dev-only — main is reserved for the release flow.
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - 'packages/reader/**'
+      - 'packages/shared/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/ci-reader.yml'
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'packages/reader/**'
+      - 'packages/shared/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/ci-reader.yml'
+
+jobs:
+  reader:
+    name: Typecheck / Build / E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @auror/reader typecheck
+      - run: pnpm --filter @auror/reader build
+      - run: pnpm --filter @auror/reader test:e2e

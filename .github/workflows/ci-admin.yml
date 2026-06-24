@@ -1,0 +1,45 @@
+name: CI — Admin
+
+# Per-package CI for the admin frontend (admin.auror.my). Mirrors the
+# path-filter style of release-admin.yml: runs when the admin package,
+# the shared types package it depends on, the lockfile/workspace, or this
+# workflow file changes. dev-only — main is reserved for the release flow.
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - 'packages/admin/**'
+      - 'packages/shared/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/ci-admin.yml'
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'packages/admin/**'
+      - 'packages/shared/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/ci-admin.yml'
+
+jobs:
+  admin:
+    name: Typecheck / Build / E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @auror/admin typecheck
+      - run: pnpm --filter @auror/admin build
+      - run: pnpm --filter @auror/admin test:e2e

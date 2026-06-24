@@ -1,0 +1,45 @@
+name: CI — Author
+
+# Per-package CI for the author frontend (author.auror.my). Mirrors the
+# path-filter style of release-author.yml: runs when the author package,
+# the shared types package it depends on, the lockfile/workspace, or this
+# workflow file changes. dev-only — main is reserved for the release flow.
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - 'packages/author/**'
+      - 'packages/shared/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/ci-author.yml'
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'packages/author/**'
+      - 'packages/shared/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/ci-author.yml'
+
+jobs:
+  author:
+    name: Typecheck / Build / E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @auror/author typecheck
+      - run: pnpm --filter @auror/author build
+      - run: pnpm --filter @auror/author test:e2e
