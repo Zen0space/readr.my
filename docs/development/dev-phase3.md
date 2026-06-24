@@ -10,6 +10,7 @@
 |---|---|
 | Backend / Infra | **Khairul** |
 | Frontend (complex) | **Khairul** |
+| Desktop / Tauri | **Khairul** |
 | Frontend (standard) | **Ajwad** |
 
 ---
@@ -93,7 +94,7 @@
 - Page-level click/scroll heatmap viewer
 
 ### F3.K7 — Offline Writing — Desktop *(Khairul)*
-**Why Khairul:** Tauri/Electron + local SQLite + sync engine + conflict resolution.
+See **Desktop Track D3.1–D3.3** below for the full breakdown (local SQLite drafts, sync engine, offline editor).
 
 ### F3.K8 — Revenue Forecasting Charts *(Khairul)*
 
@@ -112,7 +113,61 @@
 
 ---
 
-## Frontend Track — Ajwad (Standard)
+## Desktop Track — Khairul
+
+> Phase 3 is when the desktop earns its keep — offline writing + sync engine. Everything before this was online-only parity with the web.
+
+### D3.1 — Local Drafts Store
+- [ ] `tauri-plugin-sql` (SQLite) with `drafts` table: `chapter_id`, `content_md`, `updated_at`, `sync_state`
+- [ ] Frontend reads/writes only through typed IPC wrappers (`src/ipc/drafts.ts`)
+
+### D3.2 — Sync Engine
+- [ ] Rust commands `sync_pull` (server → local) and `sync_push` (local → server)
+- [ ] Background timer in a tokio task in `lib.rs` (NOT a JS `setInterval`)
+- [ ] **Last-write-wins** for v1; explicit limitation documented in the editor tooltip
+
+### D3.3 — Offline Editor Mode
+- [ ] Detect online state; switch autosave target between SQLite and `PATCH /v1/chapters/:id`
+- [ ] Queue pending pushes; flush on reconnect
+- [ ] Visible "offline" indicator in the header
+
+### D3.4 — Co-Author Split Agreement UI
+**Mirrors:** F3.K1.
+- [ ] Multi-party state machine for split agreements
+- [ ] Each co-author signs in their own desktop session
+
+### D3.5 — Goal Tracker
+**Mirrors:** F3.A1.
+- [ ] Monthly earning goal input + progress bar
+
+### D3.6 — Story Performance Comparison
+**Mirrors:** F3.A3.
+- [ ] Side-by-side metrics table for two stories
+
+### D3.7 — Follower Management + DM Top Fans
+**Mirrors:** F3.A4.
+- [ ] Followers list sorted by engagement
+- [ ] 1-to-1 DM UI atop the backend messaging primitive
+
+### D3.8 — Revenue Forecasting Charts
+**Mirrors:** F3.K8.
+- [ ] Forecast lines from `GET /v1/earnings/forecast` (B3.10)
+
+### D3.9 — Trailer / Teaser Creator
+**Mirrors:** F3.K9.
+- [ ] Canvas compositing in the webview
+- [ ] Rust-side encoder via `ffmpeg-sidecar` or `gstreamer`; export MP4/GIF
+
+### D3.10 — Per-Paragraph Inline Comments
+**Mirrors:** F3.K10.
+- [ ] Text-range anchoring + comment positioning
+- [ ] Only the *authoring* view here; reader-side lives in F3.K10
+
+### D3.11 — Original Ownership Certificate
+**Mirrors:** F3.A24.
+- [ ] PDF generation via the `printpdf` crate, signed with the app's certificate
+
+---
 
 ### F3.A1 — Goal Tracker (Author)
 - Monthly earning goal input + progress bar

@@ -1,4 +1,4 @@
-# readr.my — Product Requirements Document
+# Auror — Product Requirements Document
 
 **Status:** Draft v2 (phased)
 **Last updated:** 2026-05-12
@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-**readr.my** is a self-hosted, Malaysia-first Wattpad alternative for authors and novelists. It pairs a markdown-native, chapter-by-chapter writing experience with a transparent monetization stack (coins + subscriptions + tips) and gives admins full visibility into platform health and payouts.
+**Auror** is a self-hosted, Malaysia-first Wattpad alternative for authors and novelists. It pairs a markdown-native, chapter-by-chapter writing experience with a transparent monetization stack (coins + subscriptions + tips) and gives admins full visibility into platform health and payouts.
 
 Three user roles: **admin**, **author**, **reader**. Self-hosted via Docker (webapp, backend, Supabase, Redis, reverse proxy).
 
@@ -37,7 +37,7 @@ Three user roles: **admin**, **author**, **reader**. Self-hosted via Docker (web
 
 - **Backend** (`packages/backend`): Node.js + REST API + Redis (cache, queues, rate limits).
 - **Auth + DB**: Supabase (self-hosted) — Postgres, Auth, Storage.
-- **Webapp** (`packages/webapp`): Next.js App Router, Supabase Auth, Jotai state (no `as any`, `useEffect` last resort).
+- **Webapp** (split into `packages/reader`, `packages/author`, `packages/admin` per [`dev-frontend-split.md`](../development/dev-frontend-split.md) — one Next.js App Router codebase per role, Supabase Auth, Jotai state, no `as any`, `useEffect` last resort).
 - **Desktop** (`packages/desktop`): Electron or Tauri (decision pending) — author-focused wrapper.
 - **Shared** (`packages/shared`): DTOs and domain types consumed by all clients.
 - **Deploy**: Docker Compose for everything. No external SaaS required.

@@ -1,6 +1,6 @@
 ---
 name: desktop
-description: Conventions for the @readr/desktop package — Tauri v2, Jotai state, typed IPC, no `as any`, minimal capabilities.
+description: Conventions for the @auror/desktop package — Tauri v2, Jotai state, typed IPC, no `as any`, minimal capabilities.
 ---
 
 # desktop skill
@@ -18,8 +18,8 @@ If you ever find yourself wanting an Electron API, find the Tauri equivalent fir
 
 ## Workspace
 
-- This is a **pnpm monorepo** package. Use `pnpm add <pkg> --filter @readr/desktop`.
-- Cross-package deps use `workspace:*` (e.g. `"@readr/shared": "workspace:*"`).
+- This is a **pnpm monorepo** package. Use `pnpm add <pkg> --filter @auror/desktop`.
+- Cross-package deps use `workspace:*` (e.g. `"@auror/shared": "workspace:*"`).
 - Frontend code in `src/`, Rust code in `src-tauri/`.
 - `src-tauri/target/` and `src-tauri/gen/` are git-ignored.
 
@@ -27,7 +27,7 @@ If you ever find yourself wanting an Electron API, find the Tauri equivalent fir
 
 ```
 packages/desktop/
-├── src/                    # React + Jotai frontend (reuses webapp components where practical)
+├── src/                    # React + Jotai frontend (reuses shared reader/author/admin UI via @auror/shared)
 │   ├── atoms/              # Jotai atoms live close to features
 │   ├── ipc/                # Typed wrappers around `invoke`
 │   └── App.tsx
@@ -57,7 +57,7 @@ packages/desktop/
 **Rules:**
 1. Every Tauri command has a typed TS wrapper in `src/ipc/<feature>.ts`.
 2. The wrapper uses `invoke<T>()` with an explicit return generic.
-3. The argument and return types live in `@readr/shared` if they cross other packages; otherwise local to `src/ipc/`.
+3. The argument and return types live in `@auror/shared` if they cross other packages; otherwise local to `src/ipc/`.
 4. Prefer `tauri-specta` to auto-generate bindings from Rust — eliminates drift by construction.
 5. **Never** use `as any`, `as unknown as T`, or `@ts-ignore` to silence IPC type errors. If the type is wrong, fix it at the Rust side or in the binding.
 
@@ -66,7 +66,7 @@ Example (manual binding):
 ```ts
 // src/ipc/drafts.ts
 import { invoke } from '@tauri-apps/api/core'
-import type { Draft, DraftId } from '@readr/shared'
+import type { Draft, DraftId } from '@auror/shared'
 
 export const loadDraft = (id: DraftId): Promise<Draft> =>
   invoke<Draft>('load_draft', { id })
@@ -82,7 +82,7 @@ Then a Jotai atom layers on top:
 import { atom } from 'jotai'
 import { atomWithDefault } from 'jotai/utils'
 import { loadDraft } from '../ipc/drafts'
-import type { DraftId } from '@readr/shared'
+import type { DraftId } from '@auror/shared'
 
 export const currentDraftIdAtom = atom<DraftId | null>(null)
 export const currentDraftAtom = atomWithDefault(async (get) => {
@@ -132,12 +132,12 @@ The desktop app is the offline-writing surface (PRD §9, P3). The model:
 - **Simplest solution that meets industry standards.** Same rule as webapp.
 - Don't build a plugin system, theming engine, or mod loader because "the desktop app might want one." It won't. Not in this product.
 - Three similar Rust commands beats a generic command-dispatcher abstraction.
-- Reuse webapp components via `@readr/shared` or by importing from `@readr/webapp`. Don't fork UI.
+- Reuse components from `@auror/shared` (the api-client, api wrappers, and domain types are already there). Cross-package imports from `@auror/reader|author|admin` are not supported — if you need a UI primitive, lift it into `@auror/shared` first. Don't fork UI.
 
 ## Build & release
 
-- `pnpm --filter @readr/desktop tauri dev` for local dev.
-- `pnpm --filter @readr/desktop tauri build` for prod bundles.
+- `pnpm --filter @auror/desktop tauri dev` for local dev.
+- `pnpm --filter @auror/desktop tauri build` for prod bundles.
 - Code signing: macOS notarization + Windows code signing required before any public release. Track signing keys outside the repo.
 - Auto-updater: use `tauri-plugin-updater` with signed manifests. Don't roll your own.
 
@@ -150,7 +150,7 @@ The desktop app is the offline-writing surface (PRD §9, P3). The model:
 - [ ] Capabilities are scoped — no blanket `*` or default grants added.
 - [ ] Used an official Tauri plugin if one exists for the need.
 - [ ] `cargo clippy -- -D warnings` clean.
-- [ ] `pnpm --filter @readr/desktop typecheck` passes.
+- [ ] `pnpm --filter @auror/desktop typecheck` passes.
 
 ## Related
 

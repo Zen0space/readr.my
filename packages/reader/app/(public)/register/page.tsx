@@ -1,0 +1,30 @@
+import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { createServerComponentClient, isSupabaseConfigured } from '@/lib/supabase';
+import { RegisterForm } from '@/components/auth/RegisterForm';
+
+export const metadata: Metadata = {
+  title: 'Create Account',
+  description: 'Join Auror to read and publish stories.',
+};
+
+type PageProps = {
+  searchParams: Promise<{ error?: string }>;
+};
+
+export default async function RegisterPage({ searchParams }: PageProps): Promise<React.ReactElement> {
+  const params = await searchParams;
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = await createServerComponentClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        redirect('/');
+      }
+    } catch {
+      // fall through to render the form
+    }
+  }
+
+  return <RegisterForm initialError={params.error} />;
+}

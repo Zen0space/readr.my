@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auror.my — Author Platform Agreement</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 11pt;
+      line-height: 1.7;
+      color: #1a1a1a;
+      background: #fff;
+      padding: 0;
+    }
+
+    .page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 72px;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #1a1a1a;
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+
+    .header .logo {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 28pt;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: #1a1a1a;
+    }
+
+    .header .logo span {
+      color: #6d28d9;
+    }
+
+    .header .doc-title {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 14pt;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 8px;
+      color: #444;
+    }
+
+    .header .meta {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 9pt;
+      color: #777;
+      margin-top: 10px;
+    }
+
+    /* ── Section headings ── */
+    h2 {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 12pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #1a1a1a;
+      border-bottom: 1.5px solid #d1d5db;
+      padding-bottom: 6px;
+      margin-top: 36px;
+      margin-bottom: 14px;
+    }
+
+    h3 {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Parties block ── */
+    .parties {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 24px 0;
+    }
+
+    .party-box {
+      border: 1.5px solid #d1d5db;
+      border-radius: 6px;
+      padding: 16px 20px;
+    }
+
+    .party-box .party-label {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #6d28d9;
+      margin-bottom: 10px;
+    }
+
+    .party-box .field {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 8px;
+    }
+
+    .party-box .field label {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 8pt;
+      color: #888;
+      margin-bottom: 2px;
+    }
+
+    .party-box .field .value {
+      border-bottom: 1px solid #aaa;
+      min-height: 18px;
+      font-size: 10pt;
+    }
+
+    .party-box .field .prefilled {
+      font-size: 10pt;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 10pt;
+    }
+
+    th {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: #f3f4f6;
+      padding: 8px 12px;
+      text-align: left;
+      border: 1px solid #d1d5db;
+    }
+
+    td {
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td { background: #fafafa; }
+
+    /* ── Split highlight boxes ── */
+    .split-box {
+      border-left: 4px solid #6d28d9;
+      background: #f5f3ff;
+      border-radius: 0 6px 6px 0;
+      padding: 14px 18px;
+      margin: 14px 0;
+    }
+
+    .split-box .split-title {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 9pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6d28d9;
+      margin-bottom: 10px;
+    }
+
+    .split-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px dashed #c4b5fd;
+    }
+
+    .split-row:last-child { border-bottom: none; }
+
+    .split-row .party-name {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 10pt;
+      font-weight: 600;
+    }
+
+    .split-row .pct {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 14pt;
+      font-weight: 800;
+      color: #6d28d9;
+    }
+
+    .split-row .pct.platform { color: #9ca3af; }
+
+    .example-box {
+      background: #fff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px 14px;
+      margin-top: 10px;
+      font-size: 9.5pt;
+      color: #555;
+    }
+
+    .example-box strong { color: #1a1a1a; }
+
+    /* ── Body text ── */
+    p {
+      margin-bottom: 10px;
+      font-size: 10.5pt;
+    }
+
+    ul, ol {
+      margin: 8px 0 10px 22px;
+      font-size: 10.5pt;
+    }
+
+    li { margin-bottom: 4px; }
+
+    /* ── Callout / note ── */
+    .note {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      border-radius: 0 4px 4px 0;
+      padding: 10px 14px;
+      margin: 12px 0;
+      font-size: 9.5pt;
+      color: #555;
+    }
+
+    /* ── Signature block ── */
+    .sig-section {
+      margin-top: 48px;
+      border-top: 2px solid #1a1a1a;
+      padding-top: 28px;
+    }
+
+    .sig-section h2 {
+      border-bottom: none;
+      margin-top: 0;
+    }
+
+    .sig-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 24px;
+    }
+
+    .sig-block .sig-label {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #6d28d9;
+      margin-bottom: 20px;
+    }
+
+    .sig-field {
+      margin-bottom: 20px;
+    }
+
+    .sig-field label {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 8pt;
+      color: #888;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .sig-field .line {
+      border-bottom: 1px solid #aaa;
+      min-height: 22px;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 48px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 8pt;
+      color: #aaa;
+    }
+
+    /* ── Print / PDF ── */
+    @media print {
+      body { background: #fff; }
+      .page { padding: 40px 56px; }
+
+      h2 { page-break-after: avoid; }
+      h3 { page-break-after: avoid; }
+
+      .split-box, .parties, .sig-grid { page-break-inside: avoid; }
+
+      .sig-section { page-break-before: always; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Header ── -->
+  <div class="header">
+    <div class="logo">Auror<span>.my</span></div>
+    <div class="doc-title">Author Platform Agreement</div>
+    <div class="meta">Platform: Auror.my &nbsp;|&nbsp; Version 1.0 &nbsp;|&nbsp; Effective Date: ___________________</div>
+  </div>
+
+  <!-- ── Parties ── -->
+  <h2>Parties</h2>
+  <p>This Author Platform Agreement ("Agreement") is entered into between:</p>
+
+  <div class="parties">
+    <div class="party-box">
+      <div class="party-label">Platform</div>
+      <div class="field">
+        <label>Name</label>
+        <div class="value prefilled">Auror.my</div>
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <div class="value prefilled" style="font-size:9pt;color:#555;">A digital publishing platform operated under Malaysian law</div>
+      </div>
+      <div class="field">
+        <label>Contact</label>
+        <div class="value prefilled">legal@auror.my</div>
+      </div>
+    </div>
+
+    <div class="party-box">
+      <div class="party-label">Author</div>
+      <div class="field">
+        <label>Full Name</label>
+        <div class="value">&nbsp;</div>
+      </div>
+      <div class="field">
+        <label>IC / Passport No.</label>
+        <div class="value">&nbsp;</div>
+      </div>
+      <div class="field">
+        <label>Email Address</label>
+        <div class="value">&nbsp;</div>
+      </div>
+      <div class="field">
+        <label>Bank / E-Wallet</label>
+        <div class="value">&nbsp;</div>
+      </div>
+      <div class="field">
+        <label>Account Number</label>
+        <div class="value">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 1. Purpose ── -->
+  <h2>1. Purpose</h2>
+  <p>This Agreement governs the terms under which the Author publishes original written works ("Content") on the Auror.my platform and receives a share of revenue generated from that Content through the Platform's monetization mechanisms: <strong>Coin Purchases</strong> and <strong>Subscriptions</strong>.</p>
+
+  <!-- ── 2. Definitions ── -->
+  <h2>2. Definitions</h2>
+  <table>
+    <thead>
+      <tr><th>Term</th><th>Meaning</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Platform</strong></td><td>The Auror.my web and desktop application and all associated services</td></tr>
+      <tr><td><strong>Content</strong></td><td>Any story, chapter, or written work published by the Author on the Platform</td></tr>
+      <tr><td><strong>Coins</strong></td><td>The Platform's virtual currency purchased by Readers to unlock premium chapters</td></tr>
+      <tr><td><strong>Coin Revenue</strong></td><td>Gross revenue collected by the Platform from Reader coin top-up purchases</td></tr>
+      <tr><td><strong>Subscription Revenue</strong></td><td>Gross revenue collected from Reader subscription fees</td></tr>
+      <tr><td><strong>Author Earnings</strong></td><td>The Author's share of Coin Revenue and/or Subscription Revenue as defined in Section 4</td></tr>
+      <tr><td><strong>Payout</strong></td><td>A disbursement of Author Earnings to the Author's registered bank account or e-wallet</td></tr>
+      <tr><td><strong>Reader</strong></td><td>Any registered user of the Platform who reads and/or purchases Content</td></tr>
+      <tr><td><strong>Premium Chapter</strong></td><td>A chapter designated by the Author as coin-locked, requiring Readers to spend Coins to access</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ── 3. Author Obligations ── -->
+  <h2>3. Author Obligations</h2>
+
+  <h3>3.1 Original Content</h3>
+  <p>The Author warrants that all Content published on the Platform:</p>
+  <ul>
+    <li>Is the Author's own original work.</li>
+    <li>Does not infringe any third-party copyright, trademark, or intellectual property right.</li>
+    <li>Does not contain plagiarised material.</li>
+    <li>Does not violate Malaysian law, including but not limited to the Communications and Multimedia Act 1998, the Penal Code, and applicable religious sensitivity guidelines.</li>
+  </ul>
+
+  <h3>3.2 Content Standards</h3>
+  <p>The Author agrees not to publish Content that:</p>
+  <ul>
+    <li>Contains sexually explicit material involving minors.</li>
+    <li>Promotes violence, terrorism, or racial hatred.</li>
+    <li>Violates Malaysian Islamic guidelines where applicable.</li>
+    <li>Is spam, machine-generated, or AI-generated without meaningful original authorship.</li>
+  </ul>
+
+  <h3>3.3 Account Responsibility</h3>
+  <p>The Author is responsible for maintaining the security of their account credentials and for all activity conducted under their account.</p>
+
+  <h3>3.4 Tax Compliance</h3>
+  <p>The Author is solely responsible for declaring and paying any applicable Malaysian income tax on Author Earnings received. The Platform may issue a CP58 statement where required by law.</p>
+
+  <!-- ── 4. Revenue Split ── -->
+  <h2>4. Revenue Split</h2>
+
+  <h3>4.1 Coin Revenue Split</h3>
+  <p>When a Reader spends Coins to unlock a Premium Chapter authored by the Author:</p>
+
+  <div class="split-box">
+    <div class="split-title">Coin Purchase Split</div>
+    <div class="split-row">
+      <span class="party-name">Author</span>
+      <span class="pct">70%</span>
+    </div>
+    <div class="split-row">
+      <span class="party-name" style="color:#888;">Platform (Auror.my)</span>
+      <span class="pct platform">30%</span>
+    </div>
+    <div class="example-box">
+      <strong>Example:</strong> A Reader spends RM 10.00 worth of Coins to unlock a chapter. The Author receives <strong>RM 7.00</strong>; the Platform retains RM 3.00 to cover payment processing, infrastructure, fraud prevention, and operations.
+    </div>
+  </div>
+
+  <h3>4.2 Subscription Revenue Split</h3>
+  <p>When a Reader holds an active subscription that grants access to the Author's Content:</p>
+
+  <div class="split-box">
+    <div class="split-title">Subscription Split</div>
+    <div class="split-row">
+      <span class="party-name">Author</span>
+      <span class="pct">60%</span>
+    </div>
+    <div class="split-row">
+      <span class="party-name" style="color:#888;">Platform (Auror.my)</span>
+      <span class="pct platform">40%</span>
+    </div>
+    <div class="example-box">
+      <strong>Example:</strong> A Reader pays RM 15.00/month. If the Author's Content accounts for 20% of that Reader's reading activity in the billing period, the Author's attributable revenue is RM 3.00, of which the Author receives <strong>RM 1.80</strong> (60%).
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Subscription Attribution:</strong> Subscription Revenue is distributed among eligible Authors based on a pro-rata formula determined by the Platform, taking into account chapters read, Reader engagement, and Content volume during the subscription period. The current attribution methodology is published in the Author Dashboard.
+  </div>
+
+  <h3>4.3 Tips (Future Feature)</h3>
+  <p>Tip revenue, when enabled, will be passed to the Author at <strong>100% less applicable payment processing fees</strong>. This section will be updated when the tip feature is activated.</p>
+
+  <h3>4.4 No Guaranteed Earnings</h3>
+  <p>The Platform does not guarantee any minimum level of Author Earnings. Earnings depend entirely on Reader activity and Content performance.</p>
+
+  <!-- ── 5. Payouts ── -->
+  <h2>5. Payouts</h2>
+
+  <h3>5.1 Minimum Payout Threshold</h3>
+  <p>Payouts are processed once the Author's accumulated Author Earnings reach a minimum balance of <strong>RM 50.00</strong> (or such other amount as the Platform may set from time to time with 30 days' notice).</p>
+
+  <h3>5.2 Payout Schedule</h3>
+  <p>Payouts are processed on a <strong>monthly</strong> basis, typically within the first 14 days of the following calendar month, subject to:</p>
+  <ul>
+    <li>The Author having a verified payout method on file.</li>
+    <li>The Author's account being in good standing (not suspended or under investigation).</li>
+    <li>Admin approval of the payout request.</li>
+  </ul>
+
+  <h3>5.3 Payout Methods</h3>
+  <p>Supported payout methods include: FPX bank transfer, DuitNow transfer, Touch 'n Go (TnG) e-wallet, and Boost e-wallet. The Platform reserves the right to add or remove payout methods with 30 days' notice.</p>
+
+  <h3>5.4 Payout Fees</h3>
+  <p>The Platform does not charge a payout processing fee. However, the Author's bank or e-wallet provider may impose their own transfer fees, which are the Author's responsibility.</p>
+
+  <h3>5.5 Payout History</h3>
+  <p>The Author may download payout statements from the Author Dashboard at any time.</p>
+
+  <h3>5.6 Withheld Payouts</h3>
+  <p>The Platform may withhold a Payout if the Author's account is under investigation for fraud or policy violations, a valid legal order has been received, or the Author's payout details are incomplete or unverified.</p>
+
+  <!-- ── 6. Intellectual Property ── -->
+  <h2>6. Intellectual Property</h2>
+
+  <h3>6.1 Author Retains Ownership</h3>
+  <p>The Author retains full copyright and intellectual property ownership of all Content published on the Platform.</p>
+
+  <h3>6.2 Licence to Platform</h3>
+  <p>By publishing Content on the Platform, the Author grants Auror.my a <strong>non-exclusive, royalty-free, worldwide licence</strong> to host, store, display, and distribute the Content to Readers via the Platform; create thumbnails, previews, and promotional excerpts for discovery purposes; and cache and deliver the Content via CDN and related infrastructure. This licence does not permit the Platform to sell, sublicense, or transfer the Content to third parties without the Author's written consent.</p>
+
+  <h3>6.3 Removal of Content</h3>
+  <p>The Author may remove Content from the Platform at any time via the Author Dashboard. Upon removal, the Content will no longer be accessible to new Readers. Readers who have already unlocked a chapter retain access to that chapter. Accrued Author Earnings for the removed Content remain payable.</p>
+
+  <!-- ── 7. Platform Rights ── -->
+  <h2>7. Platform Rights and Responsibilities</h2>
+
+  <h3>7.1 Platform Obligations</h3>
+  <p>The Platform agrees to accurately track and report Coin and Subscription Revenue attributable to the Author's Content; provide the Author with a real-time earnings dashboard; process Payouts in accordance with Section 5; and notify the Author of any material changes to the revenue split with at least <strong>30 days' written notice</strong>.</p>
+
+  <h3>7.2 Platform Rights</h3>
+  <p>The Platform reserves the right to moderate, remove, or restrict Content that violates this Agreement or applicable law; suspend or terminate an Author's account for material breach; adjust coin pricing, subscription pricing, and attribution methodology with reasonable notice; and introduce new monetization features with updated terms.</p>
+
+  <h3>7.3 Downtime and Service Interruptions</h3>
+  <p>The Platform does not guarantee uninterrupted service. Scheduled maintenance will be communicated in advance where practicable. The Platform is not liable for lost earnings due to service interruptions beyond its reasonable control.</p>
+
+  <!-- ── 8. Term and Termination ── -->
+  <h2>8. Term and Termination</h2>
+
+  <h3>8.1 Term</h3>
+  <p>This Agreement commences on the date the Author creates an account on the Platform and continues until terminated by either party.</p>
+
+  <h3>8.2 Termination by Author</h3>
+  <p>The Author may terminate this Agreement at any time by closing their account via Platform settings or by written notice to legal@auror.my. Accrued Author Earnings above the minimum payout threshold will be disbursed within 60 days of account closure.</p>
+
+  <h3>8.3 Termination by Platform</h3>
+  <p>The Platform may terminate this Agreement immediately if the Author materially breaches this Agreement and fails to remedy the breach within 14 days of written notice, engages in fraud or illegal activity, or repeatedly violates content standards. Upon termination for cause involving fraudulent activity, the Platform may forfeit accrued Author Earnings.</p>
+
+  <h3>8.4 Survival</h3>
+  <p>Sections 3 (Author Obligations), 6 (Intellectual Property), 9 (Limitation of Liability), and 10 (Governing Law) survive termination.</p>
+
+  <!-- ── 9. Limitation of Liability ── -->
+  <h2>9. Limitation of Liability</h2>
+  <p>To the maximum extent permitted by Malaysian law:</p>
+  <ul>
+    <li>The Platform's total liability to the Author for any claim arising under this Agreement shall not exceed the total Author Earnings paid to the Author in the <strong>three (3) months</strong> preceding the claim.</li>
+    <li>The Platform is not liable for indirect, consequential, or incidental damages, including lost profits or lost data.</li>
+    <li>The Platform is not liable for third-party payment processor failures, bank delays, or e-wallet service interruptions.</li>
+  </ul>
+
+  <!-- ── 10. Governing Law ── -->
+  <h2>10. Governing Law and Dispute Resolution</h2>
+
+  <h3>10.1 Governing Law</h3>
+  <p>This Agreement is governed by the laws of <strong>Malaysia</strong>.</p>
+
+  <h3>10.2 Dispute Resolution</h3>
+  <p>The parties agree to first attempt to resolve any dispute through good-faith negotiation. If unresolved within 30 days, disputes shall be referred to the courts of <strong>Kuala Lumpur, Malaysia</strong>, which shall have exclusive jurisdiction.</p>
+
+  <!-- ── 11. Privacy ── -->
+  <h2>11. Privacy and Data</h2>
+  <p>The Platform collects and processes the Author's personal data in accordance with the <strong>Personal Data Protection Act 2010 (PDPA)</strong>. The Author's data is used solely for account management, payout processing, and platform operations. The Platform will not sell the Author's personal data to third parties.</p>
+
+  <!-- ── 12. Amendments ── -->
+  <h2>12. Amendments</h2>
+  <p>The Platform may amend this Agreement at any time by providing <strong>30 days' written notice</strong> to the Author's registered email address. Continued use of the Platform after the notice period constitutes acceptance of the amended terms. If the Author does not accept the amendments, they may terminate this Agreement before the effective date of the changes.</p>
+
+  <!-- ── 13. Entire Agreement ── -->
+  <h2>13. Entire Agreement</h2>
+  <p>This Agreement constitutes the entire agreement between the parties with respect to its subject matter and supersedes all prior discussions, representations, or agreements. No waiver of any provision shall be effective unless in writing.</p>
+
+  <!-- ── Signatures ── -->
+  <div class="sig-section">
+    <h2>Signatures</h2>
+    <p>By signing below, both parties agree to the terms of this Author Platform Agreement.</p>
+
+    <div class="sig-grid">
+      <div class="sig-block">
+        <div class="sig-label">Author</div>
+        <div class="sig-field">
+          <label>Signature</label>
+          <div class="line">&nbsp;</div>
+        </div>
+        <div class="sig-field">
+          <label>Full Name</label>
+          <div class="line">&nbsp;</div>
+        </div>
+        <div class="sig-field">
+          <label>IC / Passport No.</label>
+          <div class="line">&nbsp;</div>
+        </div>
+        <div class="sig-field">
+          <label>Date</label>
+          <div class="line">&nbsp;</div>
+        </div>
+      </div>
+
+      <div class="sig-block">
+        <div class="sig-label">Auror.my Platform</div>
+        <div class="sig-field">
+          <label>Authorised Signatory</label>
+          <div class="line">&nbsp;</div>
+        </div>
+        <div class="sig-field">
+          <label>Name &amp; Title</label>
+          <div class="line">&nbsp;</div>
+        </div>
+        <div class="sig-field">
+          <label>Date</label>
+          <div class="line">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="footer">
+    Auror.my — Empowering Malaysian Authors &nbsp;|&nbsp; legal@auror.my &nbsp;|&nbsp; Version 1.0 — 2026
+  </div>
+
+</div>
+</body>
+</html>

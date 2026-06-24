@@ -1,0 +1,136 @@
+# Local development stack for Auror.
+#
+# Default (`docker compose up -d`) brings up ONLY redis. The backend, the
+# reader package, and Caddy are opt-in via profiles — run those on the host
+# (`pnpm --filter @auror/backend dev`, `pnpm --filter @auror/reader dev`)
+# pointing at this redis on :6379.
+#
+# Env: there is no root .env. Each service reads its package-local .env
+# (packages/<name>/.env). For the containerized services, the few values that
+# must differ inside Docker (container networking) are overridden under
+# `environment:` — package .env files use host addresses (127.0.0.1).
+#
+# Coolify users: don't use this file in production. Coolify pulls the prebuilt
+# ghcr.io/<owner>/auror-backend, ghcr.io/<owner>/auror-reader (and -author /
+# -admin in Phases C/D) images via the release workflows in
+# .github/workflows/release-*.yml.
+
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    ports:
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: packages/backend/Dockerfile
+    restart: unless-stopped
+    profiles: ["backend", "reader", "proxy"]
+    depends_on:
+      redis:
+        condition: service_healthy
+    env_file:
+      - packages/backend/.env
+    environment:
+      NODE_ENV: production
+      HOST: "0.0.0.0"
+      PORT: "4000"
+      REDIS_URL: redis://redis:6379
+      SUPABASE_URL: ${SUPABASE_URL:-http://host.docker.internal:54321}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "127.0.0.1:4000:4000"
+
+  reader:
+    build:
+      context: .
+      dockerfile: packages/reader/Dockerfile
+    restart: unless-stopped
+    profiles: ["reader", "author", "admin", "proxy"]
+    env_file:
+      - path: packages/reader/.env
+        required: false
+    environment:
+      NODE_ENV: production
+      HOSTNAME: "0.0.0.0"
+      PORT: "3000"
+      BACKEND_URL: http://backend:4000
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:3000}
+      NEXT_PUBLIC_COOKIE_DOMAIN: ${NEXT_PUBLIC_COOKIE_DOMAIN:-}
+    depends_on:
+      - backend
+    ports:
+      - "127.0.0.1:3000:3000"
+
+  author:
+    build:
+      context: .
+      dockerfile: packages/author/Dockerfile
+    restart: unless-stopped
+    profiles: ["author", "proxy"]
+    env_file:
+      - path: packages/author/.env
+        required: false
+    environment:
+      NODE_ENV: production
+      HOSTNAME: "0.0.0.0"
+      PORT: "3000"
+      BACKEND_URL: http://backend:4000
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:3000}
+      NEXT_PUBLIC_COOKIE_DOMAIN: ${NEXT_PUBLIC_COOKIE_DOMAIN:-}
+    depends_on:
+      - backend
+    # No host port — Caddy fans author.auror.my traffic to the container.
+    expose:
+      - "3000"
+
+  admin:
+    build:
+      context: .
+      dockerfile: packages/admin/Dockerfile
+    restart: unless-stopped
+    profiles: ["admin", "proxy"]
+    env_file:
+      - path: packages/admin/.env
+        required: false
+    environment:
+      NODE_ENV: production
+      HOSTNAME: "0.0.0.0"
+      PORT: "3000"
+      BACKEND_URL: http://backend:4000
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:3000}
+      NEXT_PUBLIC_COOKIE_DOMAIN: ${NEXT_PUBLIC_COOKIE_DOMAIN:-}
+    depends_on:
+      - backend
+    # No host port — Caddy fans admin.auror.my traffic to the container.
+    expose:
+      - "3000"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./infra/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - backend
+    profiles: ["proxy"]
+
+volumes:
+  redis-data:
+  caddy-data:
+  caddy-config:
