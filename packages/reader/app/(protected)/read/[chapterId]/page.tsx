@@ -22,20 +22,20 @@ const fetchStoryAndChapter = async (
   chapterId: string,
 ): Promise<{ writing: Writing; chapter: Chapter; chapters: Chapter[] } | null> => {
   try {
-    const chapterRes = await fetch(`${baseUrl}/api/v1/chapters/${chapterId}`, {
+    const chapterRes = await fetch(`${baseUrl}/v1/chapters/${chapterId}`, {
       cache: 'no-store',
     })
     if (!chapterRes.ok) return null
     const chapter = (await chapterRes.json()) as Chapter
 
-    const storyRes = await fetch(`${baseUrl}/api/v1/stories/${chapter.story_id}`, {
+    const storyRes = await fetch(`${baseUrl}/v1/stories/${chapter.story_id}`, {
       cache: 'no-store',
     })
     if (!storyRes.ok) return null
     const writing = (await storyRes.json()) as Writing
 
     const chaptersRes = await fetch(
-      `${baseUrl}/api/v1/stories/${chapter.story_id}/chapters`,
+      `${baseUrl}/v1/stories/${chapter.story_id}/chapters`,
       { cache: 'no-store' },
     )
     const chapters = chaptersRes.ok
@@ -73,7 +73,7 @@ export default async function ReaderPage({ params }: PageProps): Promise<React.R
   if (!data) {
     notFound()
   }
-  // Coin balance + unlock flag would be fetched from /api/v1/wallet + chapter
+  // Coin balance + unlock flag would be fetched from /v1/wallet + chapter
   // gate state. Reader-side initial render uses 0/null defaults; the
   // client-side ReaderView component refreshes these via walletApi on mount.
   const coinBalance = 0

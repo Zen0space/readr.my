@@ -16,6 +16,9 @@ import {
   Circle as CircleIcon,
   DollarSign,
   Edit,
+  Grid,
+  Home,
+  Layout,
   Lock,
   LogIn,
   LogOut,
@@ -83,6 +86,9 @@ export type IconName =
   | 'credit-card'
   | 'dollar-sign'
   | 'edit'
+  | 'grid'
+  | 'home'
+  | 'layout'
   | 'lock'
   | 'log-in'
   | 'log-out'
@@ -121,6 +127,9 @@ const components: Record<IconName, FeatherIcon> = {
   'credit-card': CreditCard,
   'dollar-sign': DollarSign,
   'edit': Edit,
+  'grid': Grid,
+  'home': Home,
+  'layout': Layout,
   'lock': Lock,
   'log-in': LogIn,
   'log-out': LogOut,

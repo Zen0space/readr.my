@@ -24,3 +24,6 @@ export { Sheet, SheetTrigger, useSheet } from './Sheet';
 export { Tabs } from './Tabs';
 export { Skeleton } from './Skeleton';
 export { Icon, type IconName } from './Icon';
+
+// Error surfaces — server-rendered `ErrorBanner` + client-rendered `ErrorToast`.
+export { ErrorBanner, ErrorToast } from './error';

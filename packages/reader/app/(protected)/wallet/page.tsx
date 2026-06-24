@@ -1,39 +1,54 @@
 import type { Metadata } from 'next';
 import { WalletView } from '@/components/reader/WalletView';
+import { walletApiClient } from '@/lib/api/serverClient';
+import { ErrorBanner } from '@/components/ui';
+import { parseFetchError } from '@/lib/errors';
+import { createServerComponentClient, isSupabaseConfigured } from '@/lib/supabase';
 
 export const metadata: Metadata = {
   title: 'Wallet',
   description: 'Top up coins and manage your earnings.',
 };
 
-const fetchWallet = async (baseUrl: string): Promise<{
-  balance: number | null;
-  earnings: number | null;
-  isAuthed: boolean;
-}> => {
+const resolveAccessToken = async (): Promise<string | null> => {
+  if (!isSupabaseConfigured()) return null
   try {
-    const sessionRes = await fetch(`${baseUrl}/api/auth/session`, { cache: 'no-store' })
-    if (!sessionRes.ok) return { balance: null, earnings: null, isAuthed: false }
-    const session = (await sessionRes.json()) as { authenticated?: boolean }
-    if (!session.authenticated) return { balance: null, earnings: null, isAuthed: false }
-
-    const walletRes = await fetch(`${baseUrl}/api/v1/wallet`, { cache: 'no-store' })
-    if (!walletRes.ok) return { balance: 0, earnings: 0, isAuthed: true }
-    const wallet = (await walletRes.json()) as { coin_balance: number }
-    return { balance: wallet.coin_balance, earnings: 0, isAuthed: true }
+    const supabase = await createServerComponentClient()
+    const { data: { session } } = await supabase.auth.getSession()
+    return session?.access_token ?? null
   } catch {
-    return { balance: null, earnings: null, isAuthed: false }
+    return null
   }
 }
 
 export default async function WalletPage(): Promise<React.ReactElement> {
+  // We're inside the (protected) layout — auth has already been verified.
+  // We still need to resolve the access_token ourselves to forward it as a
+  // Bearer header to the backend (server-side fetches can't piggy-back on
+  // the browser's session cookie).
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? ''
-  const { balance, earnings, isAuthed } = await fetchWallet(baseUrl)
+  const accessToken = await resolveAccessToken()
+
+  let balance: number | null = null
+  let earnings: number | null = 0
+  let backendError: ReturnType<typeof parseFetchError> = null
+  try {
+    const wallet = await walletApiClient.get(baseUrl, { accessToken })
+    balance = wallet.coin_balance
+  } catch (err) {
+    backendError = parseFetchError(err)
+  }
+
   return (
-    <WalletView
-      initialBalance={balance}
-      initialEarnings={earnings}
-      isAuthed={isAuthed}
-    />
+    <div className="space-y-8">
+      {backendError ? (
+        <ErrorBanner error={backendError} retryHref="/wallet" />
+      ) : null}
+      <WalletView
+        initialBalance={balance}
+        initialEarnings={earnings}
+        isAuthed={true}
+      />
+    </div>
   );
 }

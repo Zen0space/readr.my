@@ -3,20 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --surface: #fcf8ff;
-  --surface-dim: #dbd8e4;
-  --surface-bright: #fcf8ff;
+  --surface: #f8f9fb;
+  --surface-dim: #d8d9dd;
+  --surface-bright: #f8f9fb;
   --surface-container-lowest: #ffffff;
-  --surface-container-low: #f5f2fe;
-  --surface-container: #efecf8;
-  --surface-container-high: #e9e6f3;
-  --surface-container-highest: #e4e1ed;
-  --on-surface: #1b1b23;
-  --on-surface-variant: #464554;
-  --inverse-surface: #303038;
-  --inverse-on-surface: #f2effb;
-  --outline: #767586;
-  --outline-variant: #c7c4d7;
+  --surface-container-low: #f1f2f4;
+  --surface-container: #ebecef;
+  --surface-container-high: #e4e5e8;
+  --surface-container-highest: #dddfe2;
+  --on-surface: #1b1b1f;
+  --on-surface-variant: #44464f;
+  --inverse-surface: #2f3033;
+  --inverse-on-surface: #f1f2f4;
+  --outline: #74777f;
+  --outline-variant: #c4c6cf;
   --surface-tint: #494bd6;
   --primary: #4648d4;
   --on-primary: #ffffff;
@@ -35,9 +35,9 @@
   --on-error: #ffffff;
   --error-container: #ffdad6;
   --on-error-container: #93000a;
-  --background: #fcf8ff;
-  --on-background: #1b1b23;
-  --surface-variant: #e4e1ed;
+  --background: #f8f9fb;
+  --on-background: #1b1b1f;
+  --surface-variant: #dddfe2;
 
   /* shadcn/ui aliases — point at the M3 tokens above.
      Components in components/ui/{button,input,card,...}.tsx resolve
@@ -63,20 +63,20 @@
 }
 
 .dark {
-  --surface: #131318;
-  --surface-dim: #131318;
-  --surface-bright: #393942;
-  --surface-container-lowest: #0e0e12;
-  --surface-container-low: #1b1b23;
-  --surface-container: #1f1f28;
-  --surface-container-high: #2a2a33;
-  --surface-container-highest: #35353e;
-  --on-surface: #e4e1ed;
-  --on-surface-variant: #c7c4d7;
-  --inverse-surface: #e4e1ed;
-  --inverse-on-surface: #303038;
-  --outline: #90909f;
-  --outline-variant: #464554;
+  --surface: #131316;
+  --surface-dim: #131316;
+  --surface-bright: #39393c;
+  --surface-container-lowest: #0e0e10;
+  --surface-container-low: #1b1b1f;
+  --surface-container: #1f1f24;
+  --surface-container-high: #2a2a2f;
+  --surface-container-highest: #35353a;
+  --on-surface: #e3e3e7;
+  --on-surface-variant: #c4c6cf;
+  --inverse-surface: #e3e3e7;
+  --inverse-on-surface: #2f3033;
+  --outline: #8e9099;
+  --outline-variant: #44464f;
   --surface-tint: #c0c1ff;
   --primary: #c0c1ff;
   --on-primary: #1c0c80;
@@ -95,9 +95,9 @@
   --on-error: #690005;
   --error-container: #93000a;
   --on-error-container: #ffdad6;
-  --background: #131318;
-  --on-background: #e4e1ed;
-  --surface-variant: #464554;
+  --background: #131316;
+  --on-background: #e3e3e7;
+  --surface-variant: #44464f;
 
   /* shadcn/ui dark-mode aliases. */
   --foreground: var(--on-background);
