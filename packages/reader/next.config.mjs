@@ -19,6 +19,11 @@ const TURBOPACK_ROOT = path.resolve(__dirname, '../..');
  */
 const nextConfig = {
   reactStrictMode: true,
+  // Standalone output creates `.next/standalone/` containing a minimal
+  // Node server + only the node_modules needed at runtime. The Dockerfile
+  // copies from this path so the runtime image stays small (no source,
+  // no devDeps, no build cache).
+  output: 'standalone',
   turbopack: {
     root: TURBOPACK_ROOT,
   },

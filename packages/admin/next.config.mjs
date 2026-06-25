@@ -28,6 +28,11 @@ const CSP = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Standalone output creates `.next/standalone/` containing a minimal
+  // Node server + only the node_modules needed at runtime. The Dockerfile
+  // copies from this path so the runtime image stays small (no source,
+  // no devDeps, no build cache).
+  output: 'standalone',
   images: {
     // Admin never optimizes third-party images; covers + avatars come from
     // Supabase storage with their own CDN URL.
